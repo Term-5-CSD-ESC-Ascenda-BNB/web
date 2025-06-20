@@ -24,6 +24,7 @@
     "@mantine/hooks": "^8.1.1",
     "@mantine/modals": "^8.1.1",
     "@mantine/nprogress": "^8.1.1",
+    "@tabler/icons-react": "^3.34.0",
     "@tanstack/react-query": "^5.80.7",
     "@tanstack/react-router": "^1.121.2",
     "@tanstack/react-router-devtools": "^1.121.5",
