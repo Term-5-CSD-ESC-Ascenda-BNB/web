@@ -20,7 +20,7 @@ function RouteComponent() {
   }, []);
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
+    <div style={{ display: 'flex', height: 'calc(100vh - 60px)' }}>
       <div
         style={{
           flex: 2,
@@ -33,7 +33,17 @@ function RouteComponent() {
         <span style={{ fontSize: 32 }}>Map</span>
       </div>
 
-      <div style={{ flex: 2, padding: 32, background: '#fff', minWidth: 0 }}>
+      <div
+        style={{
+          flex: 2,
+          padding: 32,
+          paddingBottom: 0,
+          background: '#fff',
+          minWidth: 0,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         {/* TODO: Proper search bar and filter + menu button */}
         <div
           style={{
@@ -81,7 +91,7 @@ function RouteComponent() {
           })}
         </div> */}
         <VirtuosoGrid
-          style={{ height: '90vh' }}
+          style={{ flex: 1, minHeight: 0 }}
           totalCount={hotels.length}
           overscan={200}
           listClassName={styles['virtuoso-grid-list']}
