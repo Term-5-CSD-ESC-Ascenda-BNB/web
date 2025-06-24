@@ -10,6 +10,26 @@ export const Route = createFileRoute({
 });
 
 function RouteComponent() {
+  /*
+  const fetchHotels = async (): Promise<Hotel[]> => {
+    const res = await axios.get('https://hotelapi.loyalty.dev/api/hotels?destination_id=RsBU');
+    return res.data.hotels || [];
+  };
+
+  const {
+    data: hotels = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['hotels', 'RsBU'],
+    queryFn: fetchHotels,
+  });
+
+  if (isLoading) return <div>Loading hotels...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+  */
+
   // Define a type for hotel if not already defined
   const [hotels, setHotels] = useState<Hotel[]>([]);
 

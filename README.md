@@ -1,54 +1,48 @@
-# React + TypeScript + Vite
+# Hotel Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Getting Started
 
-Currently, two official plugins are available:
+### 1. Install dependencies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Start the dev server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```sh
+npm run dev
 ```
+
+## 📝 Useful Scripts
+
+| Script            | What it does                            |
+| ----------------- | --------------------------------------- |
+| `npm run dev`     | Start development server                |
+| `npm run build`   | Build for production                    |
+| `npm run preview` | Preview production build                |
+| `npm run test`    | Runs relevant unit tests on file change |
+
+## 💡 Notes
+
+- **Styling:** Use CSS Modules for component styles.
+- **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
+
+## 📂 Project Structure
+
+- `src/routes/` — App routes (pages)
+- `src/components/` — Reusable UI components (e.g., CarouselCard)
+- `src/types/` — TypeScript type definitions
+
+## 🛠️ Stack
+
+- **React** + **TypeScript**
+- **Vite** for fast builds and HMR
+- **Mantine** for UI components
+- **TanStack Router** for routing
+- **TanStack Query** + **Axios** for data fetching/caching
+- **React Virtuoso** for virtualized lists
+- **ESLint** + **Prettier** for code quality and formatting
+- **Vitest** +**RTL** for unit and integration testing
+
+---
