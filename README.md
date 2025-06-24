@@ -19,7 +19,6 @@ npm run dev
 | Script            | What it does                            |
 | ----------------- | --------------------------------------- |
 | `npm run dev`     | Start development server                |
-| `npm run build`   | Build for production                    |
 | `npm run preview` | Preview production build                |
 | `npm run test`    | Runs relevant unit tests on file change |
 
