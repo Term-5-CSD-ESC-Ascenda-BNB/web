@@ -32,9 +32,11 @@ export default tseslint.config(
     rules: {
       ...vitest.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
         'warn',
-        { allowConstantExport: true },
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
   }

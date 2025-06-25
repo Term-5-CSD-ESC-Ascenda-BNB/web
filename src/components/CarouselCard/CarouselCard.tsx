@@ -13,7 +13,6 @@ export interface CarouselCardProps {
 
 // TODO: Add a link to the hotel details page
 // This is temporary, the ID is still needed later to click into the hotel details page
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CarouselCard({ id, name, description, rating, images }: CarouselCardProps) {
   const displayImages = images.length > 0 ? images : ['https://dummyimage.com/600x400/eee/aaa'];
   const slides = displayImages.map((image) => (
