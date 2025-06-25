@@ -33,6 +33,7 @@ It may be a bit troublesome, but ultimately it helps keep our codebase clean and
 
 - **Styling:** Use CSS Modules for component styles.
 - **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
+- **Branching:** Use feature branches (e.g. `feature/search-bar`).
 
 ## 📝 Useful Scripts
 
