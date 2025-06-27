@@ -5,7 +5,7 @@ import styles from './nav.module.css';
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className={styles.navbar}>
+      {/* <div className={styles.navbar}>
         <Link to="/" className={styles.link + ' [&.active]:font-bold'}>
           Home
         </Link>
@@ -15,7 +15,7 @@ export const Route = createRootRoute({
         <Link to="/search" className={styles.link + ' [&.active]:font-bold'}>
           Search
         </Link>
-      </div>
+      </div> */}
 
       <Outlet />
 
