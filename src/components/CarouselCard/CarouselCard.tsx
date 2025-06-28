@@ -1,11 +1,7 @@
 import { AspectRatio, Button, Card, Grid, Group, Image, Stack, Text } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
-import {
-  IconStarFilled,
-  IconStarHalfFilled,
-  IconStar,
-  IconMapPinFilled,
-} from '@tabler/icons-react';
+import { IconMapPinFilled } from '@tabler/icons-react';
+import { RatingStars } from '../RatingStars/RatingStars';
 import classes from './CarouselCard.module.css';
 
 export interface CarouselCardProps {
@@ -33,36 +29,6 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
       </AspectRatio>
     </Carousel.Slide>
   ));
-
-  // Function to render stars based on rating
-  const renderStars = () => {
-    // Round to nearest half
-    const roundedRating = Math.round(rating * 2) / 2;
-
-    // Calculate the number of filled, half, and empty stars
-    const filledStars = Math.floor(roundedRating);
-    const hasHalfStar = roundedRating % 1 !== 0;
-    const emptyStars = 5 - filledStars - (hasHalfStar ? 1 : 0);
-
-    const stars = [];
-
-    // Add filled stars
-    for (let i = 0; i < filledStars; i++) {
-      stars.push(
-        <IconStarFilled key={`filled-${i}`} size={16} color="var(--mantine-color-yellow-6)" />
-      );
-    }
-    // Add half star if needed
-    if (hasHalfStar) {
-      stars.push(<IconStarHalfFilled key="half" size={16} color="var(--mantine-color-yellow-6)" />);
-    }
-    // // Add empty stars
-    // for (let i = 0; i < emptyStars; i++) {
-    //   stars.push(<IconStar key={`empty-${i}`} size={16} color="var(--mantine-color-yellow-6)" />);
-    // }
-
-    return stars;
-  };
 
   return (
     <>
@@ -105,7 +71,7 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
             </div>
 
             <Group justify="space-between">
-              <Group gap={0}>{renderStars()}</Group>
+              <RatingStars rating={rating} />
             </Group>
           </Stack>
 
@@ -122,57 +88,6 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
           </Group>
         </Stack>
       </div>
-      {/* <Card
-        // radius="md"
-        // withBorder
-        // padding="lg"
-        style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-      >
-        <Card.Section>
-          <Carousel
-            withIndicators
-            emblaOptions={{ loop: true }}
-            classNames={{
-              root: classes.carousel,
-              controls: classes.carouselControls,
-              indicator: classes.carouselIndicator,
-            }}
-          >
-            {slides}
-          </Carousel>
-        </Card.Section>
-
-        <Group justify="space-between" mt="lg">
-          <Text fz="md">{name}</Text>
-
-          <Group gap={5}>
-            <IconStarFilled size={16} color="var(--mantine-color-yellow-6)" />
-            <Text fz="sm" fw={600}>
-              {rating}
-            </Text>
-          </Group>
-        </Group>
-
-        <Text fz="sm" c="dimmed" mt="sm" style={{ flex: 1 }}>
-          {description && description.length > 150
-            ? description.slice(0, 150) + '…'
-            : description || ''}
-        </Text>
-
-        <Group justify="space-between" mt="md">
-          <div>
-            <Text fz="xl" span fw={500} className={classes.price}>
-              397$
-            </Text>
-            <Text span fz="sm" c="dimmed">
-              {' '}
-              / night
-            </Text>
-          </div>
-
-          <Button radius="sm">Book now</Button>
-        </Group>
-      </Card> */}
     </>
   );
 }

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { CarouselCard } from '@/components/CarouselCard/CarouselCard.tsx';
 import mockData from '@/.mock_data/hotels.json';
 import type { Hotel } from '@/types/Hotel';
-import { VirtuosoGrid } from 'react-virtuoso';
 import styles from './search.module.css';
 
 export const Route = createFileRoute({
