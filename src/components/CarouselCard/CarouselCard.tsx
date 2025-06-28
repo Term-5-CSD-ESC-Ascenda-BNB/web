@@ -20,8 +20,10 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
   };
 
   // TODO: Replace with actual price data
-
   const randomPrice = Math.random() * 1000;
+
+  // TODO: Replace with actual review score data
+  const randomScore = Math.floor(Math.random() * 10) + 1;
 
   return (
     <Stack gap="xs">
@@ -42,7 +44,7 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
           <LocationDisplay address={address} />
           <Group justify="space-between">
             <RatingStars rating={rating} showEmpty={false} size={20} />
-            <ReviewScoreSmall score={rating} />
+            <ReviewScoreSmall score={randomScore} />
           </Group>
         </Stack>
 
