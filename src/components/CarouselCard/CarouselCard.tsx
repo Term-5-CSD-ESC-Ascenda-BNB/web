@@ -1,7 +1,7 @@
 import { Group, Stack, Text } from '@mantine/core';
-import { IconMapPinFilled } from '@tabler/icons-react';
 import { RatingStars } from '../RatingStars/RatingStars';
 import { ImageCarousel } from './ImageCarousel';
+import { LocationDisplay } from '../LocationDisplay/LocationDisplay';
 import classes from './CarouselCard.module.css';
 
 export interface CarouselCardProps {
@@ -12,17 +12,14 @@ export interface CarouselCardProps {
   images: string[];
 }
 
-// TODO: Add a link to the hotel details page
-// This is temporary, the ID is still needed later to click into the hotel details page
 export function CarouselCard({ id, name, address, rating, images }: CarouselCardProps) {
-  // Handler for card click - will link to hotel details page in the future
   const handleCardClick = () => {
+    // TODO: Add a link to the hotel details page
     console.log(`Clicked on hotel: ${id}`);
-    // TODO: hotel details page implement
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Stack gap="xs">
       <ImageCarousel images={images} onImageClick={handleCardClick} />
 
       <Stack
@@ -32,27 +29,18 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
         justify="space-between"
         gap="sm"
       >
-        <Stack gap={4} mt="xs">
-          <Text truncate="end" style={{ lineHeight: 'normal' }} size="md">
+        {/* Hotel Details */}
+        <Stack gap={4}>
+          <Text truncate="end" fz="md" lh="sm">
             {name}
           </Text>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px' }}>
-            <div>
-              <IconMapPinFilled size={16} color="var(--mantine-color-red-6)" />
-            </div>
-            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              <Text fz="sm" c="dimmed" truncate="end">
-                {address}
-              </Text>
-            </div>
-          </div>
-
+          <LocationDisplay address={address} />
           <Group justify="space-between">
             <RatingStars rating={rating} />
           </Group>
         </Stack>
 
+        {/* Price Display */}
         <Group justify="space-between">
           <div>
             <Text fz="xl" span fw={500} className={classes.price}>
@@ -60,11 +48,11 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
             </Text>
             <Text span fz="sm" c="dimmed">
               {' '}
-              / night
+              /night
             </Text>
           </div>
         </Group>
       </Stack>
-    </div>
+    </Stack>
   );
 }
