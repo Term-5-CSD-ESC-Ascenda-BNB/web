@@ -2,6 +2,7 @@ import { Group, Stack, Text } from '@mantine/core';
 import { RatingStars } from '../RatingStars/RatingStars';
 import { ImageCarousel } from './ImageCarousel';
 import { LocationDisplay } from '../LocationDisplay/LocationDisplay';
+import { PriceDisplay } from './PriceDisplay';
 import classes from './CarouselCard.module.css';
 
 export interface CarouselCardProps {
@@ -18,6 +19,10 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
     console.log(`Clicked on hotel: ${id}`);
   };
 
+  // TODO: Replace with actual price data
+
+  const randomPrice = Math.random() * 1000;
+
   return (
     <Stack gap="xs">
       <ImageCarousel images={images} onImageClick={handleCardClick} />
@@ -30,27 +35,19 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
         gap="sm"
       >
         {/* Hotel Details */}
-        <Stack gap={4}>
+        <Stack gap={2}>
           <Text truncate="end" fz="md" lh="sm">
             {name}
           </Text>
           <LocationDisplay address={address} />
           <Group justify="space-between">
-            <RatingStars rating={rating} />
+            <RatingStars rating={rating} showEmpty={false} size={20} />
           </Group>
         </Stack>
 
         {/* Price Display */}
         <Group justify="space-between">
-          <div>
-            <Text fz="xl" span fw={500} className={classes.price}>
-              ${(Math.random() * 1000).toFixed(2)}
-            </Text>
-            <Text span fz="sm" c="dimmed">
-              {' '}
-              /night
-            </Text>
-          </div>
+          <PriceDisplay price={randomPrice} />
         </Group>
       </Stack>
     </Stack>
