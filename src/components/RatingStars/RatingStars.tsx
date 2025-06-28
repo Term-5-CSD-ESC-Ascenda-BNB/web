@@ -14,8 +14,11 @@ export function RatingStars({
   color = 'var(--mantine-color-yellow-6)',
   showEmpty = true,
 }: RatingStarsProps) {
+  // Clamp rating between 1 and 5
+  const clampedRating = Math.max(1, Math.min(5, rating));
+
   // Round to nearest half
-  const roundedRating = Math.round(rating * 2) / 2;
+  const roundedRating = Math.round(clampedRating * 2) / 2;
 
   // Calculate the number of filled, half, and empty stars
   const filledStars = Math.floor(roundedRating);

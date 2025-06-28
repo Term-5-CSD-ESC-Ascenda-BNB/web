@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "test": "vitest",
+    "test:run": "vitest --run",
     "lint-staged": "lint-staged",
     "test:coverage": "vitest run --coverage"
   },
