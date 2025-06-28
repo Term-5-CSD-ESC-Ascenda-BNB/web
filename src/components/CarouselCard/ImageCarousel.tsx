@@ -1,6 +1,6 @@
 import { AspectRatio, Image } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
-import classes from './CarouselCard.module.css';
+import classes from './ImageCarousel.module.css';
 
 interface ImageCarouselProps {
   images: string[];

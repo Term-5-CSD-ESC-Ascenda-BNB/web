@@ -1,9 +1,9 @@
 import { Group, Stack, Text } from '@mantine/core';
-import { RatingStars } from '../RatingStars/RatingStars';
 import { ImageCarousel } from './ImageCarousel';
 import { LocationDisplay } from '../LocationDisplay/LocationDisplay';
+import { RatingStars } from '../RatingStars/RatingStars';
+import { ReviewScoreSmall } from '../ReviewScoreSmall/ReviewScoreSmall';
 import { PriceDisplay } from './PriceDisplay';
-import classes from './CarouselCard.module.css';
 
 export interface CarouselCardProps {
   id: string;
@@ -42,6 +42,7 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
           <LocationDisplay address={address} />
           <Group justify="space-between">
             <RatingStars rating={rating} showEmpty={false} size={20} />
+            <ReviewScoreSmall score={rating} />
           </Group>
         </Stack>
 
