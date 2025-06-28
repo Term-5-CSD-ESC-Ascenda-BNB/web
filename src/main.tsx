@@ -7,8 +7,10 @@ import { routeTree } from './routeTree.gen';
 
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
-import { MantineProvider, createTheme } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { theme } from './theme/index.ts';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -21,11 +23,6 @@ declare module '@tanstack/react-router' {
 }
 
 const queryClient = new QueryClient();
-
-const theme = createTheme({
-  fontFamily: 'DM Sans, sans-serif',
-  headings: { fontFamily: 'Libre Franklin, serif' },
-});
 
 // Render the app
 const rootElement = document.getElementById('root')!;
