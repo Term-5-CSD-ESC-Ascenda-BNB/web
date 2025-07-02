@@ -1,5 +1,5 @@
-import { Button, Popover, Stack } from '@mantine/core';
-import { IconUsers, IconBed } from '@tabler/icons-react';
+import { UnstyledButton, Popover, Stack, Group, Text } from '@mantine/core';
+import { IconUsers, IconBed, IconChevronDown } from '@tabler/icons-react';
 import { CounterSelector } from './CounterSelector';
 
 interface GuestsRoomsSelectorProps {
@@ -16,16 +16,29 @@ export function GuestsRoomsSelector({
   onRoomsChange,
 }: GuestsRoomsSelectorProps) {
   return (
-    <Popover width={300} trapFocus position="bottom-end" shadow="md">
+    <Popover width={260} trapFocus position="bottom-end" shadow="md">
       <Popover.Target>
-        <Button
-          variant="outline"
-          leftSection={<IconUsers size={16} />}
-          w={190}
-          justify="flex-start"
+        <UnstyledButton
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: 200,
+            padding: '8px 12px',
+            border: '1px solid var(--mantine-color-gray-4)',
+            borderRadius: 'var(--mantine-radius-sm)',
+            backgroundColor: 'var(--mantine-color-white)',
+            whiteSpace: 'nowrap',
+          }}
         >
-          {guests} guest{guests !== 1 ? 's' : ''} • {rooms} room{rooms !== 1 ? 's' : ''}
-        </Button>
+          <Group gap="xs" wrap="nowrap">
+            <IconUsers size={16} />
+            <Text size="sm">
+              {guests} guest{guests !== 1 ? 's' : ''} • {rooms} room{rooms !== 1 ? 's' : ''}
+            </Text>
+          </Group>
+          <IconChevronDown size={14} />
+        </UnstyledButton>
       </Popover.Target>
       <Popover.Dropdown>
         <Stack gap="md" p="xs">

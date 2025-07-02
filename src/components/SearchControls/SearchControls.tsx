@@ -5,14 +5,10 @@ import { useEffect, useState } from 'react';
 import { GuestsRoomsSelector } from './GuestsRoomsSelector';
 
 export function SearchControls() {
+  // Example date result: ['2025-07-01', '2025-07-10']
   const [date, setDate] = useState<[string | null, string | null]>([null, null]);
   const [guests, setGuests] = useState(2);
   const [rooms, setRooms] = useState(1);
-
-  // Example result: ['2025-07-01', '2025-07-10']
-  useEffect(() => {
-    console.log('Selected date range:', date);
-  }, [date]);
 
   const handleGuestsChange = (delta: number) => {
     setGuests((prev) => Math.max(1, prev + delta));
@@ -28,7 +24,7 @@ export function SearchControls() {
       <Divider orientation="vertical" />
       <DatePickerInput
         type="range"
-        placeholder="Pick date"
+        placeholder="Choose dates"
         value={date}
         onChange={setDate}
         valueFormat="D MMM"
