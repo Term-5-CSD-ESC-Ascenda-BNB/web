@@ -4,6 +4,7 @@ import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group, SimpleGrid } from '@mantine/core';
 import { HotelMap } from '@/components/HotelMap/HotelMap';
+import { Footer } from '@/components/Footer/Footer';
 
 export const Route = createFileRoute({ component: RouteComponent });
 
@@ -60,11 +61,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className={styles['footer']}>
-        <footer>
-          <p>© 2023 Your Company Name. All rights reserved.</p>
-        </footer>
-      </div>
+      <Footer />
     </>
   );
 }
