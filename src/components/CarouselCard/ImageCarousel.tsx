@@ -13,7 +13,7 @@ export function ImageCarousel({
   images,
   onImageClick,
   aspectRatio = 1,
-  fallbackImage = 'https://dummyimage.com/400x400/eee/aaa',
+  fallbackImage = './placeholder.png',
 }: ImageCarouselProps) {
   const displayImages = images.length > 0 ? images : [fallbackImage];
 

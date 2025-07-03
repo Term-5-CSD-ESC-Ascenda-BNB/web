@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
     },
     // root: 'src/',
     base: './',
-    publicDir: '../public',
+    publicDir: './public',
     server: {
       host: true,
     },
