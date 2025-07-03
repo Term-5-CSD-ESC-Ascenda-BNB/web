@@ -2,7 +2,7 @@ import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
 import { useHotels } from '@/hooks/useHotels';
 import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
-import { Group } from '@mantine/core';
+import { Group, SimpleGrid } from '@mantine/core';
 import { HotelMap } from '@/components/HotelMap/HotelMap';
 
 export const Route = createFileRoute({ component: RouteComponent });
@@ -53,9 +53,9 @@ function RouteComponent() {
           </Group>
 
           {/* Results grid */}
-          <div className={styles['grid-list']}>
+          <SimpleGrid type="container" cols={{ base: 2, '620px': 3 }} mb={'xl'}>
             {isLoading ? renderSkeletons() : renderHotelCards()}
-          </div>
+          </SimpleGrid>
         </div>
       </div>
 
