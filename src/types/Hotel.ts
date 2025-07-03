@@ -6,4 +6,6 @@ type MockHotel = typeof mockData extends Array<infer U> ? U : never;
 
 export type Hotel = MockHotel & {
   price: number;
+  images: string[];
+  score: number;
 };

@@ -1,9 +1,6 @@
-import { Group, Stack, Text } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { ImageCarousel } from './ImageCarousel';
-import { LocationDisplay } from '../LocationDisplay/LocationDisplay';
-import { RatingStars } from '../RatingStars/RatingStars';
-import { ReviewScoreSmall } from '../ReviewScoreSmall/ReviewScoreSmall';
-import { PriceDisplay } from './PriceDisplay';
+import { CarouselCardDetails } from './CarouselCardDetails';
 
 export interface CarouselCardProps {
   id: string;
@@ -12,45 +9,37 @@ export interface CarouselCardProps {
   rating: number;
   images: string[];
   price: number;
+  score: number;
 }
 
-export function CarouselCard({ id, name, address, rating, images, price }: CarouselCardProps) {
+export function CarouselCard({
+  id,
+  name,
+  address,
+  rating,
+  images,
+  price,
+  score,
+}: CarouselCardProps) {
   const handleCardClick = () => {
     // TODO: Add a link to the hotel details page
     console.log(`Clicked on hotel: ${id}`);
   };
 
-  // TODO: Replace with actual review score data
-  const randomScore = Math.floor(Math.random() * 10) + 1;
-
   return (
     <Stack gap="xs">
-      <ImageCarousel images={images} onImageClick={handleCardClick} />
+      <div style={{ borderRadius: 'var(--mantine-radius-lg)', overflow: 'hidden' }}>
+        <ImageCarousel images={images} onImageClick={handleCardClick} />
+      </div>
 
-      <Stack
-        style={{ cursor: 'pointer', flex: 1 }}
+      <CarouselCardDetails
+        name={name}
+        address={address}
+        rating={rating}
+        price={price}
+        score={score}
         onClick={handleCardClick}
-        role="button"
-        justify="space-between"
-        gap="sm"
-      >
-        {/* Hotel Details */}
-        <Stack gap={2}>
-          <Text truncate="end" fz="md" lh="sm">
-            {name}
-          </Text>
-          <LocationDisplay address={address} />
-          <Group justify="space-between">
-            <RatingStars rating={rating} showEmpty={false} size={20} />
-            <ReviewScoreSmall score={randomScore} />
-          </Group>
-        </Stack>
-
-        {/* Price Display */}
-        <Group justify="space-between">
-          <PriceDisplay price={price} />
-        </Group>
-      </Stack>
+      />
     </Stack>
   );
 }

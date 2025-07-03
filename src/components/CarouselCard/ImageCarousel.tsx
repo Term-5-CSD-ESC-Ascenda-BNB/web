@@ -5,12 +5,14 @@ import classes from './ImageCarousel.module.css';
 interface ImageCarouselProps {
   images: string[];
   onImageClick?: () => void;
+  aspectRatio?: number;
   fallbackImage?: string;
 }
 
 export function ImageCarousel({
   images,
   onImageClick,
+  aspectRatio = 1,
   fallbackImage = 'https://dummyimage.com/400x400/eee/aaa',
 }: ImageCarouselProps) {
   const displayImages = images.length > 0 ? images : [fallbackImage];
@@ -21,25 +23,23 @@ export function ImageCarousel({
       style={{ cursor: onImageClick ? 'pointer' : 'default' }}
       onClick={onImageClick}
     >
-      <AspectRatio ratio={1}>
+      <AspectRatio ratio={aspectRatio}>
         <Image src={image} loading="lazy" />
       </AspectRatio>
     </Carousel.Slide>
   ));
 
   return (
-    <div style={{ borderRadius: 'var(--mantine-radius-lg)', overflow: 'hidden' }}>
-      <Carousel
-        withIndicators
-        emblaOptions={{ loop: true }}
-        classNames={{
-          root: classes.carousel,
-          controls: classes.carouselControls,
-          indicator: classes.carouselIndicator,
-        }}
-      >
-        {slides}
-      </Carousel>
-    </div>
+    <Carousel
+      withIndicators
+      emblaOptions={{ loop: true }}
+      classNames={{
+        root: classes.carousel,
+        controls: classes.carouselControls,
+        indicator: classes.carouselIndicator,
+      }}
+    >
+      {slides}
+    </Carousel>
   );
 }

@@ -18,7 +18,7 @@ export default function PriceMarker({ position, price, children }: PriceMarkerPr
       html: ReactDOMServer.renderToString(<PriceTag price={price} />),
       iconSize: [56, 30],
       iconAnchor: [28, 30],
-      popupAnchor: [0, -10],
+      popupAnchor: [0, -20],
     });
   }, [price]);
 

@@ -8,7 +8,7 @@ import { HotelMap } from '@/components/HotelMap/HotelMap';
 export const Route = createFileRoute({ component: RouteComponent });
 
 function RouteComponent() {
-  const { hotels, isLoading, getHotelImages } = useHotels();
+  const { hotels, isLoading } = useHotels();
 
   const renderSkeletons = () => {
     return Array(6)
@@ -28,8 +28,9 @@ function RouteComponent() {
           name={hotel.name}
           address={hotel.address ?? ''}
           rating={hotel.rating}
-          images={getHotelImages(hotel)}
+          images={hotel.images}
           price={hotel.price}
+          score={hotel.score}
         />
       </div>
     ));
