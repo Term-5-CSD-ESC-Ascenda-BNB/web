@@ -3,6 +3,7 @@ import { useHotels } from '@/hooks/useHotels';
 import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group } from '@mantine/core';
+import { HotelMap } from '@/components/HotelMap/HotelMap';
 
 export const Route = createFileRoute({ component: RouteComponent });
 
@@ -28,6 +29,7 @@ function RouteComponent() {
           address={hotel.address ?? ''}
           rating={hotel.rating}
           images={getHotelImages(hotel)}
+          price={hotel.price}
         />
       </div>
     ));
@@ -38,7 +40,8 @@ function RouteComponent() {
       <div className={styles['root-container']}>
         {/* Map panel */}
         <div className={styles['map-container']}>
-          <span style={{ fontSize: 32 }}>Map</span>
+          {/* <span style={{ fontSize: 32 }}>Map</span> */}
+          <HotelMap hotels={hotels} />
         </div>
         {/* Search results panel */}
         <div className={styles['results-container']}>

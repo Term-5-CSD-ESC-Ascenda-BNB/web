@@ -11,16 +11,14 @@ export interface CarouselCardProps {
   address: string;
   rating: number;
   images: string[];
+  price: number;
 }
 
-export function CarouselCard({ id, name, address, rating, images }: CarouselCardProps) {
+export function CarouselCard({ id, name, address, rating, images, price }: CarouselCardProps) {
   const handleCardClick = () => {
     // TODO: Add a link to the hotel details page
     console.log(`Clicked on hotel: ${id}`);
   };
-
-  // TODO: Replace with actual price data
-  const randomPrice = Math.random() * 1000;
 
   // TODO: Replace with actual review score data
   const randomScore = Math.floor(Math.random() * 10) + 1;
@@ -50,7 +48,7 @@ export function CarouselCard({ id, name, address, rating, images }: CarouselCard
 
         {/* Price Display */}
         <Group justify="space-between">
-          <PriceDisplay price={randomPrice} />
+          <PriceDisplay price={price} />
         </Group>
       </Stack>
     </Stack>

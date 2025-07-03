@@ -11,10 +11,17 @@ export function useHotels() {
     const fetchData = async () => {
       setIsLoading(true);
 
+      // Add a random price to each hotel
+      // TODO: Replace with actual price from API
+      const updatedHotels = mockData.slice(0, 18).map((hotel) => ({
+        ...hotel,
+        price: Math.floor(Math.random() * 200) + 50, // Random price between $50 and $250
+      }));
+
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      setHotels(mockData.slice(0, 18));
+      setHotels(updatedHotels.slice(0, 18));
       setIsLoading(false);
     };
 
