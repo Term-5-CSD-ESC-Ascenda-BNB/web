@@ -2,6 +2,7 @@ import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
 import { useHotels } from '@/hooks/useHotels';
 import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
+import { Group } from '@mantine/core';
 
 export const Route = createFileRoute({ component: RouteComponent });
 
@@ -42,17 +43,12 @@ function RouteComponent() {
         {/* Search results panel */}
         <div className={styles['results-container']}>
           {/* TODO: Proper search bar and filter + menu button */}
-          <div
-            style={{
-              marginBottom: 24,
-              display: 'flex',
-              gap: 16,
-              alignItems: 'center',
-            }}
-          >
-            <SearchControls />
+
+          <Group wrap="nowrap" justify="space-between" mb={24}>
+            <SearchControls flex={1} />
             <button disabled>Menu</button>
-          </div>
+          </Group>
+
           {/* Results grid */}
           <div className={styles['grid-list']}>
             {isLoading ? renderSkeletons() : renderHotelCards()}

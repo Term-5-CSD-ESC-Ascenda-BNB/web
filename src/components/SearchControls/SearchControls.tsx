@@ -1,10 +1,14 @@
-import { Divider, Group, TextInput } from '@mantine/core';
+import { Divider, Group, TextInput, useMantineTheme } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { IconCalendar } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { IconCalendar, IconMapPinFilled } from '@tabler/icons-react';
+import { useState } from 'react';
 import { GuestsRoomsSelector } from './GuestsRoomsSelector';
 
-export function SearchControls() {
+interface SearchControlsProps {
+  flex?: number;
+}
+
+export function SearchControls({ flex = 1 }: SearchControlsProps) {
   // Example date result: ['2025-07-01', '2025-07-10']
   const [date, setDate] = useState<[string | null, string | null]>([null, null]);
   const [guests, setGuests] = useState(2);
@@ -18,10 +22,15 @@ export function SearchControls() {
     setRooms((prev) => Math.max(1, prev + delta));
   };
 
+  const theme = useMantineTheme();
+
   return (
-    <Group>
-      <TextInput />
-      <Divider orientation="vertical" />
+    <Group gap="xs" flex={flex} display={'flex'}>
+      <TextInput
+        flex={flex}
+        miw={100}
+        leftSection={<IconMapPinFilled size={16} color={theme.colors.primary[4]} />}
+      />
       <DatePickerInput
         type="range"
         placeholder="Choose dates"
@@ -36,7 +45,6 @@ export function SearchControls() {
         leftSection={<IconCalendar size={16} />}
         style={{ width: 165 }}
       />
-      <Divider orientation="vertical" />
       <GuestsRoomsSelector
         guests={guests}
         rooms={rooms}
