@@ -17,6 +17,13 @@ npm install
 npm run dev
 ```
 
+## 💡 Notes
+
+- **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
+- **Branching:** Use feature branches (e.g. `feature/search-bar`).
+- **Merging:** Test your build with `npm run build` before pushing to main.
+- **Styling:** Use CSS Modules to prevent naming conflicts. 
+
 ## 🧩 Recommended VS Code Extensions
 
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) — Shows lint errors and warnings in your editor.
@@ -32,11 +39,6 @@ If you try to commit code that doesn’t pass ESLint, the commit will fail and y
 
 It may be a bit troublesome, but ultimately it helps keep our codebase clean and consistent for everyone.
 
-## 💡 Notes
-
-- **Styling:** Use CSS Modules for component styles.
-- **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
-- **Branching:** Use feature branches (e.g. `feature/search-bar`).
 
 ## 📝 Useful Scripts
 
@@ -46,21 +48,22 @@ It may be a bit troublesome, but ultimately it helps keep our codebase clean and
 | `npm run preview` | Preview production build                |
 | `npm run test`    | Runs relevant unit tests on file change |
 | `npm run lint`    | Lints all .ts and .tsx files            |
+| `npm run build`   | Transpiles TS to JS and builds to ./dist|
 
 ## 📂 Project Structure
 
 - `src/routes/` — App routes (pages)
 - `src/components/` — Reusable UI components (e.g., CarouselCard)
 - `src/types/` — TypeScript type definitions
+- `src/hooks/` — Custom hooks
 
 ## 🛠️ Stack
 
 - **React** + **TypeScript**
 - **Vite** for fast builds and HMR
-- **Mantine** for UI components
+- **Mantine** and **Tabler Icons** for UI components
 - **TanStack Router** for routing
 - **TanStack Query** + **Axios** for data fetching/caching
-- **React Virtuoso** for virtualized lists
 - **ESLint** + **Prettier** for code quality and formatting
 - **Vitest** +**RTL** for unit and integration testing
 
