@@ -10,6 +10,8 @@ export interface CarouselCardProps {
   images: string[];
   price: number;
   score: number;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 }
 
 export function CarouselCard({
@@ -20,6 +22,8 @@ export function CarouselCard({
   images,
   price,
   score,
+  onMouseEnter,
+  onMouseLeave,
 }: CarouselCardProps) {
   const handleCardClick = () => {
     // TODO: Add a link to the hotel details page
@@ -27,7 +31,7 @@ export function CarouselCard({
   };
 
   return (
-    <Stack gap="xs">
+    <Stack gap="xs" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div style={{ borderRadius: 'var(--mantine-radius-lg)', overflow: 'hidden' }}>
         <ImageCarousel images={images} onImageClick={handleCardClick} />
       </div>

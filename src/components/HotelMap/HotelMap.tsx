@@ -4,14 +4,15 @@ import { useEffect, useMemo, useRef } from 'react';
 import { latLng, LatLngBounds, Map as LeafletMap } from 'leaflet';
 import PriceMarker from './PriceMarker';
 import styles from './Popup.module.css';
-import { CarouselCard, CarouselCardDetails } from '../CarouselCard';
+import { CarouselCardDetails } from '../CarouselCard';
 import { Stack } from '@mantine/core';
 import { ImageCarousel } from '../CarouselCard/ImageCarousel';
 interface HotelMapProps {
   hotels: Hotel[];
+  getMarkerRef: (id: string) => (marker: L.Marker | null) => void;
 }
 
-export function HotelMap({ hotels }: HotelMapProps) {
+export function HotelMap({ hotels, getMarkerRef }: HotelMapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const center = latLng(1.3521, 103.8198);
 
@@ -52,13 +53,9 @@ export function HotelMap({ hotels }: HotelMapProps) {
           key={hotel.id}
           position={[hotel.latitude, hotel.longitude]}
           price={hotel.price}
+          markerRef={getMarkerRef(hotel.id)}
         >
           <Popup className={styles.popup} minWidth={300} maxWidth={300}>
-            {/* <div>
-              <h3>{hotel.name}</h3>
-              <p>{hotel.address}</p>
-              <p>Rating: {hotel.rating}/5</p>
-            </div> */}
             <Stack gap={0} w={300}>
               <div
                 style={{

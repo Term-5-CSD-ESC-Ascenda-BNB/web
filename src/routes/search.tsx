@@ -5,11 +5,13 @@ import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group, SimpleGrid } from '@mantine/core';
 import { HotelMap } from '@/components/HotelMap/HotelMap';
 import { Footer } from '@/components/Footer/Footer';
+import { useMarkerHover } from '@/hooks/useMarkerHover';
 
 export const Route = createFileRoute({ component: RouteComponent });
 
 function RouteComponent() {
   const { hotels, isLoading } = useHotels();
+  const { makeMarkerRef, handleMouseEnter, handleMouseLeave } = useMarkerHover();
 
   const renderSkeletons = () => {
     return Array(6)
@@ -32,6 +34,8 @@ function RouteComponent() {
           images={hotel.images}
           price={hotel.price}
           score={hotel.score}
+          onMouseEnter={() => handleMouseEnter(hotel.id)}
+          onMouseLeave={() => handleMouseLeave(hotel.id)}
         />
       </div>
     ));
@@ -43,7 +47,7 @@ function RouteComponent() {
         {/* Map panel */}
         <div className={styles['map-container']}>
           {/* <span style={{ fontSize: 32 }}>Map</span> */}
-          <HotelMap hotels={hotels} />
+          <HotelMap hotels={hotels} getMarkerRef={makeMarkerRef} />
         </div>
         {/* Search results panel */}
         <div className={styles['results-container']}>
