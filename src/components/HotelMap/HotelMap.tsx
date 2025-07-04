@@ -57,8 +57,12 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
     >
       <ZoomControl
         position="topright"
-        zoomInText={renderToStaticMarkup(<IconPlus size={20} stroke={1} />)}
-        zoomOutText={renderToStaticMarkup(<IconMinus size={20} stroke={1} />)}
+        zoomInText={renderToStaticMarkup(
+          <IconPlus size={20} stroke={2} color="var(--mantine-color-primary-8)" />
+        )}
+        zoomOutText={renderToStaticMarkup(
+          <IconMinus size={20} stroke={2} color="var(--mantine-color-primary-8)" />
+        )}
       />
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {hotels.map((hotel) => (
@@ -78,7 +82,7 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
                   overflow: 'hidden',
                 }}
               >
-                // TODO: replace wiht navigation to hotel details page
+                {/* // TODO: replace wiht navigation to hotel details page */}
                 <ImageCarousel images={hotel.images} aspectRatio={4 / 3} onImageClick={() => {}} />
               </div>
               <div style={{ cursor: 'pointer', margin: '0.6rem 1rem' }}>

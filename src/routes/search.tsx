@@ -7,6 +7,7 @@ import { HotelMap } from '@/components/HotelMap/HotelMap';
 import { Footer } from '@/components/Footer/Footer';
 import { useMarkerHover } from '@/hooks/useMarkerHover';
 import { MenuButton } from '@/components/MenuButton/MenuButton';
+import { Logo } from '@/components/Logo/Logo';
 
 export const Route = createFileRoute({ component: RouteComponent });
 
@@ -45,6 +46,9 @@ function RouteComponent() {
 
   return (
     <>
+      <div className={styles['logo']}>
+        <Logo fontSize={'1.5rem'} />
+      </div>
       <div className={styles['root-container']}>
         {/* Map panel */}
         <div className={styles['map-container']}>
@@ -58,7 +62,7 @@ function RouteComponent() {
         </div>
         {/* Search results panel */}
         <div className={styles['results-container']}>
-          {/* TODO: Proper search bar and filter + menu button */}
+          {/* // TODO: Proper search bar and filter + menu button */}
 
           <Group wrap="nowrap" justify="space-between" mb={24}>
             <SearchControls flex={1} />
