@@ -69,7 +69,7 @@ describe('ImageCarousel', () => {
 
     expect(slides).toHaveLength(1);
     expect(images).toHaveLength(1);
-    expect(images[0]).toHaveAttribute('src', 'https://dummyimage.com/400x400/eee/aaa');
+    expect(images[0]).toHaveAttribute('src', './placeholder.png');
   });
 
   it('uses custom fallback image when provided', () => {
