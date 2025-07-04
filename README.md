@@ -1,5 +1,8 @@
 # Hotel Web App
 
+## 🌐 [View Deployed Site](https://esc-fe.ryanteozw.workers.dev/)
+Only builds main branch. Builds take about ~2 minutes.
+
 ## 🚀 Getting Started
 
 ### 1. Install dependencies
