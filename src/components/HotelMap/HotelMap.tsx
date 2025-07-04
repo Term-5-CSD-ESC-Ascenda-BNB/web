@@ -1,12 +1,16 @@
-import { MapContainer, TileLayer, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Popup, ZoomControl } from 'react-leaflet';
 import type { Hotel } from '@/types/Hotel';
 import { useEffect, useMemo, useRef } from 'react';
 import { latLng, LatLngBounds, Map as LeafletMap } from 'leaflet';
 import PriceMarker from './PriceMarker';
-import styles from './Popup.module.css';
-import { CarouselCardDetails } from '../CarouselCard';
+import { CarouselCardDetails } from '@/components/CarouselCard';
 import { Stack } from '@mantine/core';
-import { ImageCarousel } from '../CarouselCard/ImageCarousel';
+import { ImageCarousel } from '@/components/CarouselCard/ImageCarousel';
+import popupStyles from './Popup.module.css';
+import mapStyles from './Map.module.css';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
+
 interface HotelMapProps {
   hotels: Hotel[];
   getMarkerRef: (id: string) => (marker: L.Marker | null) => void;
@@ -48,7 +52,14 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
       wheelPxPerZoomLevel={120}
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
+      zoomControl={false}
+      className={mapStyles.mapContainer}
     >
+      <ZoomControl
+        position="topright"
+        zoomInText={renderToStaticMarkup(<IconPlus size={20} stroke={1} />)}
+        zoomOutText={renderToStaticMarkup(<IconMinus size={20} stroke={1} />)}
+      />
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {hotels.map((hotel) => (
         <PriceMarker
@@ -59,7 +70,7 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
           onPopupOpen={() => onPopupOpen(hotel.id)}
           onPopupClose={() => onPopupClose(hotel.id)}
         >
-          <Popup className={styles.popup} minWidth={300} maxWidth={300}>
+          <Popup className={popupStyles.popup} minWidth={300} maxWidth={300}>
             <Stack gap={0} w={300}>
               <div
                 style={{
@@ -67,7 +78,8 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
                   overflow: 'hidden',
                 }}
               >
-                <ImageCarousel images={hotel.images} aspectRatio={4 / 3} />
+                // TODO: replace wiht navigation to hotel details page
+                <ImageCarousel images={hotel.images} aspectRatio={4 / 3} onImageClick={() => {}} />
               </div>
               <div style={{ cursor: 'pointer', margin: '0.6rem 1rem' }}>
                 <CarouselCardDetails
@@ -76,6 +88,7 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
                   rating={hotel.rating}
                   price={hotel.price}
                   score={hotel.score}
+                  // TODO: replace with navigation to hotel details page
                   onClick={() => {}}
                 />
               </div>

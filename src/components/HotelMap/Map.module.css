@@ -1,0 +1,28 @@
+.mapContainer {
+  background-color: white;
+}
+
+.mapContainer :global(.leaflet-control-zoom) {
+  background: none;
+  border: rgba(0, 0, 0, 0.137) 1px solid;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mapContainer :global(.leaflet-control-zoom-in) {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+
+.mapContainer :global(.leaflet-control-zoom-out) {
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
+
+.mapContainer :global(.leaflet-control-zoom-in),
+.mapContainer :global(.leaflet-control-zoom-out) {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
