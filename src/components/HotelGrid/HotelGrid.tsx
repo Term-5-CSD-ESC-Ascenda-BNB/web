@@ -2,15 +2,21 @@ import { SimpleGrid } from '@mantine/core';
 import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
 import type { Hotel } from '@/types/Hotel';
 
-export interface HotelGridProps {
+interface HotelGridProps {
   hotels: Hotel[];
   isLoading: boolean;
-  skeletonCount?: number;
+  onHotelMouseEnter: (hotelId: string) => void;
+  onHotelMouseLeave: (hotelId: string) => void;
 }
 
-export function HotelGrid({ hotels, isLoading, skeletonCount = 6 }: HotelGridProps) {
+export function HotelGrid({
+  hotels,
+  isLoading,
+  onHotelMouseEnter,
+  onHotelMouseLeave,
+}: HotelGridProps) {
   const renderSkeletons = () => {
-    return Array(skeletonCount)
+    return Array(6)
       .fill(0)
       .map((_, index) => (
         <div key={`skeleton-${index}`}>
@@ -30,6 +36,8 @@ export function HotelGrid({ hotels, isLoading, skeletonCount = 6 }: HotelGridPro
           images={hotel.images}
           price={hotel.price}
           score={hotel.score}
+          onMouseEnter={() => onHotelMouseEnter(hotel.id)}
+          onMouseLeave={() => onHotelMouseLeave(hotel.id)}
         />
       </div>
     ));

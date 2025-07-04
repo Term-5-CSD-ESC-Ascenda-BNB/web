@@ -12,18 +12,12 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
-import { Route as ResultsRouteImport } from './routes/results'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResultsRoute = ResultsRouteImport.update({
-  id: '/results',
-  path: '/results',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -40,34 +34,30 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/results': typeof ResultsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/results': typeof ResultsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/results': typeof ResultsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/results' | '/search'
+  fullPaths: '/' | '/about' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/results' | '/search'
-  id: '__root__' | '/' | '/about' | '/results' | '/search'
+  to: '/' | '/about' | '/search'
+  id: '__root__' | '/' | '/about' | '/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  ResultsRoute: typeof ResultsRoute
   SearchRoute: typeof SearchRoute
 }
 
@@ -85,13 +75,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/results': {
-      id: '/results'
-      path: '/results'
-      fullPath: '/results'
-      preLoaderRoute: typeof ResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -122,15 +105,6 @@ declare module './routes/about' {
     FileRoutesByPath['/about']['fullPath']
   >
 }
-declare module './routes/results' {
-  const createFileRoute: CreateFileRoute<
-    '/results',
-    FileRoutesByPath['/results']['parentRoute'],
-    FileRoutesByPath['/results']['id'],
-    FileRoutesByPath['/results']['path'],
-    FileRoutesByPath['/results']['fullPath']
-  >
-}
 declare module './routes/search' {
   const createFileRoute: CreateFileRoute<
     '/search',
@@ -144,7 +118,6 @@ declare module './routes/search' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  ResultsRoute: ResultsRoute,
   SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
