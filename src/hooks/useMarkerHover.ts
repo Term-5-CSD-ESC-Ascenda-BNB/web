@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react';
-import priceTagStyles from '@/components/HotelMap/PriceTag.module.css';
+import styles from '@/components/HotelMap/PriceTag.module.css';
 
 export function useMarkerHover() {
   const markerRefs = useRef<Record<string, L.Marker>>({});
@@ -18,16 +18,38 @@ export function useMarkerHover() {
   const handleMouseEnter = useCallback((id: string) => {
     const m = markerRefs.current[id];
     if (!m) return;
-    const target = m.getElement()?.querySelector(`.${priceTagStyles.priceTag}`);
-    target?.classList.add(priceTagStyles.priceTagHovered);
+    const el = m.getElement();
+    const child = el?.querySelector(`.${styles.priceTag}`);
+    el?.classList.add(styles.onTop);
+    child?.classList.add(styles.priceTagHovered);
   }, []);
 
   const handleMouseLeave = useCallback((id: string) => {
     const m = markerRefs.current[id];
     if (!m) return;
-    const target = m.getElement()?.querySelector(`.${priceTagStyles.priceTag}`);
-    target?.classList.remove(priceTagStyles.priceTagHovered);
+    const el = m.getElement();
+    const child = el?.querySelector(`.${styles.priceTag}`);
+    el?.classList.remove(styles.onTop);
+    child?.classList.remove(styles.priceTagHovered);
   }, []);
 
-  return { makeMarkerRef, handleMouseEnter, handleMouseLeave };
+  const handlePopupOpen = useCallback((id: string) => {
+    const m = markerRefs.current[id];
+    if (!m) return;
+    const el = m.getElement();
+    const child = el?.querySelector(`.${styles.priceTag}`);
+    el?.classList.add(styles.onTop);
+    child?.classList.add(styles.priceTagActive);
+  }, []);
+
+  const handlePopupClose = useCallback((id: string) => {
+    const m = markerRefs.current[id];
+    if (!m) return;
+    const el = m.getElement();
+    const child = el?.querySelector(`.${styles.priceTag}`);
+    el?.classList.remove(styles.onTop);
+    child?.classList.remove(styles.priceTagActive);
+  }, []);
+
+  return { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose };
 }

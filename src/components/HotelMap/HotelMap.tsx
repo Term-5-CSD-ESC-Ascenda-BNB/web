@@ -10,9 +10,11 @@ import { ImageCarousel } from '../CarouselCard/ImageCarousel';
 interface HotelMapProps {
   hotels: Hotel[];
   getMarkerRef: (id: string) => (marker: L.Marker | null) => void;
+  onPopupOpen: (id: string) => void;
+  onPopupClose: (id: string) => void;
 }
 
-export function HotelMap({ hotels, getMarkerRef }: HotelMapProps) {
+export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: HotelMapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const center = latLng(1.3521, 103.8198);
 
@@ -54,6 +56,8 @@ export function HotelMap({ hotels, getMarkerRef }: HotelMapProps) {
           position={[hotel.latitude, hotel.longitude]}
           price={hotel.price}
           markerRef={getMarkerRef(hotel.id)}
+          onPopupOpen={() => onPopupOpen(hotel.id)}
+          onPopupClose={() => onPopupClose(hotel.id)}
         >
           <Popup className={styles.popup} minWidth={300} maxWidth={300}>
             <Stack gap={0} w={300}>

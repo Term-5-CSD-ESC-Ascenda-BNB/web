@@ -10,9 +10,18 @@ interface PriceMarkerProps {
   price: number;
   children?: React.ReactNode;
   markerRef?: React.Ref<LeafletMarker>;
+  onPopupOpen?: () => void;
+  onPopupClose?: () => void;
 }
 
-export default function PriceMarker({ position, price, children, markerRef }: PriceMarkerProps) {
+export default function PriceMarker({
+  position,
+  price,
+  children,
+  markerRef,
+  onPopupOpen,
+  onPopupClose,
+}: PriceMarkerProps) {
   // Memoize icon so it only rebuilds when `price` changes
   const icon = useMemo(() => {
     return divIcon({
@@ -25,7 +34,16 @@ export default function PriceMarker({ position, price, children, markerRef }: Pr
   }, [price]);
 
   return (
-    <Marker position={position} icon={icon} riseOnHover={true} ref={markerRef}>
+    <Marker
+      position={position}
+      icon={icon}
+      riseOnHover={true}
+      ref={markerRef}
+      eventHandlers={{
+        popupopen: onPopupOpen,
+        popupclose: onPopupClose,
+      }}
+    >
       {children}
     </Marker>
   );

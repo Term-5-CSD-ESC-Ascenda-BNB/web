@@ -17,8 +17,13 @@
 }
 
 .priceTag:hover,
-.priceTagHovered {
+.priceTagHovered,
+.priceTagActive {
   transform: scale(1.1);
   background-color: var(--mantine-color-primary-8);
   color: #ffffff;
+}
+
+.onTop {
+  z-index: 99999 !important;
 }

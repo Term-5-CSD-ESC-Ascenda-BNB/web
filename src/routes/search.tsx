@@ -11,7 +11,8 @@ export const Route = createFileRoute({ component: RouteComponent });
 
 function RouteComponent() {
   const { hotels, isLoading } = useHotels();
-  const { makeMarkerRef, handleMouseEnter, handleMouseLeave } = useMarkerHover();
+  const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
+    useMarkerHover();
 
   const renderSkeletons = () => {
     return Array(6)
@@ -47,7 +48,12 @@ function RouteComponent() {
         {/* Map panel */}
         <div className={styles['map-container']}>
           {/* <span style={{ fontSize: 32 }}>Map</span> */}
-          <HotelMap hotels={hotels} getMarkerRef={makeMarkerRef} />
+          <HotelMap
+            hotels={hotels}
+            getMarkerRef={makeMarkerRef}
+            onPopupOpen={handlePopupOpen}
+            onPopupClose={handlePopupClose}
+          />
         </div>
         {/* Search results panel */}
         <div className={styles['results-container']}>
