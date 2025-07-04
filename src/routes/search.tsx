@@ -6,6 +6,7 @@ import { Group, SimpleGrid } from '@mantine/core';
 import { HotelMap } from '@/components/HotelMap/HotelMap';
 import { Footer } from '@/components/Footer/Footer';
 import { useMarkerHover } from '@/hooks/useMarkerHover';
+import { MenuButton } from '@/components/MenuButton/MenuButton';
 
 export const Route = createFileRoute({ component: RouteComponent });
 
@@ -61,7 +62,7 @@ function RouteComponent() {
 
           <Group wrap="nowrap" justify="space-between" mb={24}>
             <SearchControls flex={1} />
-            <button disabled>Menu</button>
+            <MenuButton />
           </Group>
 
           {/* Results grid */}
