@@ -7,7 +7,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import vitest from '@vitest/eslint-plugin';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'coverage'] },
   {
     extends: [
       js.configs.recommended,

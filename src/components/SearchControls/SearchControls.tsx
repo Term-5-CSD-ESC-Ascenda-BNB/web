@@ -1,4 +1,4 @@
-import { Divider, Group, TextInput, useMantineTheme } from '@mantine/core';
+import { Group, TextInput, useMantineTheme } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { IconCalendar, IconMapPinFilled } from '@tabler/icons-react';
 import { useState } from 'react';
