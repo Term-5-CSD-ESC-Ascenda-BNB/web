@@ -1,0 +1,6 @@
+.root-container {
+  width: 70%;
+  max-width: 1200px;
+  align-items: center;
+  justify-content: center;
+}
