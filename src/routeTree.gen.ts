@@ -12,12 +12,18 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentRoute = PaymentRouteImport.update({
+  id: '/payment',
+  path: '/payment',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -34,30 +40,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/payment': typeof PaymentRoute
   '/search': typeof SearchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/payment': typeof PaymentRoute
   '/search': typeof SearchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/payment': typeof PaymentRoute
   '/search': typeof SearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/search'
+  fullPaths: '/' | '/about' | '/payment' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/search'
-  id: '__root__' | '/' | '/about' | '/search'
+  to: '/' | '/about' | '/payment' | '/search'
+  id: '__root__' | '/' | '/about' | '/payment' | '/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  PaymentRoute: typeof PaymentRoute
   SearchRoute: typeof SearchRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment': {
+      id: '/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof PaymentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -105,6 +122,15 @@ declare module './routes/about' {
     FileRoutesByPath['/about']['fullPath']
   >
 }
+declare module './routes/payment' {
+  const createFileRoute: CreateFileRoute<
+    '/payment',
+    FileRoutesByPath['/payment']['parentRoute'],
+    FileRoutesByPath['/payment']['id'],
+    FileRoutesByPath['/payment']['path'],
+    FileRoutesByPath['/payment']['fullPath']
+  >
+}
 declare module './routes/search' {
   const createFileRoute: CreateFileRoute<
     '/search',
@@ -118,6 +144,7 @@ declare module './routes/search' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  PaymentRoute: PaymentRoute,
   SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
