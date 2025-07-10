@@ -2,9 +2,17 @@ name: Tests
 
 on:
   push:
-    branches: ['main', 'feature/**']
+    branches: ['*']
+    branches-ignore: ['test/**']
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
   pull_request:
-    branches: ['main', 'feature/**']
+    branches: ['*']
+    branches-ignore: ['test/**']
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
 
 jobs:
   test:

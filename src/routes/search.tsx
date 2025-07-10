@@ -22,9 +22,7 @@ function RouteComponent() {
         <Logo fontSize={'1.5rem'} />
       </div>
       <div className={styles['root-container']}>
-        {/* Map panel */}
         <div className={styles['map-container']}>
-          {/* <span style={{ fontSize: 32 }}>Map</span> */}
           <HotelMap
             hotels={hotels}
             getMarkerRef={makeMarkerRef}
@@ -32,7 +30,7 @@ function RouteComponent() {
             onPopupClose={handlePopupClose}
           />
         </div>
-        {/* Search results panel */}
+
         <Stack gap={12} className={styles['results-container']}>
           <Group wrap="nowrap" justify="space-between" align="flex-start">
             <SearchControls flex={1} />
@@ -44,10 +42,8 @@ function RouteComponent() {
               {isLoading ? <Skeleton h={20} w={80} /> : `${hotels.length} results`}
             </Text>
 
-            <Group gap={'xs'}>
-              <Text c={'dimmed'}>Sort by:</Text>
-              <SortableSelect fields={['Rating', 'Price', 'Name']} w={120} />
-            </Group>
+            <Text c={'dimmed'}>Sort by:</Text>
+            <SortableSelect fields={['Rating', 'Price', 'Name']} w={120} />
           </Group>
 
           {/* Results grid */}

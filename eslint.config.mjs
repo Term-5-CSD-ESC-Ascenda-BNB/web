@@ -7,7 +7,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import vitest from '@vitest/eslint-plugin';
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage'] },
+  { ignores: ['dist', 'coverage', 'src/routeTree.gen.ts'] },
   {
     extends: [
       js.configs.recommended,

@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview",
-    "prepare": "husky install || true",
+    "prepare": "husky || true",
     "test": "vitest",
     "test:run": "vitest --run",
     "lint-staged": "lint-staged",
