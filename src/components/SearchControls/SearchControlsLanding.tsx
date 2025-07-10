@@ -30,8 +30,8 @@ const SearchBarWithDropdown: React.FC<SearchBarWithDropdownProps> = ({ options, 
       const filtered = options.filter((option) => {
         const label = option.label;
         if (typeof label !== 'string') return false; // skip if not string
-        const search = searchTerm.toLowerCase().trim();
-        return label.toLowerCase().trim().startsWith(search);
+        const search = searchTerm.toLowerCase();
+        return label.toLowerCase().startsWith(search);
       });
       setFilteredOptions(filtered);
       setIsDropdownOpen(true);
@@ -99,12 +99,13 @@ const SearchBarWithDropdown: React.FC<SearchBarWithDropdownProps> = ({ options, 
             backgroundColor: 'white',
             border: '1px solid #ccc',
             borderTop: 'none',
-            borderRadius: '0 0 12px 12px',
+            borderRadius: '16px',
             maxHeight: 200,
             overflowY: 'auto',
             zIndex: 100,
             listStyle: 'none',
             margin: 0,
+            marginTop: '5px',
             padding: 0,
           }}
         >
@@ -121,7 +122,8 @@ const SearchBarWithDropdown: React.FC<SearchBarWithDropdownProps> = ({ options, 
                   borderBottom: '1px solid #eee',
                 }}
               >
-                {option.label}
+                <strong>{option.label.slice(0, searchTerm.length)}</strong>
+                {option.label.slice(searchTerm.length)}
               </li>
             )
           )}
