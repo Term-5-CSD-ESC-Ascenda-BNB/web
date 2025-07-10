@@ -26,8 +26,7 @@ export function CarouselCard({
   onMouseLeave,
 }: CarouselCardProps) {
   const handleCardClick = () => {
-    // TODO: Add a link to the hotel details page
-    console.log(`Clicked on hotel: ${id}`);
+    window.location.href = `/hotels/${id}`;
   };
 
   return (
