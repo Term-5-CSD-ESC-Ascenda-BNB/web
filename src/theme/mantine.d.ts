@@ -6,4 +6,8 @@ declare module '@mantine/core' {
   export interface MantineThemeColorsOverride {
     colors: Record<ExtendedCustomColors, MantineColorsTuple>;
   }
+
+  export interface MantineThemeOther {
+    displayFont: string;
+  }
 }

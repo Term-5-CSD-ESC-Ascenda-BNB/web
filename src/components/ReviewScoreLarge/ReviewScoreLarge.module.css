@@ -1,0 +1,11 @@
+.score {
+  position: relative;
+  &::after {
+    position: absolute;
+    bottom: -0.7em;
+    right: 0;
+    content: '/10';
+    font-size: 1rem;
+    color: var(--mantine-color-primary-4);
+  }
+}
