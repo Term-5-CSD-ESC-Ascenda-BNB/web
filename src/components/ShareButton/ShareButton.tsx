@@ -1,16 +1,20 @@
-import { Button, Text, type MantineStyleProps } from '@mantine/core';
+import { type MantineStyleProps } from '@mantine/core';
 import { IconShare } from '@tabler/icons-react';
+import { IconButton } from '../IconButton/IconButton';
 
 interface ShareButtonProps {
-  width: MantineStyleProps['w'];
+  width?: MantineStyleProps['w'];
 }
 
 export function ShareButton({ width }: ShareButtonProps) {
+  const handleShare = () => {
+    // TODO: Implement share functionality here
+    console.log('Share button clicked');
+  };
+
   return (
     <>
-      <Button w={width} leftSection={<IconShare size={24} />}>
-        <Text fz={'md'}>Share</Text>
-      </Button>
+      <IconButton label="Share" icon={<IconShare size={24} />} onClick={handleShare} w={width} />
     </>
   );
 }

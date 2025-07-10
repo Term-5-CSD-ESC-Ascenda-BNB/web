@@ -1,17 +1,20 @@
-import { Text, type MantineStyleProps } from '@mantine/core';
-import { Button } from '@mantine/core';
+import { type MantineStyleProps } from '@mantine/core';
 import { IconHeart } from '@tabler/icons-react';
+import { IconButton } from '../IconButton/IconButton';
 
 interface SaveButtonProps {
-  width: MantineStyleProps['w'];
+  width?: MantineStyleProps['w'];
 }
 
 export function SaveButton({ width }: SaveButtonProps) {
+  const handleSave = () => {
+    // TODO: Implement save functionality here
+    console.log('Save button clicked');
+  };
+
   return (
     <>
-      <Button w={width} leftSection={<IconHeart size={24} />}>
-        <Text fz={'md'}>Save</Text>
-      </Button>
+      <IconButton label="Save" icon={<IconHeart size={24} />} onClick={handleSave} w={width} />
     </>
   );
 }
