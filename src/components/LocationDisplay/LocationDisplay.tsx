@@ -1,14 +1,16 @@
-import { Text } from '@mantine/core';
+import { Text, type MantineFontSize } from '@mantine/core';
 import { IconMapPinFilled } from '@tabler/icons-react';
 
 interface LocationDisplayProps {
   address: string;
+  fontSize?: MantineFontSize;
   iconSize?: number;
   iconColor?: string;
 }
 
 export function LocationDisplay({
   address,
+  fontSize = 'sm',
   iconSize = 16,
   iconColor = 'var(--mantine-color-red-6)',
 }: LocationDisplayProps) {
@@ -18,7 +20,7 @@ export function LocationDisplay({
         <IconMapPinFilled size={iconSize} color={iconColor} />
       </div>
       <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        <Text c="dimmed" truncate="end" size="sm">
+        <Text c="dimmed" truncate="end" size={fontSize}>
           {address}
         </Text>
       </div>

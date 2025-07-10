@@ -1,5 +1,8 @@
+import { Footer } from '@/components/Footer/Footer';
 import { ImageGallery } from '@/components/ImageGallery/ImageGallery';
-import hotelsData from '@/.mock_data/hotels.json';
+import { HotelDetails } from '@/features/HotelPage/HotelDetails/HotelDetails';
+import { useHotel } from '@/hooks/useHotel';
+import { Stack } from '@mantine/core';
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -7,29 +10,24 @@ export const Route = createFileRoute({
 
 function RouteComponent() {
   const { hotelId } = Route.useParams();
-
-  const hotel = hotelsData.find((hotel) => hotel.id === hotelId);
+  const { hotel, images } = useHotel(hotelId);
 
   if (!hotel) {
     return <div>Hotel not found</div>;
   }
 
-  const images: string[] = [];
-  if (hotel.image_details && hotel.hires_image_index) {
-    const { prefix, suffix } = hotel.image_details;
-    const indices = hotel.hires_image_index
-      .split(',')
-      .map((i) => i.trim())
-      .slice(0, 5);
-
-    for (const idx of indices) {
-      images.push(`${prefix}${idx}${suffix}`);
-    }
-  }
-
   return (
-    <div style={{ padding: '20px' }}>
-      <ImageGallery images={images} />
-    </div>
+    <>
+      <Stack pl={'10vh'} pr={'10vh'} pt={'2rem'} gap={'xl'} mb={'xl'}>
+        <ImageGallery images={images} />
+        <HotelDetails
+          name={hotel.name}
+          address={hotel.address}
+          starRating={hotel.rating}
+          reviewScore={hotel.trustyou.score.overall ?? undefined}
+        />
+      </Stack>
+      <Footer />
+    </>
   );
 }
