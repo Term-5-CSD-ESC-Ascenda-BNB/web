@@ -6,13 +6,12 @@ import {
   IconGift,
   IconRefresh,
 } from '@tabler/icons-react';
-import { useHotels, useMarkerHover } from '@/hooks';
+import { useHotels } from '@/hooks';
 import { IndexTopNavBar } from '@/components/IndexTopNavBar/IndexTopNavBar';
 import { Footer } from '@/components/Footer/Footer';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
 import { HelpButton } from '@/components/HelpButton/HelpButton';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
-import { FeaturedHotels } from '@/components/FeaturedHotels/FeaturedHotels';
 import { Group, Stack } from '@mantine/core';
 import { Exceptional } from '@/components/Exceptional/Exceptional';
 
@@ -22,8 +21,6 @@ export const Route = createFileRoute({
 
 function Index() {
   const { hotels, isLoading } = useHotels();
-  const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
-    useMarkerHover();
 
   return (
     <>
@@ -43,12 +40,7 @@ function Index() {
       <Stack gap={12} className={styles['listings-container']}>
         <h2>Featured Hotels</h2>
         <div className={styles['hotels-container']}>
-          <HotelGrid
-            hotels={hotels.slice(0, 3)}
-            isLoading={isLoading}
-            onHotelMouseEnter={handleMouseEnter}
-            onHotelMouseLeave={handleMouseLeave}
-          />
+          <HotelGrid hotels={hotels.slice(0, 3)} isLoading={isLoading} />
         </div>
         <a href="search" className={styles['discover-more']}>
           Discover more <IconCaretRightFilled size={16} color="black" />
@@ -57,12 +49,7 @@ function Index() {
       <Stack gap={12} className={styles['listings-container']}>
         <h2>Recommended for you</h2>
         <div className={styles['hotels-container']}>
-          <HotelGrid
-            hotels={hotels.slice(3, 6)}
-            isLoading={isLoading}
-            onHotelMouseEnter={handleMouseEnter}
-            onHotelMouseLeave={handleMouseLeave}
-          />
+          <HotelGrid hotels={hotels.slice(3, 6)} isLoading={isLoading} />
         </div>
         <a href="search" className={styles['discover-more']}>
           Discover more <IconCaretRightFilled size={16} color="black" />
@@ -71,12 +58,7 @@ function Index() {
       <Stack gap={12} className={styles['listings-container']}>
         <h2>Saved Searches</h2>
         <div className={styles['hotels-container']}>
-          <HotelGrid
-            hotels={hotels.slice(6, 9)}
-            isLoading={isLoading}
-            onHotelMouseEnter={handleMouseEnter}
-            onHotelMouseLeave={handleMouseLeave}
-          />
+          <HotelGrid hotels={hotels.slice(6, 9)} isLoading={isLoading} />
         </div>
         <a href="search" className={styles['discover-more']}>
           Discover more <IconCaretRightFilled size={16} color="black" />
