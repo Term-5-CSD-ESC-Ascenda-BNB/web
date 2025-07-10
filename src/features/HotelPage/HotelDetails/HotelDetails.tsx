@@ -7,7 +7,7 @@ interface HotelDetailsProps {
   name: string;
   starRating: number;
   address: string;
-  reviewScore?: number;
+  reviewScore: number;
 }
 
 export function HotelDetails({ name, starRating, address, reviewScore }: HotelDetailsProps) {
@@ -21,7 +21,7 @@ export function HotelDetails({ name, starRating, address, reviewScore }: HotelDe
           {/* // TODO: Share/Save buttons */}
         </Stack>
 
-        <ReviewScoreLarge score={reviewScore ?? 0} />
+        <ReviewScoreLarge score={reviewScore} />
       </Group>
     </>
   );

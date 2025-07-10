@@ -24,7 +24,7 @@ function RouteComponent() {
           name={hotel.name}
           address={hotel.address}
           starRating={hotel.rating}
-          reviewScore={hotel.trustyou.score.overall ?? undefined}
+          reviewScore={hotel.trustyou.score.overall ?? 0}
         />
       </Stack>
       <Footer />
