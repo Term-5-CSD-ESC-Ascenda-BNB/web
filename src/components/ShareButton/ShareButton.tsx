@@ -14,7 +14,13 @@ export function ShareButton({ width }: ShareButtonProps) {
 
   return (
     <>
-      <IconButton label="Share" icon={<IconShare size={24} />} onClick={handleShare} w={width} />
+      <IconButton
+        label="Share"
+        icon={<IconShare size={24} />}
+        onClick={handleShare}
+        w={width}
+        variant="subtle"
+      />
     </>
   );
 }
