@@ -26,7 +26,7 @@ export function GuestsRoomsSelector({
             width: 200,
             padding: '8px 12px',
             border: '1px solid var(--mantine-color-gray-4)',
-            borderRadius: 'var(--mantine-radius-sm)',
+            borderRadius: 50,
             backgroundColor: 'var(--mantine-color-white)',
             whiteSpace: 'nowrap',
           }}

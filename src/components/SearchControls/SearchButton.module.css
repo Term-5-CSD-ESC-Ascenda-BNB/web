@@ -1,0 +1,41 @@
+.searchButton {
+  width: 1.75em;
+  height: 1.75em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #626693;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: background 0.15s;
+}
+
+.icon {
+  color: white;
+  transition: color 0.15s;
+  width: 16px;
+}
+
+.searchButton:hover {
+  background: #dddddd;
+}
+
+.searchButton:hover .icon {
+  color: #333333;
+}
+
+/* Animation */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.searchButton:hover svg path {
+  animation: bounce 0.25s ease-in-out;
+}

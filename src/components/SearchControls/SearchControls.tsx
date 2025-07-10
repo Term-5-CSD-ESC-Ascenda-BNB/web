@@ -30,6 +30,7 @@ export function SearchControls({ flex = 1 }: SearchControlsProps) {
         flex={flex}
         miw={100}
         leftSection={<IconMapPinFilled size={16} color={theme.colors.primary[4]} />}
+        radius={50}
       />
       <DatePickerInput
         type="range"
@@ -44,6 +45,7 @@ export function SearchControls({ flex = 1 }: SearchControlsProps) {
         }}
         leftSection={<IconCalendar size={16} />}
         style={{ width: 165 }}
+        radius={50}
       />
       <GuestsRoomsSelector
         guests={guests}

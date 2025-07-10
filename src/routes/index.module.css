@@ -1,6 +1,10 @@
+h1 {
+  margin-top: 0;
+}
+
 .root-container {
   display: flex;
-  height: 70vh;
+  height: 50vh;
   background: #86a8e7; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
@@ -37,8 +41,8 @@
 }
 
 .search-content-container {
-  align-content: center;
-  justify-content: center;
+  /* align-content: center;
+  justify-content: center; */
   width: 80%;
 }
 
