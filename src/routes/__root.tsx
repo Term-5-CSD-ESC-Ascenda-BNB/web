@@ -1,6 +1,7 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import styles from './nav.module.css';
+import { Footer } from '@/components/Footer/Footer';
 
 export const Route = createRootRoute({
   component: () => (
@@ -23,6 +24,7 @@ export const Route = createRootRoute({
       }
 
       <Outlet />
+      {/* <Footer /> */}
 
       <TanStackRouterDevtools />
     </>

@@ -15,6 +15,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HotelsHotelIdRouteImport } from './routes/hotels/$hotelId'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -36,18 +37,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
+  id: '/hotels/$hotelId',
+  path: '/hotels/$hotelId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/payment': typeof PaymentRoute
   '/search': typeof SearchRoute
+  '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/payment': typeof PaymentRoute
   '/search': typeof SearchRoute
+  '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -55,13 +63,14 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/payment': typeof PaymentRoute
   '/search': typeof SearchRoute
+  '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/payment' | '/search'
+  fullPaths: '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/payment' | '/search'
-  id: '__root__' | '/' | '/about' | '/payment' | '/search'
+  to: '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
+  id: '__root__' | '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -69,6 +78,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   PaymentRoute: typeof PaymentRoute
   SearchRoute: typeof SearchRoute
+  HotelsHotelIdRoute: typeof HotelsHotelIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotels/$hotelId': {
+      id: '/hotels/$hotelId'
+      path: '/hotels/$hotelId'
+      fullPath: '/hotels/$hotelId'
+      preLoaderRoute: typeof HotelsHotelIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -140,12 +157,22 @@ declare module './routes/search' {
     FileRoutesByPath['/search']['fullPath']
   >
 }
+declare module './routes/hotels/$hotelId' {
+  const createFileRoute: CreateFileRoute<
+    '/hotels/$hotelId',
+    FileRoutesByPath['/hotels/$hotelId']['parentRoute'],
+    FileRoutesByPath['/hotels/$hotelId']['id'],
+    FileRoutesByPath['/hotels/$hotelId']['path'],
+    FileRoutesByPath['/hotels/$hotelId']['fullPath']
+  >
+}
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   PaymentRoute: PaymentRoute,
   SearchRoute: SearchRoute,
+  HotelsHotelIdRoute: HotelsHotelIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
