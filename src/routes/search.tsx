@@ -18,10 +18,10 @@ function RouteComponent() {
 
   return (
     <>
-      <div className={styles['logo']}>
-        <Logo fontSize={'1.5rem'} />
-      </div>
       <div className={styles['root-container']}>
+        <div className={styles['logo']}>
+          <Logo fontSize={'1.5rem'} />
+        </div>
         <div className={styles['map-container']}>
           <HotelMap
             hotels={hotels}
