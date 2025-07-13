@@ -42,7 +42,11 @@ const dummySurroundings = [
 
 const dummyRoom = {
   name: 'Premier King Room With Garden View',
-  images: ['/images/room1.jpg', '/images/room2.jpg', '/images/room3.jpg', '/images/room4.jpg'],
+  images: [
+    'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80',
+  ],
   features: [
     'Bathtub',
     'Balcony',

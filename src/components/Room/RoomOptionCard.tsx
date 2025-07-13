@@ -1,4 +1,11 @@
-import { Badge, Box, Button, Group, Stack, Text, NumberInput } from '@mantine/core';
+import { Box, Button, Divider, Group, Stack, Text, NumberInput } from '@mantine/core';
+import {
+  IconToolsKitchen2,
+  IconCreditCard,
+  IconCalendarCancel,
+  IconCalendarCheck,
+  IconX,
+} from '@tabler/icons-react';
 
 interface RoomOption {
   breakfast?: string;
@@ -15,44 +22,68 @@ interface RoomOptionCardProps {
 
 export function RoomOptionCard({ option }: RoomOptionCardProps) {
   return (
-    <Box p="md" mb="md" withBorder radius="md">
-      <Stack gap="xs">
-        {option.breakfast && <Text size="sm">{option.breakfast}</Text>}
-
-        <Group gap="xs" wrap="wrap">
-          {option.refundable && (
-            <Badge color="green" variant="light">
-              Refundable
-            </Badge>
+    <Box
+      p="md"
+      style={{
+        border: '1px solid #888888ff',
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+      }}
+    >
+      <Group align="flex-start" justify="space-between" wrap="nowrap">
+        <Stack gap="xs" style={{ flex: 1 }}>
+          {option.breakfast && (
+            <Group gap={6}>
+              <IconToolsKitchen2 size={16} />
+              <Text size="sm" fw={500}>
+                {option.breakfast}
+              </Text>
+            </Group>
           )}
-          {option.reschedulable && (
-            <Badge color="blue" variant="light">
-              Reschedulable
-            </Badge>
-          )}
-          {option.prepay && (
-            <Badge color="orange" variant="light">
-              Prepay Required
-            </Badge>
-          )}
-        </Group>
 
-        <Group position="apart" align="center" mt="sm">
-          <Stack gap={0}>
-            <Text fw={500}>SGD ${option.price}</Text>
-            <Text size="xs" c="dimmed">
-              Total: ${option.totalPrice}
-            </Text>
-          </Stack>
-
-          <Group gap="xs">
-            <NumberInput min={0} max={10} defaultValue={1} size="xs" />
-            <Button size="xs" radius="md">
-              Reserve
-            </Button>
+          <Group gap={6}>
+            <IconX size={16} />
+            <Text size="sm">{option.refundable ? 'Refundable' : 'Non-Refundable'}</Text>
           </Group>
-        </Group>
-      </Stack>
+
+          <Group gap={6}>
+            <IconCalendarCancel size={16} />
+            <Text size="sm">{option.reschedulable ? 'Reschedulable' : 'Non-Reschedulable'}</Text>
+          </Group>
+
+          <Group gap={6}>
+            <IconCreditCard size={16} />
+            <Text size="sm">Prepay Online</Text>
+          </Group>
+        </Stack>
+
+        <Stack gap="xs" align="flex-end" style={{ minWidth: 160 }}>
+          <Group gap="xs">
+            <Text size="sm" fw={500}>
+              No. of Rooms:
+            </Text>
+            <NumberInput
+              min={0}
+              max={10}
+              size="xs"
+              defaultValue={1}
+              hideControls
+              style={{ width: 50 }}
+            />
+          </Group>
+
+          <Text size="sm">
+            Nightly Rate: <b>SGD ${option.price}</b>
+          </Text>
+          <Text size="sm">
+            Total (incl. fees & taxes): <b>SGD ${option.totalPrice}</b>
+          </Text>
+
+          <Button radius="xl" size="sm" style={{ backgroundColor: '#514D8A' }}>
+            Reserve
+          </Button>
+        </Stack>
+      </Group>
     </Box>
   );
 }

@@ -1,3 +1,4 @@
+import { Box, Stack, Text } from '@mantine/core';
 import { RoomOptionCard } from './RoomOptionCard';
 
 interface RoomOption {
@@ -15,10 +16,16 @@ interface RoomOptionsProps {
 
 export function RoomOptions({ options }: RoomOptionsProps) {
   return (
-    <>
-      {options.map((opt, i) => (
-        <RoomOptionCard key={i} option={opt} />
-      ))}
-    </>
+    <Box>
+      <Text fw={600} size="sm" mb="md">
+        Options:
+      </Text>
+
+      <Stack gap="md">
+        {options.map((opt, i) => (
+          <RoomOptionCard key={i} option={opt} />
+        ))}
+      </Stack>
+    </Box>
   );
 }

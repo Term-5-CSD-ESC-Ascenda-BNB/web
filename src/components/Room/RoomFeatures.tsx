@@ -11,6 +11,7 @@ import {
   IconWifi,
   IconEye,
   IconSmokingNo,
+  IconHelpCircle,
 } from '@tabler/icons-react';
 
 interface RoomFeaturesProps {
@@ -33,10 +34,10 @@ const FEATURE_ICON_MAP: Record<string, JSX.Element> = {
 
 export function RoomFeatures({ features }: RoomFeaturesProps) {
   return (
-    <SimpleGrid cols={2} spacing="xs" mt="sm">
+    <SimpleGrid cols={2} spacing={8} mt="md" style={{ maxWidth: 360, width: '100%' }}>
       {features.map((feature, i) => (
-        <Group key={i} gap={6}>
-          {FEATURE_ICON_MAP[feature] || <IconEye size={16} />}
+        <Group key={i} gap={6} align="center">
+          {FEATURE_ICON_MAP[feature] || <IconHelpCircle size={16} />}
           <Text size="sm">{feature}</Text>
         </Group>
       ))}

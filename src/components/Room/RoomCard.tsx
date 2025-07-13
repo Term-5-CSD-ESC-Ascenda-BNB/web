@@ -1,7 +1,7 @@
 import { Box, Flex, Stack, Text } from '@mantine/core';
 import { RoomGallery } from './RoomGallery';
 import { RoomFeatures } from './RoomFeatures';
-// import { RoomOptions } from './RoomOptions';
+import { RoomOptions } from './RoomOptions';
 
 interface RoomOption {
   title: string;
@@ -27,16 +27,16 @@ export function RoomCard({ name, images, features, options }: RoomCardProps) {
         Rooms
       </Text>
 
-      <Flex wrap="wrap" gap="xl">
-        <Stack style={{ flex: 1, minWidth: 300 }}>
+      <Flex wrap="wrap" align="flex-start" gap="xl">
+        <Stack style={{ flex: '0 0 360px', maxWidth: 380 }}>
           <Text fw={500}>{name}</Text>
           <RoomGallery images={images} />
           <RoomFeatures features={features} />
         </Stack>
 
-        {/* <Box style={{ flex: 1, minWidth: 300 }}>
+        <Box style={{ flex: 1, minWidth: 320 }}>
           <RoomOptions options={options} />
-        </Box> */}
+        </Box>
       </Flex>
     </Box>
   );

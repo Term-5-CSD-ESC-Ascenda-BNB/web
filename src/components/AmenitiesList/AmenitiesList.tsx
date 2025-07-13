@@ -47,7 +47,21 @@ export function AmenitiesList({ amenities }: AmenitiesListProps) {
           </Group>
         ))}
       </Group>
-      <Button variant="outline" radius="md" size="xs" mt="md" style={{ borderColor: '#ccc' }}>
+      <Button
+        variant="outline"
+        radius="xl"
+        size="sm"
+        mt="md"
+        styles={{
+          root: {
+            borderColor: '#C4C4C4',
+            color: '#000',
+            fontWeight: 500,
+            padding: '6px 16px',
+            backgroundColor: '#fff',
+          },
+        }}
+      >
         View all 30 amenities
       </Button>
     </Box>
