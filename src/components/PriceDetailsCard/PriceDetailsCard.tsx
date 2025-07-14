@@ -1,6 +1,28 @@
 import { Paper, Stack, Text, Divider, Group } from '@mantine/core';
 
-export function PriceDetailsCard() {
+interface PriceDetailsCardProps {
+  roomType: string;
+  rooms: number;
+  checkin: string;
+  checkout: string;
+  currency: string;
+}
+
+export function PriceDetailsCard({
+  roomType,
+  rooms,
+  checkin,
+  checkout,
+  currency,
+}: PriceDetailsCardProps) {
+  function getNumberOfNights(checkin: string, checkout: string): number {
+    const checkinDate = new Date(checkin);
+    const checkoutDate = new Date(checkout);
+    const diffTime = checkoutDate.getTime() - checkinDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24); // ms to days
+    return diffDays;
+  }
+
   return (
     <Paper withBorder radius="md" p="md" mt="md">
       <Stack gap={4}>
@@ -10,7 +32,7 @@ export function PriceDetailsCard() {
         <Divider />
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
-            1 room ($1,600) x 9 nights
+            {rooms} room ($1,600) x {getNumberOfNights(checkin, checkout)} nights
           </Text>
           <Text size="sm">S$14,955.75</Text>
         </Group>
@@ -18,7 +40,7 @@ export function PriceDetailsCard() {
           <Text size="sm" c="dimmed">
             VAT and Fees
           </Text>
-          <Text size="sm">S$1,495.53</Text>
+          <Text size="sm">$1,495.53</Text>
         </Group>
         <Group justify="space-between">
           <Text size="sm" c="dimmed">

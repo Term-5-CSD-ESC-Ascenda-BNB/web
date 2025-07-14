@@ -17,8 +17,8 @@ export const Route = createRootRoute({
           <Link to="/search" className={styles.link + ' [&.active]:font-bold'}>
             Search
           </Link>
-          <Link to="/payment" className={styles.link + ' [&.active]:font-bold'}>
-            Payment
+          <Link to="/booking" className={styles.link + ' [&.active]:font-bold'}>
+            Booking
           </Link>
         </div>
       }
