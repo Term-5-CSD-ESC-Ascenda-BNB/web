@@ -1,12 +1,8 @@
 import { IconDots } from '@tabler/icons-react';
-import { UnstyledButton } from '@mantine/core';
+import { IconButton } from '../IconButton/IconButton';
 import styles from './MenuButton.module.css';
 import React from 'react';
 
 export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <UnstyledButton className={styles.menuButton} {...props}>
-      <IconDots size={20} />
-    </UnstyledButton>
-  );
+  return <IconButton className={styles.menuButton} icon={<IconDots size={20} />} {...props} />;
 }
