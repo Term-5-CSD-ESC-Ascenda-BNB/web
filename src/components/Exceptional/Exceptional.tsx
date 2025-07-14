@@ -13,7 +13,7 @@ export function Exceptional({ icon: Icon, header, body }: ExceptionalProps) {
     <div className={styles['exceptional-content-container']}>
       <Stack>
         <Group>
-          <Icon size={44} stroke={1.5} />
+          <Icon size={44} stroke={1.5} color={'#43455e'} />
           <Text>
             <b>{header}</b>
           </Text>

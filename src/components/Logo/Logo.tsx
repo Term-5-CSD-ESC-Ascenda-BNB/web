@@ -6,9 +6,16 @@ interface LogoProps {
   fontWeight?: number | string;
   style?: React.CSSProperties;
   onClick?: () => void;
+  className?: string;
 }
 
-export function Logo({ fontSize = '2rem', fontWeight = 500, style = {}, onClick }: LogoProps) {
+export function Logo({
+  className,
+  fontSize = '2rem',
+  fontWeight = 500,
+  style = {},
+  onClick,
+}: LogoProps) {
   const router = useRouter();
   const handleClick = onClick || (() => router.navigate({ to: '/' }));
   return (
@@ -21,6 +28,7 @@ export function Logo({ fontSize = '2rem', fontWeight = 500, style = {}, onClick 
         cursor: 'pointer',
       }}
       onClick={handleClick}
+      className={className}
     >
       Wayfare
     </span>

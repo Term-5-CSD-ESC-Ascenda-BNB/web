@@ -115,7 +115,8 @@ const SearchBarWithDropdown: React.FC<SearchBarWithDropdownProps> = ({ options, 
             ) => (
               <li
                 key={option.value}
-                onClick={() => handleSelect(option)}
+                // onClick={() => handleSelect(option)}
+                onMouseDown={() => handleSelect(option)}
                 style={{
                   padding: '10px 16px',
                   cursor: 'pointer',
