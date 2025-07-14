@@ -45,6 +45,8 @@ export function FilterButton({ onFiltersChange, initialFilters, ...props }: Filt
     setOpened(false);
   };
 
+  const appliedFiltersCount = countAppliedFilters();
+
   return (
     <Popover
       width={300}
@@ -56,8 +58,8 @@ export function FilterButton({ onFiltersChange, initialFilters, ...props }: Filt
     >
       <Popover.Target>
         <Indicator
-          label={countAppliedFilters()}
-          disabled={countAppliedFilters() === 0}
+          label={appliedFiltersCount}
+          disabled={appliedFiltersCount === 0}
           size={16}
           offset={5}
         >

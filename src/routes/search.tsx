@@ -44,11 +44,7 @@ function RouteComponent() {
           </Group>
 
           <Group justify="flex-start" gap={'xs'}>
-            {isLoading ? (
-              <Skeleton h={20} w={80} />
-            ) : (
-              <Text mr={'xs'}> {hotels.length} results </Text>
-            )}
+            {isLoading ? <Skeleton h={20} w={80} /> : <Text mr="xs">{hotels.length} results</Text>}
 
             <Text c={'dimmed'}>Sort by:</Text>
             <SortableSelect fields={['Rating', 'Price', 'Name']} w={120} />
