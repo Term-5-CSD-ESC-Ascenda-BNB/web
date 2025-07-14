@@ -1,5 +1,5 @@
 import { IconDots } from '@tabler/icons-react';
-import { IconButton } from '../IconButton/IconButton';
+import { IconButton } from '@/components/IconButton/IconButton';
 import styles from './MenuButton.module.css';
 import React from 'react';
 
