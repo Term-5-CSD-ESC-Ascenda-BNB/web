@@ -1,8 +1,8 @@
 import { Group, TextInput, useMantineTheme } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { IconCalendar, IconMapPinFilled } from '@tabler/icons-react';
-import { useState } from 'react';
 import { GuestsRoomsSelector } from './GuestsRoomsSelector';
+import { useSearchControls } from './hooks';
 
 interface SearchControlsProps {
   flex?: number;
@@ -10,17 +10,8 @@ interface SearchControlsProps {
 
 export function SearchControls({ flex = 1 }: SearchControlsProps) {
   // Example date result: ['2025-07-01', '2025-07-10']
-  const [date, setDate] = useState<[string | null, string | null]>([null, null]);
-  const [guests, setGuests] = useState(2);
-  const [rooms, setRooms] = useState(1);
-
-  const handleGuestsChange = (delta: number) => {
-    setGuests((prev) => Math.max(1, prev + delta));
-  };
-
-  const handleRoomsChange = (delta: number) => {
-    setRooms((prev) => Math.max(1, prev + delta));
-  };
+  const { date, guests, rooms, setDate, handleGuestsChange, handleRoomsChange } =
+    useSearchControls();
 
   const theme = useMantineTheme();
 
