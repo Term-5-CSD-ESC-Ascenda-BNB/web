@@ -1,4 +1,3 @@
-// src/types/Destination.ts
 export interface Destination {
   term: string;
   uid: string;

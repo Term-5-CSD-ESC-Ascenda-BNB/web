@@ -1,30 +1,38 @@
-import { useState, useEffect } from 'react';
-import mockDataRaw from '@/.mock_data/destinations.json';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import type { Destination } from '@/types/Destination';
 
-const mockData = mockDataRaw as Destination[];
+const fetchDestinations = async (): Promise<Destination[]> => {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 1500));
 
-export function useDestination() {
-  const [terms, setTerms] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // TODO: Replace with actual API endpoint
+  const response = await axios.get<Destination[]>('/mock_data/destinations.json');
+  return response.data;
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+export function useDestinations() {
+  const {
+    data: destinations = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['destinations'],
+    queryFn: fetchDestinations,
+    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+    gcTime: 10 * 60 * 1000, // Cache for 10 minutes
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const termList = mockData.map((d) => d.term);
-      setTerms(termList);
-      setIsLoading(false);
-    };
-
-    void fetchData();
-  }, []);
+  const terms = destinations.map((destination) => destination.term);
 
   return {
     terms,
     isLoading,
+    error,
+    refetch,
+    destinations, // Also expose full destination objects
   };
 }
