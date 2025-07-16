@@ -1,13 +1,20 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { Destination } from '@/types/Destination';
+import { getIconByType } from '@/utils';
+
+const createDisplayLabel = (destination: Destination): string => {
+  const typeLabel = destination.type.charAt(0).toUpperCase() + destination.type.slice(1);
+
+  if (destination.state) {
+    return `${destination.term} (${destination.state}) [${typeLabel}] - `;
+  }
+  return `${destination.term} [${typeLabel}]`;
+};
 
 const fetchDestinations = async (): Promise<Destination[]> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-
-  // TODO: Replace with actual API endpoint
-  const response = await axios.get<Destination[]>('/mock_data/destinations.json');
+  const response = await axios.get<Destination[]>('/destinations.json');
   return response.data;
 };
 
@@ -26,13 +33,20 @@ export function useDestinations() {
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
-  const terms = destinations.map((destination) => destination.term);
+  const memoizedData = useMemo(() => {
+    const terms = destinations.map((destination) => destination.term);
+    const displayLabels = destinations.map(createDisplayLabel);
+    const iconComponents = destinations.map((destination) => getIconByType(destination.type));
+    return { terms, displayLabels, iconComponents };
+  }, [destinations]);
 
   return {
-    terms,
+    terms: memoizedData.terms,
+    displayLabels: memoizedData.displayLabels,
+    iconComponents: memoizedData.iconComponents,
     isLoading,
     error,
     refetch,
-    destinations, // Also expose full destination objects
+    destinations,
   };
 }

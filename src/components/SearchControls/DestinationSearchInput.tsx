@@ -1,8 +1,8 @@
 import { TextInput, useMantineTheme } from '@mantine/core';
 import { IconMapPinFilled } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { SearchButton } from './SearchButton';
 import styles from './DestinationSearchInput.module.css';
+import { SearchButton } from '../buttons/SearchButton/SearchButton';
 
 interface Option {
   label: string;

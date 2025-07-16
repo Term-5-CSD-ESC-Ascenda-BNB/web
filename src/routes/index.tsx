@@ -12,7 +12,7 @@ import { Footer } from '@/components/Footer/Footer';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
 import { HelpButton } from '@/components/HelpButton/HelpButton';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
-import { Group, Stack } from '@mantine/core';
+import { Group, Stack, Text, useMantineTheme } from '@mantine/core';
 import { Exceptional } from '@/components/Exceptional/Exceptional';
 
 export const Route = createFileRoute({
@@ -22,17 +22,24 @@ export const Route = createFileRoute({
 function Index() {
   const { hotels, isLoading } = useHotels();
 
+  const theme = useMantineTheme();
+
   return (
     <>
-      <IndexTopNavBar />
+      {/* <IndexTopNavBar /> */}
+
       <div className={styles['root-container']}>
         {/* Search panel */}
         <div className={styles['search-container']}>
-          <div className={styles['search-content-container']}>
-            <h1>Where to next?</h1>
-            <p>Your next stay awaits.</p>
+          <Stack gap={0}>
+            <Text size={'3rem'} ff={theme.other.displayFont} fw={300}>
+              Where to next?
+            </Text>
+            <Text size="xl" ml={'xs'} mb={'sm'}>
+              Your next stay awaits.
+            </Text>
             <SearchControlsLanding />
-          </div>
+          </Stack>
         </div>
         {/* Logo panel */}
         <div className={styles['logo-container']}></div>

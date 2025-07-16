@@ -2,7 +2,7 @@ import { Group, TextInput, useMantineTheme } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { IconCalendar, IconMapPinFilled } from '@tabler/icons-react';
 import { GuestsRoomsSelector } from './GuestsRoomsSelector';
-import { useSearchControls } from './hooks';
+import { useSearchControls } from './useSearchControls';
 
 interface SearchControlsProps {
   flex?: number;
@@ -17,6 +17,7 @@ export function SearchControls({ flex = 1 }: SearchControlsProps) {
 
   return (
     <Group gap="xs" flex={flex} display={'flex'}>
+      {/* // TODO: Make this text input autocomplete */}
       <TextInput
         flex={flex}
         miw={100}
