@@ -7,24 +7,18 @@ import { useDestinations } from './useDestinations';
 interface DestinationOption {
   uid: string;
   term: string;
-  displayLabel: string;
   icon: React.FC<IconProps>;
 }
 
 const FUSE_CONFIG = {
   keys: ['term'],
-  threshold: 0.4, // Slightly more strict for better performance
-  includeScore: false, // Disable scoring for better performance
+  threshold: 0.5,
   minMatchCharLength: 2,
-  ignoreLocation: true,
-  findAllMatches: false,
-  shouldSort: true,
-  distance: 100, // Limit search distance
 };
 
 const SEARCH_CONFIG = {
   debounceMs: 250, // Debounce time in milliseconds
-  maxResults: 10, // Reduced from 15 for better performance
+  maxResults: 10,
   minSearchLength: 2,
 } as const;
 
@@ -34,7 +28,7 @@ interface FuseResult {
 }
 
 export function useDestinationSearch(searchValue: string) {
-  const { destinations, displayLabels, iconComponents, error } = useDestinations();
+  const { destinations, iconComponents, error } = useDestinations();
   const [debouncedValue] = useDebouncedValue(searchValue, SEARCH_CONFIG.debounceMs);
 
   const fuse = useMemo(() => {
@@ -43,12 +37,11 @@ export function useDestinationSearch(searchValue: string) {
     const options: DestinationOption[] = destinations.map((dest, index) => ({
       uid: dest.uid,
       term: dest.term,
-      displayLabel: displayLabels[index],
       icon: iconComponents[index],
     }));
 
     return new Fuse(options, FUSE_CONFIG);
-  }, [destinations, displayLabels, iconComponents]);
+  }, [destinations, iconComponents]);
 
   const [fuseResults, setFuseResults] = useState<FuseResult[]>([]);
 
@@ -75,15 +68,16 @@ export function useDestinationSearch(searchValue: string) {
     };
   }, [fuse, debouncedValue]);
 
+  // Had to use the full JSON.stringify to ensure unique values
   const searchResults = useMemo(() => {
-    return fuseResults.map((result) => result.item.displayLabel);
+    return fuseResults.map((result) => JSON.stringify(result.item));
   }, [fuseResults]);
 
   const searchResultsWithIcons = useMemo(() => {
     return fuseResults.map((result) => ({
+      value: JSON.stringify(result.item),
       uid: result.item.uid,
       term: result.item.term,
-      label: result.item.displayLabel,
       icon: result.item.icon,
     }));
   }, [fuseResults]);

@@ -33,14 +33,14 @@ export function DestinationSearch({
       filter={({ options }) => options} // Disable Mantine's internal filtering - we handle it with Fuse.js
       data={searchResults}
       renderOption={({ option }) => {
-        const optionData = searchResultsWithIcons.find((item) => item.label === option.value);
+        const optionData = searchResultsWithIcons.find((item) => item.value === option.value);
         if (!optionData) return option.value;
 
         const IconComponent = optionData.icon;
         return (
           <Group gap="xs" wrap="nowrap">
             <IconComponent size={16} style={{ flexShrink: 0 }} />
-            <Text size="sm">{option.value}</Text>
+            <Text size="sm">{optionData.term}</Text>
           </Group>
         );
       }}

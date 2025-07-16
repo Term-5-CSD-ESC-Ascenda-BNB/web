@@ -47,18 +47,19 @@ export const getIconByType = (type: string): React.FC<IconProps> => {
     theater: IconMask,
     stadium: IconBuildingStadium,
     casino: IconCards,
-    golf: IconGolf,
     winery: IconGlassFullFilled,
     business: IconBriefcase,
     medical: IconBuildingHospital,
-    civic: IconBuildingCommunity,
+    district: IconBuildingEstate,
+    golf: IconGolf,
     skiing: IconSkiJumping,
+    civic: IconBuildingCommunity,
+    // what are all these wtf
     anchor: IconAnchor,
     sign: IconDirectionsFilled,
     tree: IconTree,
     icecream: IconIceCream,
     sunglass: IconSunglasses,
-    district: IconBuildingEstate,
   };
   return iconMap[type.toLowerCase()] || IconMapPin;
 };
