@@ -12,6 +12,7 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +21,11 @@ import { Route as HotelsHotelIdRouteImport } from './routes/hotels/$hotelId'
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentRoute = PaymentRouteImport.update({
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/payment': typeof PaymentRoute
+  '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/payment': typeof PaymentRoute
+  '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
@@ -62,21 +70,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/payment': typeof PaymentRoute
+  '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/payment'
+    | '/register'
+    | '/search'
+    | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
-  id: '__root__' | '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
+  to: '/' | '/about' | '/payment' | '/register' | '/search' | '/hotels/$hotelId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/payment'
+    | '/register'
+    | '/search'
+    | '/hotels/$hotelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   PaymentRoute: typeof PaymentRoute
+  RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
 }
@@ -102,6 +125,13 @@ declare module '@tanstack/react-router' {
       path: '/payment'
       fullPath: '/payment'
       preLoaderRoute: typeof PaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -148,6 +178,15 @@ declare module './routes/payment' {
     FileRoutesByPath['/payment']['fullPath']
   >
 }
+declare module './routes/register' {
+  const createFileRoute: CreateFileRoute<
+    '/register',
+    FileRoutesByPath['/register']['parentRoute'],
+    FileRoutesByPath['/register']['id'],
+    FileRoutesByPath['/register']['path'],
+    FileRoutesByPath['/register']['fullPath']
+  >
+}
 declare module './routes/search' {
   const createFileRoute: CreateFileRoute<
     '/search',
@@ -171,6 +210,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   PaymentRoute: PaymentRoute,
+  RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
 }

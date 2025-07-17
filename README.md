@@ -1,6 +1,7 @@
 # Hotel Web App
 
 ## 🌐 [View Deployed Site](https://esc-fe.ryanteozw.workers.dev/)
+
 Only builds main branch. Builds take about ~2 minutes.
 
 ## 🚀 Getting Started
@@ -22,7 +23,7 @@ npm run dev
 - **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
 - **Branching:** Use feature branches (e.g. `feature/search-bar`).
 - **Merging:** Test your build with `npm run build` before pushing to main.
-- **Styling:** Use CSS Modules to prevent naming conflicts. 
+- **Styling:** Use CSS Modules to prevent naming conflicts.
 
 ## 🧩 Recommended VS Code Extensions
 
@@ -39,16 +40,15 @@ If you try to commit code that doesn’t pass ESLint, the commit will fail and y
 
 It may be a bit troublesome, but ultimately it helps keep our codebase clean and consistent for everyone.
 
-
 ## 📝 Useful Scripts
 
-| Script            | What it does                            |
-| ----------------- | --------------------------------------- |
-| `npm run dev`     | Start development server                |
-| `npm run preview` | Preview production build                |
-| `npm run test`    | Runs relevant unit tests on file change |
-| `npm run lint`    | Lints all .ts and .tsx files            |
-| `npm run build`   | Transpiles TS to JS and builds to ./dist|
+| Script            | What it does                             |
+| ----------------- | ---------------------------------------- |
+| `npm run dev`     | Start development server                 |
+| `npm run preview` | Preview production build                 |
+| `npm run test`    | Runs relevant unit tests on file change  |
+| `npm run lint`    | Lints all .ts and .tsx files             |
+| `npm run build`   | Transpiles TS to JS and builds to ./dist |
 
 ## 📂 Project Structure
 
