@@ -1,91 +1,72 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
-import Fuse from 'fuse.js';
-import type { IconProps } from '@tabler/icons-react';
-import { useDestinations } from './useDestinations';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { getIconByType } from '@/utils';
+import type { TablerIcon } from '@tabler/icons-react';
 
-interface DestinationOption {
-  uid: string;
-  term: string;
-  icon: React.FC<IconProps>;
-}
-
-const FUSE_CONFIG = {
-  keys: ['term'],
-  threshold: 0.5,
-  minMatchCharLength: 2,
-};
+const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://api-production-46df.up.railway.app';
 
 const SEARCH_CONFIG = {
-  debounceMs: 250, // Debounce time in milliseconds
-  maxResults: 10,
+  debounceTime: 250, // Debounce time in milliseconds
   minSearchLength: 2,
 } as const;
-
-interface FuseResult {
-  item: DestinationOption;
-  refIndex: number;
+interface ApiResponse {
+  location: {
+    type: string;
+    coordinates: [number, number];
+  };
+  state?: string;
+  term: string;
+  type: string;
+  uid: string;
 }
 
+export interface DestinationSearchResult {
+  term: string;
+  uid: string;
+  icon: TablerIcon;
+}
+
+const fetchDestinations = async (searchValue: string): Promise<ApiResponse[]> => {
+  if (!searchValue.trim() || searchValue.trim().length < SEARCH_CONFIG.minSearchLength) {
+    return [];
+  }
+
+  const response = await axios.get<ApiResponse[]>(`${API_BASE_URL}/destinations`, {
+    params: { search: searchValue },
+  });
+  return response.data;
+};
+
 export function useDestinationSearch(searchValue: string) {
-  const { destinations, iconComponents, error } = useDestinations();
-  const [debouncedValue] = useDebouncedValue(searchValue, SEARCH_CONFIG.debounceMs);
+  const [debouncedValue] = useDebouncedValue(searchValue, SEARCH_CONFIG.debounceTime);
 
-  const fuse = useMemo(() => {
-    if (!destinations.length) return null;
+  const {
+    data: destinations = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['destinations', debouncedValue],
+    queryFn: () => fetchDestinations(debouncedValue),
+    enabled: debouncedValue.trim().length >= SEARCH_CONFIG.minSearchLength,
+    staleTime: 30 * 1000, // Data is fresh for 30 seconds
+    gcTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
 
-    const options: DestinationOption[] = destinations.map((dest, index) => ({
-      uid: dest.uid,
-      term: dest.term,
-      icon: iconComponents[index],
-    }));
-
-    return new Fuse(options, FUSE_CONFIG);
-  }, [destinations, iconComponents]);
-
-  const [fuseResults, setFuseResults] = useState<FuseResult[]>([]);
-
-  useEffect(() => {
-    if (!debouncedValue.trim() || debouncedValue.trim().length < SEARCH_CONFIG.minSearchLength) {
-      setFuseResults([]);
-      return;
-    }
-
-    if (!fuse) {
-      setFuseResults([]);
-      return;
-    }
-
-    // setTimeout to yield control back to main thread
-    // Prevents blocking the UI thread during search
-    const timeoutId = setTimeout(() => {
-      const results = fuse.search(debouncedValue);
-      setFuseResults(results.slice(0, SEARCH_CONFIG.maxResults));
-    }, 0);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [fuse, debouncedValue]);
-
-  // Had to use the full JSON.stringify to ensure unique values
-  const searchResults = useMemo(() => {
-    return fuseResults.map((result) => JSON.stringify(result.item));
-  }, [fuseResults]);
-
-  const searchResultsWithIcons = useMemo(() => {
-    return fuseResults.map((result) => ({
-      value: JSON.stringify(result.item),
-      uid: result.item.uid,
-      term: result.item.term,
-      icon: result.item.icon,
-    }));
-  }, [fuseResults]);
+  const searchResults = useMemo<DestinationSearchResult[]>(() => {
+    return destinations.map((destination) => {
+      return {
+        uid: destination.uid,
+        term: destination.term,
+        icon: getIconByType(destination.type),
+      };
+    });
+  }, [destinations]);
 
   return {
     searchResults,
-    searchResultsWithIcons,
     error,
-    isLoading: !destinations.length && !error,
+    isLoading,
   };
 }

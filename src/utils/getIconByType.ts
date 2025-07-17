@@ -24,7 +24,7 @@ import {
   IconSunglasses,
   IconBuildingEstate,
   IconMapPin,
-  type IconProps,
+  type TablerIcon,
 } from '@tabler/icons-react';
 
 /**
@@ -32,8 +32,8 @@ import {
  * @param type - The destination type (e.g., 'city', 'airport', 'museum')
  * @returns React component for the icon
  */
-export const getIconByType = (type: string): React.FC<IconProps> => {
-  const iconMap: Record<string, React.FC<IconProps>> = {
+export const getIconByType = (type: string): TablerIcon => {
+  const iconMap: Record<string, TablerIcon> = {
     city: IconBuildingSkyscraper,
     airport: IconPlane,
     hotel: IconBuilding,
