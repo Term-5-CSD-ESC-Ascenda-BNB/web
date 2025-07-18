@@ -7,13 +7,13 @@ import {
   IconRefresh,
 } from '@tabler/icons-react';
 import { useHotels } from '@/hooks';
-import { IndexTopNavBar } from '@/components/IndexTopNavBar/IndexTopNavBar';
+import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { Footer } from '@/components/Footer/Footer';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
-import { HelpButton } from '@/components/HelpButton/HelpButton';
+import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
 import { Group, Stack, Text, useMantineTheme } from '@mantine/core';
-import { Exceptional } from '@/components/Exceptional/Exceptional';
+import { Exceptional } from '@/features/LandingPage/Exceptional/Exceptional';
 
 export const Route = createFileRoute({
   component: Index,
@@ -109,6 +109,7 @@ function Index() {
           </Group>
         </Stack>
       </div>
+
       <HelpButton />
       <Footer />
     </>

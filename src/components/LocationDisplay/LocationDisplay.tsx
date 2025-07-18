@@ -8,6 +8,9 @@ interface LocationDisplayProps {
   iconColor?: string;
 }
 
+/**
+ * Displays address with a map pin icon.
+ */
 export function LocationDisplay({
   address,
   fontSize = 'sm',
