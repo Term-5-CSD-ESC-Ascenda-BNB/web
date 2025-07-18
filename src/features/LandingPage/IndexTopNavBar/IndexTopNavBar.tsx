@@ -1,5 +1,5 @@
-import { Logo } from '../Logo/Logo';
-import { MenuButton } from '../buttons/MenuButton/MenuButton';
+import { Logo } from '@/components/Logo/Logo';
+import { MenuButton } from '@/components/buttons/';
 import styles from './IndexTopNavBar.module.css';
 
 export function IndexTopNavBar() {
