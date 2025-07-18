@@ -1,9 +1,9 @@
+import React from 'react';
 import { IconDots } from '@tabler/icons-react';
-import { IconButton } from '../../IconButton/IconButton';
 import { Drawer } from '@mantine/core';
+import { IconButton } from '@/components/IconButton/IconButton';
 import { useDisclosure } from '@mantine/hooks';
 import styles from './MenuButton.module.css';
-import React from 'react';
 import { Logo } from '@/components/Logo/Logo';
 
 export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
@@ -14,6 +14,7 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
       <IconButton
         className={styles.menuButton}
         icon={<IconDots size={20} />}
+        w={42}
         onClick={open}
         {...props}
       />
@@ -25,7 +26,7 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
         title={<Logo fontSize={'1.5rem'} />}
         overlayProps={{ blur: 4 }}
       >
-        {/* Drawer content goes here */}
+        {/* //TODO: add Drawer content */}
       </Drawer>
     </>
   );

@@ -1,50 +1,63 @@
-import { Group, TextInput, useMantineTheme } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
-import { IconCalendar, IconMapPinFilled } from '@tabler/icons-react';
+import { Group } from '@mantine/core';
 import { GuestsRoomsSelector } from './GuestsRoomsSelector';
-import { useSearchControls } from './useSearchControls';
+import { DatePicker } from './DatePicker';
+import { DestinationSearch } from './DestinationSearch';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
+import { SearchParamsSchema } from '@/schemas/SearchParamsSchema';
+import { SearchButton } from '../buttons';
+import { useForm } from '@mantine/form';
 
-interface SearchControlsProps {
-  flex?: number;
-}
+const routeApi = getRouteApi('/search');
 
-export function SearchControls({ flex = 1 }: SearchControlsProps) {
-  // Example date result: ['2025-07-01', '2025-07-10']
-  const { date, guests, rooms, setDate, handleGuestsChange, handleRoomsChange } =
-    useSearchControls();
+export function SearchControls() {
+  const searchParams = routeApi.useSearch();
+  const navigate = useNavigate({});
 
-  const theme = useMantineTheme();
+  const form = useForm({
+    initialValues: {
+      uid: searchParams.uid,
+      term: searchParams.term,
+      date: searchParams.date,
+      guests: searchParams.guests,
+      rooms: searchParams.rooms,
+    },
+    validate: {
+      uid: (value) => (value ? null : 'Destination is required'),
+      date: (value) => (value[0] && value[1] ? null : 'Date range is required'),
+    },
+  });
+
+  const handleSearchButtonClick = () => {
+    const validationResult = form.validate();
+
+    if (validationResult.hasErrors) {
+      console.error('Validation failed:', validationResult.errors);
+      return;
+    }
+
+    void navigate({
+      to: '/search',
+      search: SearchParamsSchema.parse(form.values),
+    });
+  };
 
   return (
-    <Group gap="xs" flex={flex} display={'flex'}>
-      {/* // TODO: Make this text input autocomplete */}
-      <TextInput
-        flex={flex}
-        miw={100}
-        leftSection={<IconMapPinFilled size={16} color={theme.colors.primary[4]} />}
-        radius={50}
-      />
-      <DatePickerInput
-        type="range"
-        placeholder="Choose dates"
-        value={date}
-        onChange={setDate}
-        valueFormat="D MMM"
-        excludeDate={(dateStr) => {
-          const today = new Date();
-          const selectedDate = new Date(dateStr);
-          return selectedDate <= today;
+    <Group gap="xs" flex={1} display={'flex'}>
+      <DestinationSearch
+        destination={form.values.term}
+        onDestinationChange={(uid, term) => {
+          form.setFieldValue('uid', uid);
+          form.setFieldValue('term', term);
         }}
-        leftSection={<IconCalendar size={16} />}
-        style={{ width: 165 }}
-        radius={50}
       />
+      <DatePicker date={form.values.date} setDate={(date) => form.setFieldValue('date', date)} />
       <GuestsRoomsSelector
-        guests={guests}
-        rooms={rooms}
-        onGuestsChange={handleGuestsChange}
-        onRoomsChange={handleRoomsChange}
+        guests={form.values.guests}
+        rooms={form.values.rooms}
+        setGuests={(guests) => form.setFieldValue('guests', guests)}
+        setRooms={(rooms) => form.setFieldValue('rooms', rooms)}
       />
+      <SearchButton onClick={handleSearchButtonClick} />
     </Group>
   );
 }

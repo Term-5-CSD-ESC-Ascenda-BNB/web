@@ -8,6 +8,7 @@ interface CounterSelectorProps {
   value: number;
   onValueChange: (delta: number) => void;
   minValue?: number;
+  maxValue?: number;
 }
 
 export function CounterSelector({
@@ -16,6 +17,7 @@ export function CounterSelector({
   value,
   onValueChange,
   minValue = 1,
+  maxValue = 10,
 }: CounterSelectorProps) {
   return (
     <Group justify="space-between" wrap="nowrap">
@@ -37,7 +39,12 @@ export function CounterSelector({
         <Text size="sm" fw={500} w={20} ta="center">
           {value}
         </Text>
-        <ActionIcon variant="outline" size="sm" onClick={() => onValueChange(1)}>
+        <ActionIcon
+          variant="outline"
+          size="sm"
+          onClick={() => onValueChange(1)}
+          disabled={value >= maxValue}
+        >
           <IconPlus size={12} />
         </ActionIcon>
       </Group>

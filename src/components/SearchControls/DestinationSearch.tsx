@@ -2,18 +2,21 @@ import { Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
 import { useDestinationSearch, type DestinationSearchResult } from '@/hooks/useDestinationSearch';
 import { IconMapPinFilled } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
-import { useDebouncedValue } from '@mantine/hooks';
 
 interface DestinationSearchProps {
-  onDestinationChange: (value: string) => void;
+  destination?: string;
+  onDestinationChange: (uid: string, term: string) => void;
+  error?: boolean;
 }
 
-export function DestinationSearch({ onDestinationChange }: DestinationSearchProps) {
-  const [searchValue, setSearchValue] = useState('');
-
+export function DestinationSearch({
+  destination = '',
+  onDestinationChange,
+  error: formError,
+}: DestinationSearchProps) {
+  const [searchValue, setSearchValue] = useState(destination);
+  const lastValidTerm = useRef(destination);
   const { searchResults, isLoading, error } = useDestinationSearch(searchValue);
-
-  const lastValidTerm = useRef('');
 
   const combobox = useCombobox({
     onDropdownClose: () => {
@@ -32,7 +35,7 @@ export function DestinationSearch({ onDestinationChange }: DestinationSearchProp
   };
 
   const handleSubmit = (value: DestinationSearchResult) => {
-    onDestinationChange(value.uid);
+    onDestinationChange(value.uid, value.term);
     setSearchValue(value.term);
     lastValidTerm.current = value.term;
     combobox.closeDropdown();
@@ -58,6 +61,7 @@ export function DestinationSearch({ onDestinationChange }: DestinationSearchProp
           size="md"
           radius={9999}
           leftSection={<IconMapPinFilled size={16} />}
+          error={formError}
         />
       </Combobox.Target>
       <Combobox.Dropdown mah={250} style={{ overflowY: 'auto' }}>

@@ -1,2 +1,2 @@
-export { DestinationSearch } from './DestinationSearch';
+export { SearchControls } from './SearchControls';
 export { SearchControlsLanding } from './SearchControlsLanding';

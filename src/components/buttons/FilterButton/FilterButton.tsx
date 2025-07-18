@@ -64,9 +64,10 @@ export function FilterButton({ onFiltersChange, initialFilters, ...props }: Filt
           offset={5}
         >
           <IconButton
-            icon={<IconFilter size={20} className={styles.filterIcon} />}
+            icon={<IconFilter size={16} className={styles.filterIcon} />}
             onClick={handleButtonClick}
             className={styles.filterButton}
+            w={36}
             {...props}
           />
         </Indicator>

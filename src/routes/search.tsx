@@ -10,8 +10,12 @@ import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
+import { SearchParamsSchema } from '@/schemas/searchParamsSchema';
 
-export const Route = createFileRoute({ component: RouteComponent });
+export const Route = createFileRoute({
+  component: RouteComponent,
+  validateSearch: SearchParamsSchema,
+});
 
 function RouteComponent() {
   const { hotels, isLoading } = useHotels();
@@ -39,7 +43,7 @@ function RouteComponent() {
 
         <Stack gap={12} className={styles['results-container']}>
           <Group wrap="nowrap" justify="space-between" align="flex-start">
-            <SearchControls flex={1} />
+            <SearchControls />
             <MenuButton />
           </Group>
 
