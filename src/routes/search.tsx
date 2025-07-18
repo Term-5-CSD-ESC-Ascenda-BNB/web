@@ -10,7 +10,7 @@ import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
-import { SearchParamsSchema } from '@/schemas/searchParamsSchema';
+import { SearchParamsSchema } from '@/schemas/SearchParamsSchema';
 
 export const Route = createFileRoute({
   component: RouteComponent,
