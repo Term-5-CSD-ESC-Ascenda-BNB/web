@@ -40,7 +40,7 @@ export function GuestsRoomsSelector({
           }}
         >
           <Group gap="xs" wrap="nowrap">
-            <IconUsers size={16} />
+            <IconUsers size={16} color="var(--mantine-color-gray-6)" />
             <Text size="sm">
               {guests} guest{guests !== 1 ? 's' : ''} • {rooms} room{rooms !== 1 ? 's' : ''}
             </Text>

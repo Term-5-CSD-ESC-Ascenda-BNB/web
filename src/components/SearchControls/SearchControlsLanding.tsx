@@ -45,7 +45,7 @@ export function SearchControlsLanding() {
             form.setFieldValue('uid', uid);
             form.setFieldValue('term', term);
           }}
-          error={form.errors.selectedUid ? true : false}
+          error={form.errors.uid ? true : false}
         />
         <SearchButton onClick={handleSearchButtonClick} />
       </Group>
