@@ -1,36 +1,29 @@
-import React from 'react';
 import { useRouter } from '@tanstack/react-router';
+import { Text, type ElementProps, type TextProps } from '@mantine/core';
 
-interface LogoProps {
-  fontSize?: string | number;
-  fontWeight?: number | string;
-  style?: React.CSSProperties;
-  onClick?: () => void;
-  className?: string;
-}
+interface LogoProps extends Omit<TextProps, 'ff'>, ElementProps<'a', keyof TextProps> {}
 
-export function Logo({
-  className,
-  fontSize = '2rem',
-  fontWeight = 500,
-  style = {},
-  onClick,
-}: LogoProps) {
+export function Logo({ className, fz = '2rem', fw = 500, style = {}, ...props }: LogoProps) {
   const router = useRouter();
-  const handleClick = onClick || (() => router.navigate({ to: '/' }));
+  const handleClick = () => {
+    void router.navigate({ to: '/' });
+  };
+
   return (
-    <span
+    <Text
+      component="a"
       style={{
-        fontFamily: '"Cormorant Garamond", serif',
-        fontSize,
-        fontWeight,
-        ...style,
         cursor: 'pointer',
+        ...style,
       }}
+      ff={'"Cormorant Garamond", serif'}
+      fz={fz}
+      fw={fw}
       onClick={handleClick}
       className={className}
+      {...props}
     >
       Wayfare
-    </span>
+    </Text>
   );
 }

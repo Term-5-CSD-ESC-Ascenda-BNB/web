@@ -30,7 +30,7 @@ function RouteComponent() {
     <>
       <div className={styles['root-container']}>
         <div className={styles['logo']}>
-          <Logo fontSize={'1.5rem'} />
+          <Logo fz={'1.5rem'} />
         </div>
         <div className={styles['map-container']}>
           <HotelMap
