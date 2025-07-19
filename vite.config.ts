@@ -28,6 +28,13 @@ export default defineConfig(({ mode }) => {
     publicDir: './public',
     server: {
       host: true,
+      proxy: {
+        '/api': {
+          target: 'https://api-production-46df.up.railway.app',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
     },
     build: {
       outDir: './dist',

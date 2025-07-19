@@ -5,8 +5,8 @@ import type { Hotel } from '@/types/Hotel';
 interface HotelGridProps {
   hotels: Hotel[];
   isLoading: boolean;
-  onHotelMouseEnter: (hotelId: string) => void;
-  onHotelMouseLeave: (hotelId: string) => void;
+  onHotelMouseEnter?: (hotelId: string) => void;
+  onHotelMouseLeave?: (hotelId: string) => void;
 }
 
 export function HotelGrid({
@@ -36,8 +36,8 @@ export function HotelGrid({
           images={hotel.images}
           price={hotel.price}
           score={hotel.score}
-          onMouseEnter={() => onHotelMouseEnter(hotel.id)}
-          onMouseLeave={() => onHotelMouseLeave(hotel.id)}
+          onMouseEnter={() => onHotelMouseEnter?.(hotel.id)}
+          onMouseLeave={() => onHotelMouseLeave?.(hotel.id)}
         />
       </div>
     ));

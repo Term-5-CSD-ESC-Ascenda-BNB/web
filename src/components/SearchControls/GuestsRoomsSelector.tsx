@@ -5,16 +5,23 @@ import { CounterSelector } from './CounterSelector';
 interface GuestsRoomsSelectorProps {
   guests: number;
   rooms: number;
-  onGuestsChange: (delta: number) => void;
-  onRoomsChange: (delta: number) => void;
+  setGuests: (guests: number) => void;
+  setRooms: (rooms: number) => void;
 }
 
 export function GuestsRoomsSelector({
   guests,
   rooms,
-  onGuestsChange,
-  onRoomsChange,
+  setGuests,
+  setRooms,
 }: GuestsRoomsSelectorProps) {
+  const handleGuestsChange = (delta: number) => {
+    setGuests(guests + delta);
+  };
+  const handleRoomsChange = (delta: number) => {
+    setRooms(rooms + delta);
+  };
+
   return (
     <Popover width={260} trapFocus position="bottom-end" shadow="md">
       <Popover.Target>
@@ -24,20 +31,21 @@ export function GuestsRoomsSelector({
             alignItems: 'center',
             justifyContent: 'space-between',
             width: 200,
+            height: 42,
             padding: '8px 12px',
-            border: '1px solid var(--mantine-color-gray-4)',
-            borderRadius: 'var(--mantine-radius-sm)',
+            borderRadius: 50,
             backgroundColor: 'var(--mantine-color-white)',
             whiteSpace: 'nowrap',
+            border: '1px solid var(--mantine-color-gray-4)',
           }}
         >
           <Group gap="xs" wrap="nowrap">
-            <IconUsers size={16} />
+            <IconUsers size={16} color="var(--mantine-color-gray-6)" />
             <Text size="sm">
               {guests} guest{guests !== 1 ? 's' : ''} • {rooms} room{rooms !== 1 ? 's' : ''}
             </Text>
           </Group>
-          <IconChevronDown size={14} />
+          <IconChevronDown size={16} />
         </UnstyledButton>
       </Popover.Target>
       <Popover.Dropdown>
@@ -46,13 +54,17 @@ export function GuestsRoomsSelector({
             label="Guests"
             icon={<IconUsers size={16} />}
             value={guests}
-            onValueChange={onGuestsChange}
+            onValueChange={handleGuestsChange}
+            minValue={1}
+            maxValue={10}
           />
           <CounterSelector
             label="Rooms"
             icon={<IconBed size={16} />}
             value={rooms}
-            onValueChange={onRoomsChange}
+            onValueChange={handleRoomsChange}
+            minValue={1}
+            maxValue={10}
           />
         </Stack>
       </Popover.Dropdown>
