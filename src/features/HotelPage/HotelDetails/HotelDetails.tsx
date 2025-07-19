@@ -63,6 +63,7 @@ const dummyRoom = {
   ],
   options: [
     {
+      title: 'Paid Breakfast',
       breakfast: 'Breakfast for SGD $53.94 (optional)',
       refundable: false,
       reschedulable: false,
@@ -71,6 +72,7 @@ const dummyRoom = {
       totalPrice: 1239,
     },
     {
+      title: 'Free Breakfast Option',
       breakfast: 'Free Breakfast for 2',
       refundable: true,
       reschedulable: true,

@@ -18,7 +18,7 @@ interface RoomFeaturesProps {
   features: string[];
 }
 
-const FEATURE_ICON_MAP: Record<string, JSX.Element> = {
+const FEATURE_ICON_MAP: Record<string, React.ReactElement> = {
   Bathtub: <IconBath size={16} />,
   Balcony: <IconHome2 size={16} />,
   'Smart TV': <IconDeviceTv size={16} />,

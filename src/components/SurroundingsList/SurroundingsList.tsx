@@ -13,7 +13,7 @@ interface Surrounding {
   distance: string;
 }
 
-const ICON_MAP: Record<string, JSX.Element> = {
+const ICON_MAP: Record<string, React.ReactElement> = {
   Metro: <IconTrain size={18} />,
   Airport: <IconPlane size={18} />,
   Shopping: <IconShoppingBag size={18} />,

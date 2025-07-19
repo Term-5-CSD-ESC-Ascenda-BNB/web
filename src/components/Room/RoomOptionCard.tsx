@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Group, Stack, Text, NumberInput } from '@mantine/core';
+import { Box, Button, Group, Stack, Text, NumberInput } from '@mantine/core';
 import {
   IconToolsKitchen2,
   IconCreditCard,
@@ -7,14 +7,7 @@ import {
   IconX,
 } from '@tabler/icons-react';
 
-interface RoomOption {
-  breakfast?: string;
-  refundable: boolean;
-  reschedulable: boolean;
-  prepay: boolean;
-  price: number;
-  totalPrice: number;
-}
+import type { RoomOption } from '@/types/Room';
 
 interface RoomOptionCardProps {
   option: RoomOption;
@@ -68,7 +61,9 @@ export function RoomOptionCard({ option }: RoomOptionCardProps) {
               size="xs"
               defaultValue={1}
               hideControls
-              style={{ width: 50 }}
+              styles={{
+                input: { width: 50 },
+              }}
             />
           </Group>
 

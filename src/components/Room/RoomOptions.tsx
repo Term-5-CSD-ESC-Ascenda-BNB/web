@@ -1,14 +1,7 @@
 import { Box, Stack, Text } from '@mantine/core';
 import { RoomOptionCard } from './RoomOptionCard';
 
-interface RoomOption {
-  breakfast?: string;
-  refundable: boolean;
-  reschedulable: boolean;
-  prepay: boolean;
-  price: number;
-  totalPrice: number;
-}
+import type { RoomOption } from '@/types/Room';
 
 interface RoomOptionsProps {
   options: RoomOption[];

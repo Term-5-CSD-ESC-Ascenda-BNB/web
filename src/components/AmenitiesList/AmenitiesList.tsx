@@ -14,7 +14,7 @@ import {
   IconPresentation,
 } from '@tabler/icons-react';
 
-const ICON_MAP: Record<string, JSX.Element> = {
+const ICON_MAP: Record<string, React.ReactElement> = {
   Parking: <IconParking size={18} />,
   Gym: <IconBarbell size={18} />,
   'Wi-Fi': <IconWifi size={18} />,
