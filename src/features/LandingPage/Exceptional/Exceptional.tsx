@@ -1,25 +1,24 @@
-import { Group, Stack, Text } from '@mantine/core';
-import styles from './Exceptional.module.css';
-import type { IconProps } from '@tabler/icons-react'; // not from dist/esm/types
+import { Card, Group, Stack, Text } from '@mantine/core';
+import { type TablerIcon } from '@tabler/icons-react';
 
 interface ExceptionalProps {
-  icon: React.FC<IconProps>; // Type for any Tabler icon component
+  icon: TablerIcon;
   header: string;
   body: string;
 }
 
 export function Exceptional({ icon: Icon, header, body }: ExceptionalProps) {
   return (
-    <div className={styles['exceptional-content-container']}>
+    <Card shadow={'0 2px 6px rgba(0,0,0,0.1)'} p={'xl'}>
       <Stack>
         <Group>
-          <Icon size={44} stroke={1.5} color={'#43455e'} />
-          <Text>
-            <b>{header}</b>
+          <Icon size={42} stroke={1.5} color="var(--mantine-color-primary-7)" />
+          <Text fw={500} fz={'lg'}>
+            {header}
           </Text>
         </Group>
         <Text>{body}</Text>
       </Stack>
-    </div>
+    </Card>
   );
 }

@@ -2,12 +2,14 @@ import { IconButton, type IconButtonProps } from '@/components/IconButton/IconBu
 import { IconSearch } from '@tabler/icons-react';
 import styles from './SearchButton.module.css';
 
-type SearchButtonProps = Omit<IconButtonProps, 'icon'>;
+interface SearchButtonProps extends Omit<IconButtonProps, 'icon'> {
+  iconSize?: number;
+}
 
-export function SearchButton(props: SearchButtonProps) {
+export function SearchButton({ iconSize = 20, ...props }: SearchButtonProps) {
   return (
     <IconButton
-      icon={<IconSearch size={20} color="var(--mantine-color-primary-1)" />}
+      icon={<IconSearch size={iconSize} color="var(--mantine-color-primary-1)" />}
       className={styles.searchButton}
       w={42}
       {...props}

@@ -39,7 +39,7 @@ export function SearchControlsLanding() {
 
   return (
     <Stack gap="xs">
-      <Group justify="space-between" wrap="wrap" style={{ gap: 8 }}>
+      <Group justify="space-between" wrap="wrap" style={{ gap: 8 }} maw={500}>
         <DestinationSearch
           onDestinationChange={(uid, term) => {
             form.setFieldValue('uid', uid);
