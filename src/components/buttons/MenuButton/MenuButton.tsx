@@ -23,7 +23,7 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
         opened={opened}
         onClose={close}
         position="right"
-        title={<Logo fontSize={'1.5rem'} />}
+        title={<Logo fz={'1.5rem'} />}
         overlayProps={{ blur: 4 }}
       >
         {/* //TODO: add Drawer content */}
