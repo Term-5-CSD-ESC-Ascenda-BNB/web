@@ -4,7 +4,7 @@ import fragmentShader from './shaders/earth/fragment.glsl';
 import { TextureLoader } from 'three';
 import { extend, useLoader, type ThreeElement } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useControls } from 'leva';
+import { useAtmosphereControls } from './hooks/useAtmosphereControls';
 
 const EarthShaderMaterial = shaderMaterial(
   {
@@ -28,16 +28,7 @@ declare module '@react-three/fiber' {
 }
 
 export function EarthMaterial() {
-  const { atmosphereDayColor, atmosphereTwilightColor } = useControls('Atmosphere', {
-    atmosphereDayColor: {
-      value: '#00aaff',
-      label: 'Atmosphere Day Color',
-    },
-    atmosphereTwilightColor: {
-      value: '#ff6600',
-      label: 'Atmosphere Twilight Color',
-    },
-  });
+  const { atmosphereDayColor, atmosphereTwilightColor } = useAtmosphereControls();
 
   const dayTexture = useLoader(TextureLoader, '/textures/earth/day.jpg');
   dayTexture.colorSpace = THREE.SRGBColorSpace;
