@@ -24,8 +24,8 @@ function Index() {
       <IndexTopNavBar />
 
       {/* Hero section */}
-      <Flex align={'center'} className={styles['root-container']} px={'10vw'}>
-        <Stack gap={0}>
+      <Flex align={'center'} className={styles['hero-container']} px={'10vw'}>
+        <Stack gap={0} className={styles['hero-content']}>
           <Text size={'3rem'} ff={theme.other.displayFont} fw={300}>
             Where to next?
           </Text>
