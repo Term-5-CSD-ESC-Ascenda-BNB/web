@@ -8,6 +8,7 @@ import { SearchControlsLanding } from '@/components/SearchControls/SearchControl
 import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
 import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
+import { ThreeCanvas } from '@/three/ThreeCanvas';
 
 export const Route = createFileRoute({
   component: Index,
@@ -22,6 +23,7 @@ function Index() {
     <>
       <IndexTopNavBar />
 
+      {/* Hero section */}
       <Flex align={'center'} className={styles['root-container']} px={'10vw'}>
         <Stack gap={0}>
           <Text size={'3rem'} ff={theme.other.displayFont} fw={300}>
@@ -34,6 +36,8 @@ function Index() {
 
           <SearchControlsLanding />
         </Stack>
+
+        <ThreeCanvas />
 
         <Stack className={styles['scroll-prompt']} justify="center" align="center" gap={0}>
           <Text size="sm">More</Text>
