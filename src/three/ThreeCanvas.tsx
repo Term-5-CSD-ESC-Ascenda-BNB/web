@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { ThreeScene } from './ThreeScene';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Environment } from '@react-three/drei';
 
 export function ThreeCanvas() {
   return (
@@ -14,12 +14,11 @@ export function ThreeCanvas() {
         zIndex: 1,
       }}
     >
-      <Canvas>
-        <OrbitControls />
+      <Canvas orthographic camera={{ zoom: 170, position: [0, 0, 10] }}>
         <ambientLight intensity={0.5} />
         <Environment preset="warehouse" backgroundIntensity={0.5} />
 
-        <ThreeScene />
+        <ThreeScene position={[2, 0, 0]} />
       </Canvas>
     </div>
   );

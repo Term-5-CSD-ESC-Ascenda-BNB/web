@@ -9,6 +9,7 @@ import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
 import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';
+import { Suspense } from 'react';
 
 export const Route = createFileRoute({
   component: Index,
@@ -37,7 +38,9 @@ function Index() {
           <SearchControlsLanding />
         </Stack>
 
-        <ThreeCanvas />
+        <Suspense fallback={<div>Loading 3D scene...</div>}>
+          <ThreeCanvas />
+        </Suspense>
 
         <Stack className={styles['scroll-prompt']} justify="center" align="center" gap={0}>
           <Text size="sm">More</Text>
