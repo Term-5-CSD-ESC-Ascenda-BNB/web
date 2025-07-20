@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { ThreeScene } from './ThreeScene';
-import { Environment, Loader, OrbitControls, PresentationControls } from '@react-three/drei';
+import { Environment, Loader } from '@react-three/drei';
 import { Leva } from 'leva';
 import { useLevaControls } from './hooks/useLevaControls';
 import { Suspense } from 'react';

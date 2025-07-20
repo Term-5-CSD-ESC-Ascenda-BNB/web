@@ -4,7 +4,6 @@ import { EarthMaterial } from './materials/EarthMaterial';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Marker } from './Marker';
-import { PresentationControls } from '@react-three/drei';
 import { useCoords } from '@/context/coords-store';
 import { animated, useSpring, easings } from '@react-spring/three';
 
@@ -52,7 +51,6 @@ export function ThreeScene({ position = [0, 0, 0] }: ThreeSceneProps) {
   return (
     <>
       <group position={position}>
-        {/* <PresentationControls polar={[-0.1, 0.1]} speed={2}> */}
         <animated.group rotation-y={rotationY} ref={earthRef}>
           <mesh position={[0, 0, 0]}>
             <sphereGeometry args={[2, 64, 64]} />
@@ -64,7 +62,6 @@ export function ThreeScene({ position = [0, 0, 0] }: ThreeSceneProps) {
           </mesh>
           <Marker earthCenter={new THREE.Vector3(...position)} earthRadius={2} />
         </animated.group>
-        {/* </PresentationControls> */}
       </group>
     </>
   );

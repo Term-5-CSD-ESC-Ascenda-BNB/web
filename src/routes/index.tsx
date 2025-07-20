@@ -9,7 +9,6 @@ import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
 import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';
-import { Suspense } from 'react';
 import { CoordsProvider } from '@/context/CoordsProvider';
 
 export const Route = createFileRoute({
@@ -70,6 +69,7 @@ function Index() {
 
         <ExceptionalSection />
       </Stack>
+      <Footer />
 
       <HelpButton />
     </>

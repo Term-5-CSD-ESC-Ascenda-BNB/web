@@ -1,6 +1,6 @@
 import { Logo } from '../Logo/Logo';
 import styles from './Footer.module.css';
-import { Group, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import {
   IconBrandFacebook,
   IconBrandTiktok,

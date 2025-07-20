@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
         verboseFileRoutes: false,
       }),
       react(),
-      restart({ restart: ['../public/**'] }), // Restart server on static file change
+      restart({ restart: ['./public/**'] }), // Restart server on static file change
       glsl(), // Handle shader files
     ],
     resolve: {
