@@ -1,8 +1,9 @@
 import { Canvas } from '@react-three/fiber';
 import { ThreeScene } from './ThreeScene';
-import { Environment, OrbitControls, PresentationControls } from '@react-three/drei';
+import { Environment, Loader, OrbitControls, PresentationControls } from '@react-three/drei';
 import { Leva } from 'leva';
 import { useLevaControls } from './hooks/useLevaControls';
+import { Suspense } from 'react';
 
 export function ThreeCanvas() {
   // Init atmosphere controls
@@ -15,6 +16,7 @@ export function ThreeCanvas() {
   return (
     <>
       <Leva hidden={window.location.hash !== '#debug'} />
+
       <div
         style={{
           position: 'absolute',
@@ -25,14 +27,16 @@ export function ThreeCanvas() {
           zIndex: 1,
         }}
       >
-        <Canvas orthographic camera={{ zoom: 170, position: [0, 0, 10] }}>
-          {/* <Canvas camera={{ position: [0, 0, 10], fov: 30 }}> */}
-          {/* <OrbitControls /> */}
-          <ambientLight intensity={0.5} />
-          <Environment preset="warehouse" backgroundIntensity={0.5} />
-
-          <ThreeScene position={[2, 0, 0]} />
-        </Canvas>
+        <Suspense fallback={null}>
+          <Canvas orthographic camera={{ zoom: 170, position: [0, 0, 10] }}>
+            {/* <Canvas camera={{ position: [0, 0, 10], fov: 30 }}> */}
+            {/* <OrbitControls /> */}
+            <ambientLight intensity={0.5} />
+            <Environment preset="warehouse" backgroundIntensity={0.5} />
+            <ThreeScene position={[1.8, 0, 0]} />
+          </Canvas>
+        </Suspense>
+        <Loader containerStyles={{ backgroundColor: 'transparent' }} />
       </div>
     </>
   );

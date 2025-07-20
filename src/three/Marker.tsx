@@ -29,7 +29,7 @@ export function Marker({ earthCenter, earthRadius }: MarkerProps) {
 
       // spin effect
       ref.current.rotateZ(spinAngle.current);
-      spinAngle.current += (delta * 0.5) % (Math.PI * 2); // Spin the marker
+      spinAngle.current += (delta * 0.5) % (Math.PI * 2);
     }
   });
 

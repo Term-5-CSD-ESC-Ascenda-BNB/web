@@ -45,7 +45,7 @@ export function ThreeScene({ position = [0, 0, 0] }: ThreeSceneProps) {
 
   useFrame((_, delta) => {
     if (!isSnapping.current) {
-      rotationY.set(rotationY.get() + delta * 0.05);
+      rotationY.set((rotationY.get() + delta * 0.05) % (Math.PI * 2));
     }
   });
 

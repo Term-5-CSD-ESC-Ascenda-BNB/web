@@ -40,10 +40,7 @@ function Index() {
             <SearchControlsLanding />
           </Stack>
 
-          {/* // TODO: replace with a better fallback */}
-          <Suspense fallback={<div>Loading 3D scene...</div>}>
-            <ThreeCanvas />
-          </Suspense>
+          <ThreeCanvas />
 
           <Stack className={styles['scroll-prompt']} justify="center" align="center" gap={0}>
             <Text size="sm">More</Text>
