@@ -11,7 +11,7 @@ export function useSunDirection() {
       label: 'Elevation',
     },
     azimuth: {
-      value: -1.2,
+      value: -1.1,
       min: -Math.PI,
       max: Math.PI,
       step: 0.01,

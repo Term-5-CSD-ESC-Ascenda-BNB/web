@@ -19,7 +19,7 @@ export function Marker({ earthCenter, earthRadius }: MarkerProps) {
   const { coords } = useCoords();
   const isVisible = coords !== null;
   const position = isVisible
-    ? latLngToVec3(coords.lat, coords.lng, earthRadius)
+    ? latLngToVec3(coords.lat, coords.lng, earthRadius + 0.01)
     : new THREE.Vector3(0, 0, 0);
 
   useFrame((state, delta) => {
