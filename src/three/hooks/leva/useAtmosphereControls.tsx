@@ -7,7 +7,7 @@ export function useAtmosphereControls() {
       label: 'Day',
     },
     atmosphereTwilightColor: {
-      value: '#ff6600',
+      value: '#ffa468',
       label: 'Twilight',
     },
   });

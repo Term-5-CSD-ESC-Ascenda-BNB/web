@@ -3,6 +3,7 @@ import { AtmosphereMaterial } from './AtmosphereMaterial';
 import { EarthMaterial } from './EarthMaterial';
 import { useRef } from 'react';
 import * as THREE from 'three';
+import { useSunDirection } from './hooks/leva/useSunDirection';
 
 export function ThreeScene({ position = [0, 0, 0] }: { position?: [number, number, number] }) {
   const earthRef = useRef<THREE.Group>(null!);

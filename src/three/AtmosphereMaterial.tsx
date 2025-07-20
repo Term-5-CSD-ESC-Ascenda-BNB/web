@@ -3,8 +3,8 @@ import vertexShader from './shaders/atmosphere/vertex.glsl';
 import fragmentShader from './shaders/atmosphere/fragment.glsl';
 import { extend, type ThreeElement } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useControls } from 'leva';
-import { useAtmosphereControls } from './hooks/useAtmosphereControls';
+import { useAtmosphereControls } from './hooks/leva/useAtmosphereControls';
+import { useSunDirection } from './hooks/leva/useSunDirection';
 
 const AtmosphereShaderMaterial = shaderMaterial(
   {
@@ -26,10 +26,12 @@ declare module '@react-three/fiber' {
 
 export function AtmosphereMaterial() {
   const { atmosphereDayColor, atmosphereTwilightColor } = useAtmosphereControls();
+  const { sunDirection } = useSunDirection();
+
   return (
     <>
       <atmosphereShaderMaterial
-        uSunDirection={new THREE.Vector3(-5, 0, 1).normalize()}
+        uSunDirection={sunDirection}
         uAtmosphereDayColor={new THREE.Color(atmosphereDayColor)}
         uAtmosphereTwilightColor={new THREE.Color(atmosphereTwilightColor)}
         side={THREE.BackSide}
