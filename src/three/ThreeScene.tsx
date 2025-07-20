@@ -29,7 +29,7 @@ export function ThreeScene({ position = [0, 0, 0] }: ThreeSceneProps) {
             <sphereGeometry args={[2, 64, 64]} />
             <AtmosphereMaterial />
           </mesh>
-          <Marker earthCenter={new THREE.Vector3(...position)} />
+          <Marker earthCenter={new THREE.Vector3(...position)} earthRadius={2} />
         </PresentationControls>
       </group>
     </>

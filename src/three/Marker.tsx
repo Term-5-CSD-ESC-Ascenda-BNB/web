@@ -1,25 +1,26 @@
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import * as THREE from 'three';
 import { latLngToVec3 } from './utils/latLngToVec3';
+import { useCoords } from '@/context/coords-store';
 
 interface MarkerProps {
-  lat?: number;
-  lng?: number;
-  visible?: boolean;
   earthCenter: THREE.Vector3;
+  earthRadius: number;
 }
 
-export function Marker({ lat = 0, lng = 0, visible = true, earthCenter }: MarkerProps) {
+export function Marker({ earthCenter, earthRadius }: MarkerProps) {
   const gltf = useGLTF('/models/marker.glb');
   const ref = useRef<THREE.Group>(null!);
 
   const spinAngle = useRef(0); // lookAt resets the rotation so need to keep track of it
 
-  const position = useMemo(() => {
-    return latLngToVec3(lat, lng, 2);
-  }, [lat, lng]);
+  const { coords } = useCoords();
+  const isVisible = coords !== null;
+  const position = isVisible
+    ? latLngToVec3(coords.lat, coords.lng, earthRadius)
+    : new THREE.Vector3(0, 0, 0);
 
   useFrame((state, delta) => {
     if (ref.current) {
@@ -34,7 +35,13 @@ export function Marker({ lat = 0, lng = 0, visible = true, earthCenter }: Marker
 
   return (
     <>
-      <primitive ref={ref} object={gltf.scene} scale={0.2} position={position} visible={visible} />
+      <primitive
+        ref={ref}
+        object={gltf.scene}
+        scale={0.2}
+        position={position}
+        visible={isVisible}
+      />
     </>
   );
 }
