@@ -1,10 +1,10 @@
 import { shaderMaterial } from '@react-three/drei';
-import vertexShader from './shaders/atmosphere/vertex.glsl';
-import fragmentShader from './shaders/atmosphere/fragment.glsl';
+import vertexShader from '@/three/shaders/atmosphere/vertex.glsl';
+import fragmentShader from '@/three/shaders/atmosphere/fragment.glsl';
 import { extend, type ThreeElement } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useAtmosphereControls } from './hooks/leva/useAtmosphereControls';
-import { useSunDirection } from './hooks/leva/useSunDirection';
+import { useAtmosphereControls } from '../hooks/leva/useAtmosphereControls';
+import { useSunDirection } from '../hooks/leva/useSunDirection';
 
 const AtmosphereShaderMaterial = shaderMaterial(
   {

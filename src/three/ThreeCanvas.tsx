@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { ThreeScene } from './ThreeScene';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Environment, OrbitControls, PresentationControls } from '@react-three/drei';
 import { Leva } from 'leva';
 import { useLevaControls } from './hooks/useLevaControls';
 
@@ -32,7 +32,6 @@ export function ThreeCanvas() {
           <Environment preset="warehouse" backgroundIntensity={0.5} />
 
           <ThreeScene position={[2, 0, 0]} />
-          {/* <color attach="background" args={['#000']} /> */}
         </Canvas>
       </div>
     </>
