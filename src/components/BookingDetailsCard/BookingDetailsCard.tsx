@@ -14,6 +14,7 @@ import {
 import { IconStar, IconUser, IconRulerMeasure, IconCalendarTime } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useCounter } from '@mantine/hooks';
+import { ReviewScoreLarge } from '../ReviewScoreLarge/ReviewScoreLarge';
 
 interface BookingDetailsCardProps {
   name: string;
@@ -81,9 +82,10 @@ export function BookingDetailsCard({
               </Box>
             </Group>
           </Box>
-          <Badge color="violet" size="xl" style={{ alignSelf: 'flex-start' }}>
+          {/* <Badge color="violet" size="xl" style={{ alignSelf: 'flex-start' }}>
             {reviewScore} / 10
-          </Badge>
+          </Badge> */}
+          <ReviewScoreLarge score={6}></ReviewScoreLarge>
         </Group>
         <Divider />
         <Group grow>

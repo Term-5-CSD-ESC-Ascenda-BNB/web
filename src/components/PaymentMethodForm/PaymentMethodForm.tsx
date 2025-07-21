@@ -1,7 +1,42 @@
 import { Paper, Title, Tabs, Group, Button, TextInput, Switch, Stack, Image } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
 
+interface PaymentMethodFormValues {
+  name: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+}
+
+const handleSubmit = (values: PaymentMethodFormValues): void => {
+  console.log(values);
+};
+
 function PaymentMethodForm() {
+  const form = useForm({
+    initialValues: {
+      name: '',
+      cardNumber: '',
+      expiryDate: '',
+      cvv: '',
+    },
+    validate: {
+      name: (value) => {
+        if (!value.trim()) return 'Cardholder name is required';
+        if (!/^[A-Za-z\s'-]+$/.test(value)) return 'Name contains invalid characters';
+        if (value.length < 2) return 'Name is too short';
+        if (value.length > 50) return 'Name is too long';
+        return null;
+      },
+      cardNumber: (value) =>
+        value.length === 16 && /^\d+$/.test(value) ? null : 'Card number must be 16 digits',
+      expiryDate: (value) =>
+        /^\d{2}\/\d{2}$/.test(value) ? null : 'Expiry date must be in MM/YY format',
+      cvv: (value) => (value.length === 3 && /^\d+$/.test(value) ? null : 'CVV must be 3 digits'),
+    },
+  });
+
   return (
     <Paper withBorder radius="md" p="xl" mt="md">
       <Stack gap="md">
@@ -78,51 +113,52 @@ function PaymentMethodForm() {
                 alt="JCB"
               />
             </Group>
-            <Stack gap="sm" mt="sm">
-              <TextInput placeholder="Cardholder's name" radius="xl" />
-              <TextInput placeholder="Card number" radius="xl" />
-              <Group grow gap="sm">
-                <TextInput placeholder="Expiration date (MM/YY)" radius="xl" />
-                <TextInput placeholder="CVV / CVC" radius="xl" />
-              </Group>
-              <Group justify="space-between">
-                <Switch label="Save card for future purchases" color="dark" mt="sm" />
-                <Button type="submit" radius={'xl'}>
-                  Submit Payment
-                </Button>
-              </Group>
-            </Stack>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              <Stack gap="sm" mt="sm">
+                <TextInput
+                  placeholder="Cardholder's name"
+                  withAsterisk
+                  radius="xl"
+                  {...form.getInputProps('name')}
+                />
+                <TextInput
+                  placeholder="Card number"
+                  withAsterisk
+                  radius="xl"
+                  {...form.getInputProps('cardNumber')}
+                />
+                <Group grow gap="sm">
+                  <TextInput
+                    placeholder="Expiration date (MM/YY)"
+                    withAsterisk
+                    radius="xl"
+                    {...form.getInputProps('expiryDate')}
+                  />
+                  <TextInput
+                    placeholder="CVV / CVC"
+                    withAsterisk
+                    radius="xl"
+                    {...form.getInputProps('cvv')}
+                  />
+                </Group>
+                <Group justify="space-between">
+                  <Switch
+                    label="Save card for future purchases"
+                    color="dark"
+                    mt="sm"
+                    withThumbIndicator={false}
+                  />
+                  <Button type="submit" radius={'xl'}>
+                    Submit Payment
+                  </Button>
+                </Group>
+              </Stack>
+            </form>
           </Tabs.Panel>
         </Tabs>
       </Stack>
     </Paper>
   );
-
-  // const form = useForm({
-  //   initialValues: {
-  //     name: '',
-  //     cardNumber: '',
-  //     expiryDate: '',
-  //     cvv: '',
-  //   },
-  //   validate: {
-  //     cardNumber: (value) => (value.length === 16 ? null : 'Card number must be 16 digits'),
-  //     expiryDate: (value) => (value.length === 5 ? null : 'Expiry date must be MM/YY format'),
-  //     cvv: (value) => (value.length === 3 ? null : 'CVV must be 3 digits'),
-  //   },
-  // });
-
-  // interface PaymentMethodFormValues {
-  //   name: string;
-  //   cardNumber: string;
-  //   expiryDate: string;
-  //   cvv: string;
-  // }
-
-  // const handleSubmit = (values: PaymentMethodFormValues): void => {
-  //   console.log(values);
-  //   // In a real application, you would send this data to your payment gateway.
-  // };
 
   // return (
   //   <Box mx="auto" mt={16} style={{ maxWidth: 750, margin: '0 auto' }}>
