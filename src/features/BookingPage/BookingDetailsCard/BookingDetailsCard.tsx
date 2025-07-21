@@ -14,7 +14,7 @@ import {
 import { IconStar, IconUser, IconRulerMeasure, IconCalendarTime } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useCounter } from '@mantine/hooks';
-import { ReviewScoreLarge } from '../ReviewScoreLarge/ReviewScoreLarge';
+import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
 
 interface BookingDetailsCardProps {
   name: string;

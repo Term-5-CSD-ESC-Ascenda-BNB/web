@@ -64,8 +64,6 @@ function RouteComponent() {
           />
         </Stack>
       </div>
-
-      <Footer />
     </>
   );
 }

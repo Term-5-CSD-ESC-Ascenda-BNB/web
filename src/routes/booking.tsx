@@ -1,8 +1,8 @@
-import { CancellationPolicyCard } from '@/components/CancellationPolicyCard/CancellationPolicyCard';
-import GuestInfoForm from '@/components/GuestInfoForm/GuestInfoForm';
-import PaymentMethodForm from '@/components/PaymentMethodForm/PaymentMethodForm';
-import { PriceDetailsCard } from '@/components/PriceDetailsCard/PriceDetailsCard';
-import { BookingDetailsCard } from '@/components/BookingDetailsCard/BookingDetailsCard';
+import { CancellationPolicyCard } from '@/features/BookingPage/CancellationPolicyCard/CancellationPolicyCard';
+import GuestInfoForm from '@/features/BookingPage/GuestInfoForm/GuestInfoForm';
+import PaymentMethodForm from '@/features/BookingPage/PaymentMethodForm/PaymentMethodForm';
+import { PriceDetailsCard } from '@/features/BookingPage/PriceDetailsCard/PriceDetailsCard';
+import { BookingDetailsCard } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCard';
 import { Container, Grid } from '@mantine/core';
 
 export const Route = createFileRoute({
