@@ -6,12 +6,8 @@ import { useLevaControls } from './hooks/useLevaControls';
 import { Suspense } from 'react';
 
 export function ThreeCanvas() {
-  // Init atmosphere controls
+  // Initialise Leva in top level component
   useLevaControls();
-
-  //TODO: retrieve lat/lng coords from search destination and create a marker at those coordiantes on the globe
-
-  // TODO currently the Suspense fallback is just a text message might make it look better later
 
   return (
     <>
