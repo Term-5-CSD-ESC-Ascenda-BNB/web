@@ -10,8 +10,12 @@ import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
+import { SearchParamsSchema } from '@/schemas/SearchParamsSchema';
 
-export const Route = createFileRoute({ component: RouteComponent });
+export const Route = createFileRoute({
+  component: RouteComponent,
+  validateSearch: SearchParamsSchema,
+});
 
 function RouteComponent() {
   const { hotels, isLoading } = useHotels();
@@ -26,7 +30,7 @@ function RouteComponent() {
     <>
       <div className={styles['root-container']}>
         <div className={styles['logo']}>
-          <Logo fontSize={'1.5rem'} />
+          <Logo fz={'1.5rem'} />
         </div>
         <div className={styles['map-container']}>
           <HotelMap
@@ -39,7 +43,7 @@ function RouteComponent() {
 
         <Stack gap={12} className={styles['results-container']}>
           <Group wrap="nowrap" justify="space-between" align="flex-start">
-            <SearchControls flex={1} />
+            <SearchControls />
             <MenuButton />
           </Group>
 
@@ -60,8 +64,6 @@ function RouteComponent() {
           />
         </Stack>
       </div>
-
-      <Footer />
     </>
   );
 }

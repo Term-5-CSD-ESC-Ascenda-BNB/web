@@ -1,33 +1,17 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import styles from './nav.module.css';
 import { Footer } from '@/components/Footer/Footer';
+import { Stack } from '@mantine/core';
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      {
-        <div className={styles.navbar}>
-          <Link to="/" className={styles.link + ' [&.active]:font-bold'}>
-            Home
-          </Link>
-          <Link to="/about" className={styles.link + ' [&.active]:font-bold'}>
-            About
-          </Link>
-          <Link to="/search" className={styles.link + ' [&.active]:font-bold'}>
-            Search
-          </Link>
-          <Link to="/payment" className={styles.link + ' [&.active]:font-bold'}>
-            Payment
-          </Link>
-          <Link to="/register" className={styles.link + ' [&.active]:font-bold'}>
-            Login/Register
-          </Link>
+      <Stack mih={'100vh'}>
+        <div style={{ flex: 1 }}>
+          <Outlet />
         </div>
-      }
-
-      <Outlet />
-      {/* <Footer /> */}
+        <Footer />
+      </Stack>
 
       <TanStackRouterDevtools />
     </>
