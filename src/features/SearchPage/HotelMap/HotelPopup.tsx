@@ -1,6 +1,5 @@
 import { Stack } from '@mantine/core';
-import { ImageCarousel } from '@/components/CarouselCard/ImageCarousel';
-import { CarouselCardDetails } from '@/components/CarouselCard';
+import { CarouselCardDetails, ImageCarousel } from '@/components/CarouselCard';
 import type { Hotel } from '@/types/Hotel';
 import { Popup } from 'react-leaflet';
 import popupStyles from './Popup.module.css';

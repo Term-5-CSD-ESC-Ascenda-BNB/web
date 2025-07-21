@@ -1,0 +1,12 @@
+.exceptional-content-container {
+  display: flex;
+  position: relative;
+  box-shadow: 0 4px 10px #00000026;
+  background-color: white;
+  border-radius: 8px;
+  text-align: left;
+  justify-content: center;
+  width: 400px;
+  height: 200px;
+  padding: 1.5em;
+}

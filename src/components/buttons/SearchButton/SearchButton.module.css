@@ -1,0 +1,7 @@
+.searchButton {
+  background-color: var(--mantine-color-primary-7);
+
+  &:hover {
+    background-color: var(--mantine-color-primary-6);
+  }
+}

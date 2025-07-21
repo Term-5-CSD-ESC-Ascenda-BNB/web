@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer/Footer';
 export const Route = createRootRoute({
   component: () => (
     <>
-      {
+      {/* {
         <div className={styles.navbar}>
           <Link to="/" className={styles.link + ' [&.active]:font-bold'}>
             Home
@@ -21,10 +21,10 @@ export const Route = createRootRoute({
             Booking
           </Link>
         </div>
-      }
+      } */}
 
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
 
       <TanStackRouterDevtools />
     </>
