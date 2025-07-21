@@ -12,7 +12,7 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
-import { Route as PaymentRouteImport } from './routes/payment'
+import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels/$hotelId'
@@ -22,9 +22,9 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PaymentRoute = PaymentRouteImport.update({
-  id: '/payment',
-  path: '/payment',
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -46,14 +46,14 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/payment': typeof PaymentRoute
+  '/booking': typeof BookingRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/payment': typeof PaymentRoute
+  '/booking': typeof BookingRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
@@ -61,22 +61,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/payment': typeof PaymentRoute
+  '/booking': typeof BookingRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
+  fullPaths: '/' | '/about' | '/booking' | '/search' | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
-  id: '__root__' | '/' | '/about' | '/payment' | '/search' | '/hotels/$hotelId'
+  to: '/' | '/about' | '/booking' | '/search' | '/hotels/$hotelId'
+  id: '__root__' | '/' | '/about' | '/booking' | '/search' | '/hotels/$hotelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  PaymentRoute: typeof PaymentRoute
+  BookingRoute: typeof BookingRoute
   SearchRoute: typeof SearchRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
 }
@@ -97,11 +97,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/payment': {
-      id: '/payment'
-      path: '/payment'
-      fullPath: '/payment'
-      preLoaderRoute: typeof PaymentRouteImport
+    '/booking': {
+      id: '/booking'
+      path: '/booking'
+      fullPath: '/booking'
+      preLoaderRoute: typeof BookingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -139,13 +139,13 @@ declare module './routes/about' {
     FileRoutesByPath['/about']['fullPath']
   >
 }
-declare module './routes/payment' {
+declare module './routes/booking' {
   const createFileRoute: CreateFileRoute<
-    '/payment',
-    FileRoutesByPath['/payment']['parentRoute'],
-    FileRoutesByPath['/payment']['id'],
-    FileRoutesByPath['/payment']['path'],
-    FileRoutesByPath['/payment']['fullPath']
+    '/booking',
+    FileRoutesByPath['/booking']['parentRoute'],
+    FileRoutesByPath['/booking']['id'],
+    FileRoutesByPath['/booking']['path'],
+    FileRoutesByPath['/booking']['fullPath']
   >
 }
 declare module './routes/search' {
@@ -170,7 +170,7 @@ declare module './routes/hotels/$hotelId' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  PaymentRoute: PaymentRoute,
+  BookingRoute: BookingRoute,
   SearchRoute: SearchRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
 }
