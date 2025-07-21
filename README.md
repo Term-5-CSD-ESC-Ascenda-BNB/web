@@ -21,7 +21,7 @@ npm run dev
 
 - **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
 - **Branching:** Use feature branches (e.g. `feature/search-bar`).
-- **Merging:** Test your build with `npm run build` before pushing to main.
+- **Merging:** Test your build with `npm run build`. Create a pull request to merge your branch to main.
 - **Styling:** Use CSS Modules to prevent naming conflicts. 
 
 ## 🧩 Recommended VS Code Extensions
