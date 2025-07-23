@@ -10,6 +10,7 @@ import '@mantine/carousel/styles.css';
 import '@mantine/dates/styles.css';
 import 'leaflet/dist/leaflet.css';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { theme } from './theme/index.ts';
@@ -34,6 +35,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme}>
+          <Notifications />
           <RouterProvider router={router} />
         </MantineProvider>
       </QueryClientProvider>

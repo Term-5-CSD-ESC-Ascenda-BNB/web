@@ -19,7 +19,7 @@ const API_URL: string = (import.meta.env.VITE_API_URL as string) || 'http://loca
 
 export function RegisterLoginPage() {
   const [isRegister, setIsRegister] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [errorState, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -276,9 +276,9 @@ export function RegisterLoginPage() {
           >
             Carefully selected stays, one account away.
           </Text>
-          {error && (
+          {errorState && (
             <Alert color="red" mb="xs">
-              {error}
+              {errorState}
             </Alert>
           )}
           {success && (

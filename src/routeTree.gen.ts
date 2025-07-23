@@ -15,8 +15,11 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels/$hotelId'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -38,6 +41,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -48,55 +56,90 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   path: '/hotels/$hotelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/about'
     | '/booking'
     | '/register'
     | '/search'
+    | '/auth/login'
+    | '/auth/register'
     | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/booking' | '/register' | '/search' | '/hotels/$hotelId'
+  to:
+    | '/'
+    | '/auth'
+    | '/about'
+    | '/booking'
+    | '/register'
+    | '/search'
+    | '/auth/login'
+    | '/auth/register'
+    | '/hotels/$hotelId'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/about'
     | '/booking'
     | '/register'
     | '/search'
+    | '/auth/login'
+    | '/auth/register'
     | '/hotels/$hotelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   BookingRoute: typeof BookingRoute
   RegisterRoute: typeof RegisterRoute
@@ -111,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -141,6 +191,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/hotels/$hotelId': {
       id: '/hotels/$hotelId'
       path: '/hotels/$hotelId'
@@ -158,6 +222,15 @@ declare module './routes/index' {
     FileRoutesByPath['/']['id'],
     FileRoutesByPath['/']['path'],
     FileRoutesByPath['/']['fullPath']
+  >
+}
+declare module './routes/auth/route' {
+  const createFileRoute: CreateFileRoute<
+    '/auth',
+    FileRoutesByPath['/auth']['parentRoute'],
+    FileRoutesByPath['/auth']['id'],
+    FileRoutesByPath['/auth']['path'],
+    FileRoutesByPath['/auth']['fullPath']
   >
 }
 declare module './routes/about' {
@@ -196,6 +269,24 @@ declare module './routes/search' {
     FileRoutesByPath['/search']['fullPath']
   >
 }
+declare module './routes/auth/login' {
+  const createFileRoute: CreateFileRoute<
+    '/auth/login',
+    FileRoutesByPath['/auth/login']['parentRoute'],
+    FileRoutesByPath['/auth/login']['id'],
+    FileRoutesByPath['/auth/login']['path'],
+    FileRoutesByPath['/auth/login']['fullPath']
+  >
+}
+declare module './routes/auth/register' {
+  const createFileRoute: CreateFileRoute<
+    '/auth/register',
+    FileRoutesByPath['/auth/register']['parentRoute'],
+    FileRoutesByPath['/auth/register']['id'],
+    FileRoutesByPath['/auth/register']['path'],
+    FileRoutesByPath['/auth/register']['fullPath']
+  >
+}
 declare module './routes/hotels/$hotelId' {
   const createFileRoute: CreateFileRoute<
     '/hotels/$hotelId',
@@ -206,8 +297,23 @@ declare module './routes/hotels/$hotelId' {
   >
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   BookingRoute: BookingRoute,
   RegisterRoute: RegisterRoute,
