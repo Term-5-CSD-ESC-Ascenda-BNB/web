@@ -16,6 +16,7 @@ import { IconBrandGoogle, IconBrandFacebook, IconBrandApple } from '@tabler/icon
 import { useForm } from '@mantine/form';
 
 const API_URL: string = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000';
+// const API_URL = import.meta.env.DEV ? '/api' : 'https://api-production-46df.up.railway.app';
 
 export function RegisterLoginPage() {
   const [isRegister, setIsRegister] = useState(true);
@@ -104,7 +105,7 @@ export function RegisterLoginPage() {
       });
       if (res.status === 201) {
         setSuccess('Login successful! Redirecting...');
-        setTimeout(() => (window.location.href = '/search'), 1000);
+        // setTimeout(() => (window.location.href = '/search'), 1000);
       } else if (res.status === 400) {
         setError('Invalid email or password.');
       } else {
@@ -116,6 +117,22 @@ export function RegisterLoginPage() {
       setLoading(false);
     }
   };
+
+  /**
+  {
+    "id": 126,
+    "createdAt": "2025-06-11T16:15:53.085Z",
+    "updatedAt": "2025-06-11T16:15:53.085Z",
+    "email": "xyf.oco@gmail.com",
+    "emailVerified": true,
+    "firstName": "yufeng",
+    "lastName": "xue",
+    "password": "",
+    "provider": null,
+    "providerId": null,
+    "stripeCustomerId": null
+  }
+   */
 
   const handleGoogle = () => {
     const popup = window.open(`${API_URL}/auth/google`, 'oauth', 'width=500,height=600');

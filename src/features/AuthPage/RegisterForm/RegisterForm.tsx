@@ -1,38 +1,22 @@
 import { Button, Group, PasswordInput, Stack, TextInput } from '@mantine/core';
 import { useRegisterForm } from './useRegisterForm';
 import { useRegisterMutation } from './useRegisterMutation';
-import { notifications } from '@mantine/notifications';
-import { useNavigate } from '@tanstack/react-router';
+import { useRegisterNotifications } from './useRegisterNotifications';
 
 export function RegisterForm() {
-  const navigate = useNavigate();
-
   const form = useRegisterForm();
   const mutation = useRegisterMutation();
+  const { handleSuccess, handleError } = useRegisterNotifications();
 
   const handleSubmit = (values: typeof form.values) => {
-    console.log('Form values:', values);
+    // Omit confirmPassword from the data
+    const { confirmPassword: _, ...data } = values;
 
-    mutation.mutate(values, {
-      onSuccess: () => {
-        console.log('Registration successful');
-        void navigate({
-          to: '/auth/login',
-          replace: true,
-        });
-      },
-      onError: (error) => {
-        console.error('Registration failed:', error);
+    console.log('Submitting form values:', data);
 
-        notifications.show({
-          title: 'Registration Error',
-          message: error.message || 'An error occurred during registration.',
-          color: 'red',
-          autoClose: 5000,
-          withCloseButton: true,
-          position: 'bottom-right',
-        });
-      },
+    mutation.mutate(data, {
+      onSuccess: handleSuccess,
+      onError: handleError,
     });
   };
 
