@@ -2,6 +2,7 @@ import { LocationDisplay } from '@/components/LocationDisplay/LocationDisplay';
 import { RatingStars } from '@/components/RatingStars/RatingStars';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
 import { ReviewScoreSmall } from '@/components/ReviewScoreSmall/ReviewScoreSmall';
+import { ReviewScoreSub } from '@/components/ReviewScoreSub/ReviewScoreSub';
 import { SaveButton } from '@/components/SaveButton/SaveButton';
 import { ShareButton } from '@/components/ShareButton/ShareButton';
 import { Group, Stack, Text, Box, Flex } from '@mantine/core';
@@ -158,7 +159,7 @@ export function HotelDetails({ name, starRating, address, reviewScore }: HotelDe
               { label: 'Accuracy', score: 9.8 },
             ].map(({ label, score }) => (
               <Stack key={label} align="center" gap={4}>
-                <ReviewScoreSmall score={score} />
+                <ReviewScoreSub score={score} />
                 <Text fz="xs" style={{ color: '#000' }}>
                   {label}
                 </Text>

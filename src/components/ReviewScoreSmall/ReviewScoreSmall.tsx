@@ -1,4 +1,4 @@
-import { Box, Text } from '@mantine/core';
+import { Group, Text } from '@mantine/core';
 
 interface ReviewScoreSmallProps {
   score: number;
@@ -6,25 +6,15 @@ interface ReviewScoreSmallProps {
 
 export function ReviewScoreSmall({ score }: ReviewScoreSmallProps) {
   return (
-    <Box
-      style={{
-        backgroundColor: '#d8cfc0',
-        borderRadius: '50%',
-        width: 72,
-        height: 72,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        fontFamily: 'Prata, serif',
-      }}
-    >
-      <Text fz="lg" fw={600} lh={1} style={{ fontFamily: 'Prata, serif' }}>
-        {score.toFixed(1)}
-      </Text>
-      <Text fz="sm" c="dimmed" lh={1} style={{ fontFamily: 'Prata, serif' }}>
-        /10
-      </Text>
-    </Box>
+    <div style={{ borderRadius: '999px', overflow: 'hidden' }}>
+      <Group gap={2} bg="primary.7" align="center" p="0 0.6rem">
+        <Text fz="md" c="primary.1">
+          {score.toFixed(1)}
+        </Text>
+        <Text fz="xs" c="dimmed">
+          /10
+        </Text>
+      </Group>
+    </div>
   );
 }
