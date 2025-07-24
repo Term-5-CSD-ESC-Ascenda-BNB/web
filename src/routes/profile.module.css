@@ -1,0 +1,95 @@
+.fixed-profile-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.root-container {
+  height: 160px;
+  background: linear-gradient(to right, #d0c5f1, #a9d4f4);
+  position: relative;
+}
+
+.profile-background {
+  background-color: white;
+}
+
+.profile-container {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 10vw;
+  position: relative;
+  margin-top: -5rem;
+}
+
+.help-link {
+  font-size: 0.85rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.picture-container {
+  flex: 1 1 1 15%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #e7e7e7;
+  width: 10rem;
+  height: 10rem;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 1.5rem;
+  margin-top: 6rem;
+}
+
+.name-container {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.country-container {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+  margin-top: 0.25rem;
+}
+
+.achievements-container {
+  margin-top: 350px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+  border: 2px solid #808ab1;
+  border-radius: 10px;
+  height: 25rem;
+}
+
+.milestones-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.badges-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider-label {
+  font-weight: 600;
+}
