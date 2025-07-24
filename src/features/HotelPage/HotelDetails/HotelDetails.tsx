@@ -1,72 +1,41 @@
+import { useState } from 'react';
 import { LocationDisplay } from '@/components/LocationDisplay/LocationDisplay';
 import { RatingStars } from '@/components/RatingStars/RatingStars';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
-import { ReviewScoreSmall } from '@/components/ReviewScoreSmall/ReviewScoreSmall';
 import { ReviewScoreSub } from '@/components/ReviewScoreSub/ReviewScoreSub';
 import { SaveButton } from '@/components/SaveButton/SaveButton';
 import { ShareButton } from '@/components/ShareButton/ShareButton';
-import { Group, Stack, Text, Box, Flex } from '@mantine/core';
-import { AmenitiesList } from '@/components/AmenitiesList/AmenitiesList';
-import { SurroundingsList } from '@/components/SurroundingsList/SurroundingsList';
-import { RoomCard } from '@/components/Room/RoomCard';
+import { Group, Stack, Text, Box, Flex, Modal } from '@mantine/core';
 import { HotelAmenitiesSection } from '@/components/AmenitiesList/HotelAmenitiesSection';
 import { HotelRoomsSection } from '@/components/Room/HotelRoomsSection';
-import roomData from '@/.mock_data/price.json';
-
-interface AmenityRating {
-  name: string;
-  score: number;
-}
-
-interface TrustYouScore {
-  overall: number | null;
-  kaligo_overall: number;
-  solo: number | null;
-  couple: number | null;
-  family: number | null;
-  business: number | null;
-}
-
-interface Hotel {
-  name: string;
-  address: string;
-  rating: number;
-  trustyou: {
-    score: TrustYouScore;
-  };
-  amenities_ratings: AmenityRating[];
-  amenities?: Record<string, boolean | undefined>;
-}
+import { useSurroundings } from '@/hooks/useSurroundings';
+import { HotelMap } from '@/components/HotelMap/HotelMap';
+import { SurroundingsList } from '@/components/SurroundingsList/SurroundingsList';
+import { IconMapPinFilled } from '@tabler/icons-react';
+import type { Hotel } from '@/types/Hotel';
 
 interface HotelDetailsProps {
   hotel: Hotel;
 }
 
-interface Room {
-  key: string;
-  roomNormalizedDescription: string;
-  freeCancellation: boolean;
-  description: string;
-  longDescription: string;
-  images: string[];
-  amenities: string[];
-  price: number;
-  marketRates?: { supplier: string; rate: number }[];
-}
-
-function generateRoomImageUrls(
-  imageData: { prefix: string; suffix: string; count: number }[]
-): string[] {
-  if (!imageData || imageData.length === 0) return [];
-
-  const { prefix, suffix, count } = imageData[0]; // usually one object
-  return Array.from({ length: count }, (_, i) => `${prefix}_${i + 1}${suffix}`);
-}
-
 export function HotelDetails({ hotel }: HotelDetailsProps) {
-  const { name, address, rating, trustyou, amenities_ratings, amenities } = hotel;
+  const { name, address, rating, trustyou, amenities_ratings, amenities, latitude, longitude } =
+    hotel;
+  const {
+    surroundings,
+    loading: _loading,
+    error: _error,
+  } = useSurroundings({ lat: latitude, lng: longitude });
+  const [mapOpen, setMapOpen] = useState(false);
 
-  // Map from amenities_ratings to ReviewScoreSub-like data
+  const formattedSurroundings = surroundings.map((s) => ({
+    type: s.type ?? 'POI',
+    name: s.name || 'Unnamed',
+    distance: `${s.dist} m`,
+    latitude: s.point.lat,
+    longitude: s.point.lon,
+  }));
+
   const ratingLabels = ['Location', 'Service', 'Room', 'WiFi', 'Breakfast', 'Food', 'Comfort'];
   const mappedRatings = ratingLabels
     .map((label) => {
@@ -77,6 +46,7 @@ export function HotelDetails({ hotel }: HotelDetailsProps) {
 
   return (
     <>
+      {/* Header */}
       <Group justify="space-between" align="stretch">
         <Stack gap="xs">
           <Text fz="h2">{name}</Text>
@@ -90,27 +60,53 @@ export function HotelDetails({ hotel }: HotelDetailsProps) {
         {trustyou?.score?.overall && <ReviewScoreLarge score={trustyou.score.overall} />}
       </Group>
 
+      {/* Amenities and Surroundings */}
       <Flex justify="space-between" wrap="wrap" mt="xl" gap="xl">
         <HotelAmenitiesSection amenities={amenities} />
+
         <Box style={{ flex: 1, minWidth: 300 }}>
-          <SurroundingsList surroundings={[]} />{' '}
-          {/* You can replace this when you add surroundings data */}
+          <Group align="center" justify="space-between">
+            <Group gap={6}>
+              <IconMapPinFilled size={18} color="var(--mantine-color-blue-6)" />
+              <Text fw={600} fz="lg">
+                Surroundings
+              </Text>
+            </Group>
+            <Text c="blue" style={{ cursor: 'pointer' }} onClick={() => setMapOpen(true)}>
+              View on map
+            </Text>
+          </Group>
+          <Box mt="sm">
+            <SurroundingsList surroundings={formattedSurroundings} />
+          </Box>
         </Box>
       </Flex>
 
+      {/* Modal Map */}
+      <Modal
+        opened={mapOpen}
+        onClose={() => setMapOpen(false)}
+        size="80%"
+        centered
+        title="Hotel & Nearby Places"
+        styles={{ body: { padding: 0, height: 500 } }}
+      >
+        <HotelMap hotels={[hotel]} surroundings={formattedSurroundings} />
+      </Modal>
+
+      {/* Rooms */}
       <HotelRoomsSection />
 
+      {/* Guest Reviews */}
       <Box mt="xl">
         <Text fz="h2" mb="sm">
           Guest Reviews
         </Text>
-
         <Group align="center" wrap="nowrap" gap="xl" style={{ maxWidth: 1000, margin: '0 auto' }}>
           <Stack align="center" gap={4}>
             <ReviewScoreLarge score={trustyou.score.overall ?? 0} />
             <Text fz="sm">Verified Reviews</Text>
           </Stack>
-
           <Group justify="space-between" gap="xl" style={{ flexGrow: 1 }}>
             {mappedRatings.map(({ label, score }) => (
               <Stack key={label} align="center" gap={4}>
@@ -122,8 +118,6 @@ export function HotelDetails({ hotel }: HotelDetailsProps) {
             ))}
           </Group>
         </Group>
-
-        {/* Reviews section omitted — not in JSON */}
       </Box>
     </>
   );

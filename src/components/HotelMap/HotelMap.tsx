@@ -1,42 +1,75 @@
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import type { Hotel } from '@/types/Hotel';
+import { MapContainer, TileLayer, ZoomControl, Marker, Popup } from 'react-leaflet';
 import { useEffect, useMemo, useRef } from 'react';
-import { latLng, LatLngBounds, Map as LeafletMap } from 'leaflet';
+import { latLng, LatLngBounds, Map as LeafletMap, divIcon, Marker as LeafletMarker } from 'leaflet';
+import * as L from 'leaflet'; // ✅ Required for correct typing
+import { renderToStaticMarkup } from 'react-dom/server';
+import {
+  IconPlus,
+  IconMinus,
+  IconTrain,
+  IconPlane,
+  IconShoppingBag,
+  IconStar,
+  IconToolsKitchen,
+  IconMapPin,
+} from '@tabler/icons-react';
+
+import mapStyles from './Map.module.css';
 import PriceMarker from './PriceMarker';
 import { HotelPopup } from './HotelPopup';
-import mapStyles from './Map.module.css';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
+import type { Hotel } from '@/types/Hotel';
 
-interface HotelMapProps {
-  hotels: Hotel[];
-  getMarkerRef: (id: string) => (marker: L.Marker | null) => void;
-  onPopupOpen: (id: string) => void;
-  onPopupClose: (id: string) => void;
+interface Surrounding {
+  type: string;
+  name: string;
+  distance: string;
+  latitude: number;
+  longitude: number;
 }
 
-export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: HotelMapProps) {
+// ✅ FIX: Use L.Marker instead of any
+type MarkerRefHandler = (id: string) => (marker: L.Marker | null) => void;
+type PopupHandler = (id: string) => void;
+
+interface HotelMapProps {
+  hotels?: Hotel[];
+  surroundings?: Surrounding[];
+  getMarkerRef?: MarkerRefHandler;
+  onPopupOpen?: PopupHandler;
+  onPopupClose?: PopupHandler;
+}
+
+export function HotelMap({
+  hotels = [],
+  surroundings = [],
+  getMarkerRef,
+  onPopupOpen,
+  onPopupClose,
+}: HotelMapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const center = latLng(1.3521, 103.8198);
 
-  // Calculate bounds for all hotels
   const bounds = useMemo(() => {
-    if (hotels.length === 0) return null;
+    const b = new LatLngBounds([]);
 
-    const bounds = new LatLngBounds([]);
     hotels.forEach((hotel) => {
       if (hotel.latitude && hotel.longitude) {
-        bounds.extend([hotel.latitude, hotel.longitude]);
+        b.extend([hotel.latitude, hotel.longitude]);
       }
     });
-    return bounds;
-  }, [hotels]);
 
-  // Fit map to bounds when hotels change
+    surroundings.forEach((poi) => {
+      if (poi.latitude && poi.longitude) {
+        b.extend([poi.latitude, poi.longitude]);
+      }
+    });
+
+    return b;
+  }, [hotels, surroundings]);
+
   useEffect(() => {
-    if (mapRef.current && bounds && bounds.isValid()) {
-      const map = mapRef.current;
-      map.fitBounds(bounds, { padding: [20, 20] });
+    if (mapRef.current && bounds.isValid()) {
+      mapRef.current.fitBounds(bounds, { padding: [20, 20] });
     }
   }, [bounds]);
 
@@ -45,8 +78,7 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
       ref={mapRef}
       center={center}
       zoom={13}
-      scrollWheelZoom={true}
-      wheelPxPerZoomLevel={120}
+      scrollWheelZoom
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
       zoomControl={false}
@@ -61,24 +93,53 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
           <IconMinus size={20} stroke={2} color="var(--mantine-color-primary-8)" />
         )}
       />
+
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
       {hotels.map((hotel) => (
         <PriceMarker
           key={hotel.id}
           position={[hotel.latitude, hotel.longitude]}
           price={hotel.price}
-          markerRef={getMarkerRef(hotel.id)}
-          onPopupOpen={() => onPopupOpen(hotel.id)}
-          onPopupClose={() => onPopupClose(hotel.id)}
+          markerRef={getMarkerRef ? getMarkerRef(hotel.id) : undefined}
+          onPopupOpen={() => onPopupOpen?.(hotel.id)}
+          onPopupClose={() => onPopupClose?.(hotel.id)}
         >
-          <HotelPopup
-            hotel={hotel}
-            onClick={(hotelId) => {
-              console.log(`Clicked on hotel: ${hotelId}`);
-            }}
-          />
+          <HotelPopup hotel={hotel} onClick={() => console.log(`Clicked on hotel: ${hotel.id}`)} />
         </PriceMarker>
+      ))}
+
+      {surroundings.map((poi, idx) => (
+        <Marker
+          key={`poi-${idx}`}
+          position={[poi.latitude, poi.longitude]}
+          icon={divIcon({
+            className: 'custom-icon',
+            html: renderToStaticMarkup(getPOIIcon(poi.type)),
+            iconSize: [28, 28],
+            iconAnchor: [14, 28],
+          })}
+        >
+          <Popup>
+            <strong>{poi.type}</strong>: {poi.name}
+            <br />
+            {poi.distance}
+          </Popup>
+        </Marker>
       ))}
     </MapContainer>
   );
+}
+
+function getPOIIcon(type: string) {
+  const iconMap: Record<string, React.ReactElement> = {
+    Metro: <IconTrain size={20} color="#1c7ed6" />,
+    Train: <IconTrain size={20} color="#1c7ed6" />,
+    Airport: <IconPlane size={20} color="#1971c2" />,
+    Shopping: <IconShoppingBag size={20} color="#2f9e44" />,
+    Dining: <IconToolsKitchen size={20} color="#e8590c" />,
+    Attraction: <IconStar size={20} color="#fab005" />,
+  };
+
+  return iconMap[type] ?? <IconMapPin size={20} />;
 }

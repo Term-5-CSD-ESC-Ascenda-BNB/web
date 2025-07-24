@@ -1,4 +1,5 @@
-import { Box, Flex, Stack, Text } from '@mantine/core';
+import { Box, Button, Grid, Modal, Text } from '@mantine/core';
+import { useState } from 'react';
 import { RoomGallery } from './RoomGallery';
 import { RoomFeatures } from './RoomFeatures';
 import { RoomOptions } from './RoomOptions';
@@ -21,17 +22,39 @@ interface RoomCardProps {
 }
 
 export function RoomCard({ name, images, features, options }: RoomCardProps) {
-  return (
-    <Flex wrap="wrap" align="flex-start" gap="xl">
-      <Stack style={{ flex: '0 0 360px', maxWidth: 380 }}>
-        <Text fw={500}>{name}</Text>
-        <RoomGallery images={images} />
-        <RoomFeatures features={features} />
-      </Stack>
+  const [opened, setOpened] = useState(false);
 
-      <Box style={{ flex: 1, minWidth: 320 }}>
-        <RoomOptions options={options} />
-      </Box>
-    </Flex>
+  return (
+    <Box mt="xl">
+      <Grid gutter="xl">
+        {/* Left Column: Image + Amenities */}
+        <Grid.Col span={5}>
+          <RoomGallery images={images} />
+          <RoomFeatures features={features.slice(0, 6)} />
+          <Button
+            radius="xl"
+            size="sm"
+            mt="xs"
+            style={{ backgroundColor: '#514D8A' }}
+            onClick={() => setOpened(true)}
+          >
+            View all room details
+          </Button>
+
+          <Modal opened={opened} onClose={() => setOpened(false)} title="Room Details" size="lg">
+            <Text fw={600} mb="sm">
+              {name}
+            </Text>
+            <RoomGallery images={images} />
+            <RoomFeatures features={features} />
+          </Modal>
+        </Grid.Col>
+
+        {/* Right Column: Room Options */}
+        <Grid.Col span={5}>
+          <RoomOptions options={options} />
+        </Grid.Col>
+      </Grid>
+    </Box>
   );
 }

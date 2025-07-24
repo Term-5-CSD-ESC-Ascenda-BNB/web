@@ -15,15 +15,21 @@ export function RoomGallery({ images }: RoomGalleryProps) {
         display: 'grid',
         gap: 8,
         gridTemplateColumns: '1fr',
-        maxWidth: 360,
-        width: '100%',
+        width: '100%', // removed maxWidth
       }}
     >
-      <Image src={main} alt="Main room image" radius="md" height={180} fit="cover" />
+      <Image
+        src={main}
+        alt="Main room image"
+        radius="md"
+        height={220}
+        fit="cover"
+        style={{ width: '100%' }}
+      />
 
       <Box style={{ display: 'grid', gap: 8, gridTemplateColumns: '1fr 1fr' }}>
-        <Image src={thumb1} alt="Thumb 1" radius="md" height={90} fit="cover" />
-        <Image src={thumb2} alt="Thumb 2" radius="md" height={90} fit="cover" />
+        <Image src={thumb1} alt="Thumb 1" radius="md" height={100} fit="cover" />
+        <Image src={thumb2} alt="Thumb 2" radius="md" height={100} fit="cover" />
       </Box>
     </Box>
   );
