@@ -20,12 +20,7 @@ function RouteComponent() {
     <>
       <Stack pl={'10vh'} pr={'10vh'} pt={'2rem'} gap={'xl'} mb={'xl'}>
         <ImageGallery images={images} />
-        <HotelDetails
-          name={hotel.name}
-          address={hotel.address}
-          starRating={hotel.rating}
-          reviewScore={hotel.trustyou.score.overall ?? 0}
-        />
+        <HotelDetails hotel={hotel} />
       </Stack>
       <Footer />
     </>

@@ -9,134 +9,96 @@ import { Group, Stack, Text, Box, Flex } from '@mantine/core';
 import { AmenitiesList } from '@/components/AmenitiesList/AmenitiesList';
 import { SurroundingsList } from '@/components/SurroundingsList/SurroundingsList';
 import { RoomCard } from '@/components/Room/RoomCard';
+import { HotelAmenitiesSection } from '@/components/AmenitiesList/HotelAmenitiesSection';
+import { HotelRoomsSection } from '@/components/Room/HotelRoomsSection';
+import roomData from '@/.mock_data/price.json';
 
-interface HotelDetailsProps {
+interface AmenityRating {
   name: string;
-  starRating: number;
-  address: string;
-  reviewScore: number;
+  score: number;
 }
 
-// Dummy data
-const dummyAmenities = [
-  'Parking',
-  'Gym',
-  'Wi-Fi',
-  'Restaurant',
-  'Swimming Pool',
-  'Playground',
-  '24-Hour Front Desk',
-  'Airport Shuttle',
-  'Business Center',
-  'Accessible Rooms',
-];
+interface TrustYouScore {
+  overall: number | null;
+  kaligo_overall: number;
+  solo: number | null;
+  couple: number | null;
+  family: number | null;
+  business: number | null;
+}
 
-const dummySurroundings = [
-  { type: 'Metro', name: 'City Hall', distance: '610 m' },
-  { type: 'Airport', name: 'Singapore Changi Airport', distance: '18.9 km' },
-  { type: 'Shopping', name: 'Marina Bay Sands', distance: '3.2 km' },
-  { type: 'Attraction', name: 'Merlion Park', distance: '1.1 km' },
-  { type: 'Dining', name: 'Lau Pa Sat', distance: '820 m' },
-];
+interface Hotel {
+  name: string;
+  address: string;
+  rating: number;
+  trustyou: {
+    score: TrustYouScore;
+  };
+  amenities_ratings: AmenityRating[];
+  amenities?: Record<string, boolean | undefined>;
+}
 
-const dummyRoom = {
-  name: 'Premier King Room With Garden View',
-  images: [
-    'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80',
-  ],
-  features: [
-    'Bathtub',
-    'Balcony',
-    'Mini Bar',
-    'Coffee Machine',
-    'Smart TV',
-    'Sleeps 2',
-    '1 King Bed',
-    'Garden View',
-    'Non-Smoking',
-    '45m² | Floor: 5–16',
-    'Free Wi-Fi',
-    'Air Conditioning',
-  ],
-  options: [
-    {
-      title: 'Paid Breakfast',
-      breakfast: 'Breakfast for SGD $53.94 (optional)',
-      refundable: false,
-      reschedulable: false,
-      prepay: true,
-      price: 219,
-      totalPrice: 1239,
-    },
-    {
-      title: 'Free Breakfast Option',
-      breakfast: 'Free Breakfast for 2',
-      refundable: true,
-      reschedulable: true,
-      prepay: true,
-      price: 249,
-      totalPrice: 1339,
-    },
-  ],
-};
+interface HotelDetailsProps {
+  hotel: Hotel;
+}
 
-const guestReviews = [
-  {
-    username: 'Username',
-    rating: 10,
-    room: 'Premier King Room With Garden View',
-    stayDate: 'January 2025',
-    travelerType: 'Solo Traveller',
-    comment:
-      'Excellent service excellent location excellent amenities excellent design. What a beautiful hotel. We arrived early and our room wasn’t ready but they were able to arrange a room for us to rest in. The service was wonderful — we couldn’t ask for more!',
-  },
-  {
-    username: 'Username',
-    rating: 9.8,
-    room: 'Family Suite',
-    stayDate: 'January 2025',
-    travelerType: 'Family',
-    comment:
-      'Wonderful family stay. Clean, beautiful, and very comfortable. Easy access to dining and shopping. Loved the service and amenities!',
-  },
-];
+interface Room {
+  key: string;
+  roomNormalizedDescription: string;
+  freeCancellation: boolean;
+  description: string;
+  longDescription: string;
+  images: string[];
+  amenities: string[];
+  price: number;
+  marketRates?: { supplier: string; rate: number }[];
+}
 
-export function HotelDetails({ name, starRating, address, reviewScore }: HotelDetailsProps) {
+function generateRoomImageUrls(
+  imageData: { prefix: string; suffix: string; count: number }[]
+): string[] {
+  if (!imageData || imageData.length === 0) return [];
+
+  const { prefix, suffix, count } = imageData[0]; // usually one object
+  return Array.from({ length: count }, (_, i) => `${prefix}_${i + 1}${suffix}`);
+}
+
+export function HotelDetails({ hotel }: HotelDetailsProps) {
+  const { name, address, rating, trustyou, amenities_ratings, amenities } = hotel;
+
+  // Map from amenities_ratings to ReviewScoreSub-like data
+  const ratingLabels = ['Location', 'Service', 'Room', 'WiFi', 'Breakfast', 'Food', 'Comfort'];
+  const mappedRatings = ratingLabels
+    .map((label) => {
+      const entry = amenities_ratings.find((r) => r.name === label);
+      return entry ? { label: entry.name, score: entry.score / 10 } : null;
+    })
+    .filter(Boolean) as { label: string; score: number }[];
+
   return (
     <>
       <Group justify="space-between" align="stretch">
         <Stack gap="xs">
           <Text fz="h2">{name}</Text>
-          <RatingStars rating={starRating} size={24} />
+          <RatingStars rating={rating} size={24} />
           <LocationDisplay address={address} fontSize="md" />
-
           <Group gap="xs">
             <ShareButton width={120} />
             <SaveButton width={120} />
           </Group>
         </Stack>
-        <ReviewScoreLarge score={reviewScore} />
+        {trustyou?.score?.overall && <ReviewScoreLarge score={trustyou.score.overall} />}
       </Group>
 
       <Flex justify="space-between" wrap="wrap" mt="xl" gap="xl">
+        <HotelAmenitiesSection amenities={amenities} />
         <Box style={{ flex: 1, minWidth: 300 }}>
-          <AmenitiesList amenities={dummyAmenities} />
-        </Box>
-        <Box style={{ flex: 1, minWidth: 300 }}>
-          <SurroundingsList surroundings={dummySurroundings} />
+          <SurroundingsList surroundings={[]} />{' '}
+          {/* You can replace this when you add surroundings data */}
         </Box>
       </Flex>
 
-      <Text fz="h2">Rooms</Text>
-
-      <RoomCard
-        name={dummyRoom.name}
-        images={dummyRoom.images}
-        features={dummyRoom.features}
-        options={dummyRoom.options}
-      />
+      <HotelRoomsSection />
 
       <Box mt="xl">
         <Text fz="h2" mb="sm">
@@ -145,19 +107,12 @@ export function HotelDetails({ name, starRating, address, reviewScore }: HotelDe
 
         <Group align="center" wrap="nowrap" gap="xl" style={{ maxWidth: 1000, margin: '0 auto' }}>
           <Stack align="center" gap={4}>
-            <ReviewScoreLarge score={9.0} />
-            <Text fz="sm">572 Verified Reviews</Text>
+            <ReviewScoreLarge score={trustyou.score.overall ?? 0} />
+            <Text fz="sm">Verified Reviews</Text>
           </Stack>
 
           <Group justify="space-between" gap="xl" style={{ flexGrow: 1 }}>
-            {[
-              { label: 'Cleanliness', score: 9.1 },
-              { label: 'Amenities', score: 8.9 },
-              { label: 'Service', score: 9.7 },
-              { label: 'Location', score: 8.7 },
-              { label: 'Value', score: 9.3 },
-              { label: 'Accuracy', score: 9.8 },
-            ].map(({ label, score }) => (
+            {mappedRatings.map(({ label, score }) => (
               <Stack key={label} align="center" gap={4}>
                 <ReviewScoreSub score={score} />
                 <Text fz="xs" style={{ color: '#000' }}>
@@ -168,54 +123,7 @@ export function HotelDetails({ name, starRating, address, reviewScore }: HotelDe
           </Group>
         </Group>
 
-        <Box mt="xl">
-          <Group align="stretch" gap="md" grow style={{ display: 'flex' }}>
-            {guestReviews.map((review, index) => (
-              <Box
-                key={index}
-                style={{
-                  padding: '1.25rem',
-                  backgroundColor: '#f9f9f9',
-                  borderRadius: '10px',
-                  border: '1px solid #ddd',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  height: '100%',
-                }}
-              >
-                {/* Header: User info and score */}
-                <Group justify="space-between" align="flex-start" mb="xs">
-                  <Group align="center">
-                    <Box
-                      style={{
-                        backgroundColor: '#e9ecef',
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                      }}
-                    />
-                    <Box>
-                      <Text fw={600}>{review.username}</Text>
-                      <Text fz="sm" c="dimmed">
-                        {review.room}
-                      </Text>
-                      <Text fz="xs" c="dimmed">
-                        {review.stayDate} • {review.travelerType}
-                      </Text>
-                    </Box>
-                  </Group>
-                  <ReviewScoreSmall score={review.rating} />
-                </Group>
-
-                {/* Body: Comment */}
-                <Text fz="sm" lh={1.5}>
-                  {review.comment}
-                </Text>
-              </Box>
-            ))}
-          </Group>
-        </Box>
+        {/* Reviews section omitted — not in JSON */}
       </Box>
     </>
   );
