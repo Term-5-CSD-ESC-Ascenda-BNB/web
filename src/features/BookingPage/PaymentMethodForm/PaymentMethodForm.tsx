@@ -129,7 +129,7 @@ function PaymentMethodForm() {
                 />
                 <Group grow gap="sm">
                   <TextInput
-                    placeholder="Expiration date (MM/YY)"
+                    placeholder="Expiraton date (MM/YY)"
                     withAsterisk
                     radius="xl"
                     {...form.getInputProps('expiryDate')}
