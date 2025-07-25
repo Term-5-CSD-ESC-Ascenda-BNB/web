@@ -14,7 +14,7 @@ export function Footer() {
   return (
     <div className={styles['footer']}>
       <Stack gap={20} className={styles['logo-container']}>
-        <Logo className={styles['footer-logo']} />
+        <Logo c={'gray.1'} />
         <p className={styles['copyright']}>© 2025 Wayfare. All rights reserved.</p>
       </Stack>
 
