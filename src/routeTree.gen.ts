@@ -12,12 +12,8 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
-<<<<<<< HEAD
-import { Route as BookingRouteImport } from './routes/booking'
-=======
 import { Route as RegisterRouteImport } from './routes/register'
-import { Route as PaymentRouteImport } from './routes/payment'
->>>>>>> feature/Registration
+import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels/$hotelId'
@@ -27,20 +23,14 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
-const BookingRoute = BookingRouteImport.update({
-  id: '/booking',
-  path: '/booking',
-=======
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PaymentRoute = PaymentRouteImport.update({
-  id: '/payment',
-  path: '/payment',
->>>>>>> feature/Registration
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -62,24 +52,16 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-<<<<<<< HEAD
   '/booking': typeof BookingRoute
-=======
-  '/payment': typeof PaymentRoute
   '/register': typeof RegisterRoute
->>>>>>> feature/Registration
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-<<<<<<< HEAD
   '/booking': typeof BookingRoute
-=======
-  '/payment': typeof PaymentRoute
   '/register': typeof RegisterRoute
->>>>>>> feature/Registration
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
@@ -87,52 +69,37 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-<<<<<<< HEAD
   '/booking': typeof BookingRoute
-=======
-  '/payment': typeof PaymentRoute
   '/register': typeof RegisterRoute
->>>>>>> feature/Registration
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-<<<<<<< HEAD
-  fullPaths: '/' | '/about' | '/booking' | '/search' | '/hotels/$hotelId'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/booking' | '/search' | '/hotels/$hotelId'
-  id: '__root__' | '/' | '/about' | '/booking' | '/search' | '/hotels/$hotelId'
-=======
   fullPaths:
     | '/'
     | '/about'
-    | '/payment'
+    | '/booking'
     | '/register'
     | '/search'
     | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/payment' | '/register' | '/search' | '/hotels/$hotelId'
+  to: '/' | '/about' | '/booking' | '/register' | '/search' | '/hotels/$hotelId'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/payment'
+    | '/booking'
     | '/register'
     | '/search'
     | '/hotels/$hotelId'
->>>>>>> feature/Registration
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-<<<<<<< HEAD
   BookingRoute: typeof BookingRoute
-=======
-  PaymentRoute: typeof PaymentRoute
   RegisterRoute: typeof RegisterRoute
->>>>>>> feature/Registration
   SearchRoute: typeof SearchRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
 }
@@ -242,12 +209,8 @@ declare module './routes/hotels/$hotelId' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-<<<<<<< HEAD
   BookingRoute: BookingRoute,
-=======
-  PaymentRoute: PaymentRoute,
   RegisterRoute: RegisterRoute,
->>>>>>> feature/Registration
   SearchRoute: SearchRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
 }
