@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { theme } from './theme/index.ts';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import type { Stripe } from '@stripe/stripe-js';
 
 // const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
@@ -24,7 +25,7 @@ import { Elements } from '@stripe/react-stripe-js';
 
 // const stripePromise = loadStripe(stripePublicKey);
 
-const stripePromise = loadStripe(
+const stripePromise: Promise<Stripe | null> = loadStripe(
   'pk_test_51RjdQSPndwpVsFGO20F4GBpwBwhB0I0amPXOKPrUHtXAJ2MFhfVZzmtjXOWTlDeNYmJN57LuWjiTVYihVq5ZAEpX005oEudZ4z'
 );
 // Create a new router instance

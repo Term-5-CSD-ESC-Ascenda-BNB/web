@@ -54,8 +54,13 @@ function PaymentMethodForm() {
   });
 
   const handleSubmit = async (values: PaymentMethodFormValues) => {
-    if (!stripe || !elements) {
+    if (!stripe) {
       console.error('Stripe.js has not loaded.');
+      return;
+    }
+
+    if (!elements || typeof elements.getElement !== 'function') {
+      console.error('Stripe Elements not loaded or invalid');
       return;
     }
 
