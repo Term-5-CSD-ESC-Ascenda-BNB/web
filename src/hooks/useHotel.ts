@@ -2,8 +2,13 @@ import hotelsData from '@/.mock_data/hotels.json';
 
 type MockHotel = typeof hotelsData extends Array<infer U> ? U : never;
 
+export type Hotel = MockHotel & {
+  images: string[];
+  price: number;
+  score: number;
+};
+
 export function useHotel(hotelId: string) {
-  // TODO: Implement actual data fetching
   const baseHotel = hotelsData.find((hotel: MockHotel) => hotel.id === hotelId);
 
   const images: string[] = [];
@@ -19,10 +24,19 @@ export function useHotel(hotelId: string) {
     }
   }
 
+  const enrichedHotel: Hotel | null = baseHotel
+    ? {
+        ...baseHotel,
+        images,
+        price: Math.floor(Math.random() * 200) + 100,
+        score: baseHotel.trustyou?.score?.overall ?? 0,
+      }
+    : null;
+
   return {
-    hotel: baseHotel,
+    hotel: enrichedHotel,
     images,
-    isLoading: false, // TODO: Implement actual loading state
-    error: null, // TODO: Implement actual error handling
+    isLoading: false,
+    error: null,
   };
 }
