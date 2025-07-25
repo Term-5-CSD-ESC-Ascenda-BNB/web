@@ -13,6 +13,12 @@ import { MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { theme } from './theme/index.ts';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(
+  'pk_test_51RjdQSPndwpVsFGO20F4GBpwBwhB0I0amPXOKPrUHtXAJ2MFhfVZzmtjXOWTlDeNYmJN57LuWjiTVYihVq5ZAEpX005oEudZ4z'
+);
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -33,9 +39,11 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
-          <RouterProvider router={router} />
-        </MantineProvider>
+        <Elements stripe={stripePromise}>
+          <MantineProvider theme={theme}>
+            <RouterProvider router={router} />
+          </MantineProvider>
+        </Elements>
       </QueryClientProvider>
     </StrictMode>
   );

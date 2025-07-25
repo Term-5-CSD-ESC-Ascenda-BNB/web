@@ -1,25 +1,20 @@
-import { Paper, Title, Tabs, Group, Button, TextInput, Switch, Stack, Image } from '@mantine/core';
+import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import axios from 'axios';
 
 interface PaymentMethodFormValues {
   name: string;
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
 }
 
-const handleSubmit = (values: PaymentMethodFormValues): void => {
-  console.log(values);
-};
-
 function PaymentMethodForm() {
+  const stripe = useStripe();
+  const elements = useElements();
+
   const form = useForm({
     initialValues: {
       name: '',
-      cardNumber: '',
-      expiryDate: '',
-      cvv: '',
     },
     validate: {
       name: (value) => {
@@ -29,13 +24,56 @@ function PaymentMethodForm() {
         if (value.length > 50) return 'Name is too long';
         return null;
       },
-      cardNumber: (value) =>
-        value.length === 16 && /^\d+$/.test(value) ? null : 'Card number must be 16 digits',
-      expiryDate: (value) =>
-        /^\d{2}\/\d{2}$/.test(value) ? null : 'Expiry date must be in MM/YY format',
-      cvv: (value) => (value.length === 3 && /^\d+$/.test(value) ? null : 'CVV must be 3 digits'),
     },
   });
+
+  const handleSubmit = async (values: PaymentMethodFormValues) => {
+    if (!stripe || !elements) {
+      console.error('Stripe.js has not loaded.');
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      console.error('CardElement not found.');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        'https://api-production-46df.up.railway.app/bookings/pay',
+        {
+          destinationId: 'cdwcd',
+          hotelId: 'csdcsf',
+          bookingInfo: {
+            startDate: '04/04/2025',
+            endDate: '08/04/2025',
+            numberOfNights: 4,
+            adults: 2,
+            children: 2,
+            messageToHotel: 'nil',
+            roomTypes: ['Big room', 'Small room'],
+          },
+          price: 200,
+          bookingReference: 'cdcdsdcs',
+          guest: {
+            salutation: 'Mr',
+            firstName: 'qi han',
+            lastName: 'liew',
+          },
+          payment: {
+            paymentId: 'cdsfsdf',
+            payeeId: 'cdsfds',
+          },
+        },
+        { withCredentials: true }
+      );
+
+      console.log('✅ Payment response:', res.data);
+    } catch (error) {
+      console.error('❌ Error submitting payment:', error);
+    }
+  };
 
   return (
     <Paper withBorder radius="md" p="xl" mt="md">
@@ -121,34 +159,32 @@ function PaymentMethodForm() {
                   radius="xl"
                   {...form.getInputProps('name')}
                 />
-                <TextInput
-                  placeholder="Card number"
-                  withAsterisk
-                  radius="xl"
-                  {...form.getInputProps('cardNumber')}
-                />
-                <Group grow gap="sm">
-                  <TextInput
-                    placeholder="Expiraton date (MM/YY)"
-                    withAsterisk
-                    radius="xl"
-                    {...form.getInputProps('expiryDate')}
+
+                <div
+                  style={{
+                    border: '1px solid #ccc',
+                    borderRadius: '12px',
+                    padding: '12px',
+                    marginTop: '8px',
+                  }}
+                >
+                  <CardElement
+                    options={{
+                      style: {
+                        base: {
+                          fontSize: '16px',
+                          color: '#000',
+                          '::placeholder': {
+                            color: '#888',
+                          },
+                        },
+                      },
+                    }}
                   />
-                  <TextInput
-                    placeholder="CVV / CVC"
-                    withAsterisk
-                    radius="xl"
-                    {...form.getInputProps('cvv')}
-                  />
-                </Group>
-                <Group justify="space-between">
-                  <Switch
-                    label="Save card for future purchases"
-                    color="dark"
-                    mt="sm"
-                    withThumbIndicator={false}
-                  />
-                  <Button type="submit" radius={'xl'}>
+                </div>
+
+                <Group justify="flex-end">
+                  <Button type="submit" radius="xl">
                     Submit Payment
                   </Button>
                 </Group>
@@ -159,37 +195,6 @@ function PaymentMethodForm() {
       </Stack>
     </Paper>
   );
-
-  // return (
-  //   <Box mx="auto" mt={16} style={{ maxWidth: 750, margin: '0 auto' }}>
-  //     <Card withBorder padding="lg" radius="md">
-  //       <Text size="lg" fw="500" mb="md">
-  //         Payment Method
-  //       </Text>
-  //       <form onSubmit={form.onSubmit(handleSubmit)}>
-  //         <TextInput withAsterisk placeholder="Cardholder's name" {...form.getInputProps('name')} />
-  //         <TextInput
-  //           withAsterisk
-  //           placeholder="Card number"
-  //           {...form.getInputProps('cardNumber')}
-  //           mt={'16'}
-  //         />
-  //         <Group grow mt={'16'}>
-  //           <TextInput
-  //             withAsterisk
-  //             placeholder="Expiration Date"
-  //             {...form.getInputProps('expiryDate')}
-  //           />
-  //           <TextInput withAsterisk placeholder="CVV/CVC" {...form.getInputProps('cvv')} />
-  //         </Group>
-  //         <Group justify="space-between" mt="md">
-  //           <Switch label="Remember card?" withThumbIndicator={false} />
-  //           <Button type="submit">Submit Payment</Button>
-  //         </Group>
-  //       </form>
-  //     </Card>
-  //   </Box>
-  // );
 }
 
 export default PaymentMethodForm;
