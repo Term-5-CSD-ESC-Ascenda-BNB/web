@@ -1,23 +1,21 @@
 import { MapContainer, TileLayer, ZoomControl, Marker, Popup } from 'react-leaflet';
 import { useEffect, useMemo, useRef } from 'react';
-import { latLng, LatLngBounds, Map as LeafletMap, divIcon, Marker as LeafletMarker } from 'leaflet';
+import { latLng, LatLngBounds, Map as LeafletMap, divIcon } from 'leaflet';
 import * as L from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
-import {
-  IconPlus,
-  IconMinus,
-  IconTrain,
-  IconPlane,
-  IconShoppingBag,
-  IconStar,
-  IconToolsKitchen,
-  IconMapPin,
-} from '@tabler/icons-react';
+import { IconPlus, IconMinus } from '@tabler/icons-react';
 
 import mapStyles from './Map.module.css';
 import PriceMarker from './PriceMarker';
 import { HotelPopup } from './HotelPopup';
 import type { Hotel } from '@/types/Hotel';
+import {
+  IconTrain,
+  IconToolsKitchen,
+  IconShoppingBag,
+  IconStar,
+  IconMapPin,
+} from '@tabler/icons-react'; // use only 1 per category
 
 interface Surrounding {
   type: string;
@@ -112,37 +110,124 @@ export function HotelMap({
         </PriceMarker>
       ))}
 
-      {surroundings.map((poi, idx) => (
-        <Marker
-          key={`poi-${idx}`}
-          position={[poi.latitude, poi.longitude]}
-          icon={divIcon({
-            className: 'custom-icon',
-            html: renderToStaticMarkup(getPOIIcon(poi.type)),
-            iconSize: [28, 28],
-            iconAnchor: [14, 28],
-          })}
-        >
-          <Popup>
-            <strong>{poi.type}</strong>: {poi.name}
-            <br />
-            {poi.distance}
-          </Popup>
-        </Marker>
-      ))}
+      {surroundings.map((poi, idx) => {
+        const category = getCategory(poi.type);
+        return (
+          <Marker
+            key={`poi-${idx}`}
+            position={[poi.latitude, poi.longitude]}
+            icon={divIcon({
+              className: 'custom-icon',
+              html: renderToStaticMarkup(getPOIIcon(category)),
+              iconSize: [28, 28],
+              iconAnchor: [14, 28],
+            })}
+          >
+            <Popup>
+              <strong>{poi.type}</strong>: {poi.name}
+              <br />
+              {poi.distance}
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 }
 
-function getPOIIcon(type: string) {
-  const iconMap: Record<string, React.ReactElement> = {
-    Metro: <IconTrain size={20} color="#1c7ed6" />,
-    Train: <IconTrain size={20} color="#1c7ed6" />,
-    Airport: <IconPlane size={20} color="#1971c2" />,
-    Shopping: <IconShoppingBag size={20} color="#2f9e44" />,
-    Dining: <IconToolsKitchen size={20} color="#e8590c" />,
-    Attraction: <IconStar size={20} color="#fab005" />,
-  };
+// === Helpers ===
 
-  return iconMap[type] ?? <IconMapPin size={20} />;
+function getPOIIcon(category: Category) {
+  const icon = getCategoryIcon(category);
+  const bgColor = getCategoryColor(category);
+
+  return (
+    <div
+      style={{
+        backgroundColor: bgColor,
+        borderRadius: '50%',
+        width: 28,
+        height: 28,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {icon}
+    </div>
+  );
+}
+
+type Category = 'Transport' | 'Dining' | 'Shopping' | 'Landmarks' | 'Others';
+
+function getCategory(type: string): Category {
+  const t = type.toLowerCase();
+
+  if (
+    ['bus', 'subway', 'station', 'train', 'taxi', 'public_transport', 'platform'].some((s) =>
+      t.includes(s)
+    )
+  )
+    return 'Transport';
+
+  if (
+    ['restaurant', 'cafe', 'fast_food', 'food_court', 'bakery', 'ice_cream'].some((s) =>
+      t.includes(s)
+    )
+  )
+    return 'Dining';
+
+  if (
+    ['supermarket', 'mall', 'store', 'convenience', 'toys', 'electronics', 'retail', 'shop'].some(
+      (s) => t.includes(s)
+    )
+  )
+    return 'Shopping';
+
+  if (
+    [
+      'hotel',
+      'guest_house',
+      'museum',
+      'school',
+      'park',
+      'monument',
+      'temple',
+      'church',
+      'police',
+    ].some((s) => t.includes(s))
+  )
+    return 'Landmarks';
+
+  return 'Others';
+}
+
+function getCategoryColor(category: Category): string {
+  switch (category) {
+    case 'Transport':
+      return '#1c7ed6'; // Blue
+    case 'Dining':
+      return '#e8590c'; // Orange
+    case 'Shopping':
+      return '#2f9e44'; // Green
+    case 'Landmarks':
+      return '#fab005'; // Yellow
+    default:
+      return '#868e96'; // Gray for Others
+  }
+}
+
+function getCategoryIcon(category: Category): React.ReactElement {
+  switch (category) {
+    case 'Transport':
+      return <IconTrain size={18} color="white" />;
+    case 'Dining':
+      return <IconToolsKitchen size={18} color="white" />;
+    case 'Shopping':
+      return <IconShoppingBag size={18} color="white" />;
+    case 'Landmarks':
+      return <IconStar size={18} color="white" />;
+    default:
+      return <IconMapPin size={18} color="white" />;
+  }
 }
