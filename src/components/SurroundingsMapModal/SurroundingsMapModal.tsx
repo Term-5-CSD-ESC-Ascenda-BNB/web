@@ -1,7 +1,16 @@
 import { useState } from 'react';
 import { Modal, Box, Group, Text, Stack, Tabs, ScrollArea } from '@mantine/core';
-import { HotelMap } from '@/components/HotelMap/HotelMap';
-import { getSurroundingIcon } from '@/utils/getSurroundingIcon';
+import { MapContainer, TileLayer, ZoomControl, Marker, Popup } from 'react-leaflet';
+import { divIcon } from 'leaflet';
+import { renderToStaticMarkup } from 'react-dom/server';
+import {
+  IconBed,
+  IconTrain,
+  IconToolsKitchen,
+  IconShoppingBag,
+  IconStar,
+  IconMapPin,
+} from '@tabler/icons-react';
 import type { Hotel } from '@/types/Hotel';
 
 export interface Surrounding {
@@ -19,8 +28,11 @@ interface Props {
   surroundings: Surrounding[];
 }
 
-// Categorization helper
-function categorizeType(type: string): string {
+// === Categorization ===
+
+type Category = 'Transport' | 'Dining' | 'Shopping' | 'Landmarks' | 'Others';
+
+function categorizeType(type: string): Category {
   const t = type.toLowerCase();
 
   if (
@@ -62,9 +74,8 @@ function categorizeType(type: string): string {
   return 'Others';
 }
 
-// Group surroundings into tabs
 function groupIntoCategories(surroundings: Surrounding[]) {
-  const grouped: Record<string, Surrounding[]> = {
+  const grouped: Record<Category, Surrounding[]> = {
     Transport: [],
     Landmarks: [],
     Dining: [],
@@ -80,11 +91,91 @@ function groupIntoCategories(surroundings: Surrounding[]) {
   return grouped;
 }
 
+// === Map Icon Helpers ===
+
+function getCategoryColor(category: Category): string {
+  switch (category) {
+    case 'Transport':
+      return '#1c7ed6';
+    case 'Dining':
+      return '#e8590c';
+    case 'Shopping':
+      return '#2f9e44';
+    case 'Landmarks':
+      return '#fab005';
+    default:
+      return '#868e96';
+  }
+}
+
+function getCategoryIcon(category: Category): React.ReactElement {
+  switch (category) {
+    case 'Transport':
+      return <IconTrain size={18} color="white" />;
+    case 'Dining':
+      return <IconToolsKitchen size={18} color="white" />;
+    case 'Shopping':
+      return <IconShoppingBag size={18} color="white" />;
+    case 'Landmarks':
+      return <IconStar size={18} color="white" />;
+    default:
+      return <IconMapPin size={18} color="white" />;
+  }
+}
+
+function getPOIIcon(category: Category) {
+  const icon = getCategoryIcon(category);
+  const bgColor = getCategoryColor(category);
+
+  return (
+    <div
+      style={{
+        backgroundColor: bgColor,
+        borderRadius: '50%',
+        width: 40,
+        height: 40,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {icon}
+    </div>
+  );
+}
+
+function getHotelIcon() {
+  return divIcon({
+    className: '',
+    html: renderToStaticMarkup(
+      <div
+        style={{
+          backgroundColor: '#6741d9',
+          borderRadius: '50%',
+          width: 70,
+          height: 70,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <IconBed size={35} color="white" />
+      </div>
+    ),
+    iconSize: [50, 50],
+    iconAnchor: [25, 50],
+  });
+}
+
+// === Main Component ===
+
 export function SurroundingsMapModal({ opened, onClose, hotel, surroundings }: Props) {
   const grouped = groupIntoCategories(surroundings);
-  const availableCategories = Object.keys(grouped).filter((key) => grouped[key].length > 0);
+  const availableCategories = Object.keys(grouped).filter(
+    (key) => grouped[key as Category].length > 0
+  );
   const [activeTab, setActiveTab] = useState<string | null>(availableCategories[0] || 'Transport');
-  const filteredSurroundings = grouped[activeTab ?? 'Transport'] || [];
+  const filteredSurroundings = grouped[activeTab as Category] || [];
 
   return (
     <Modal
@@ -101,7 +192,7 @@ export function SurroundingsMapModal({ opened, onClose, hotel, surroundings }: P
       }}
     >
       <Group wrap="nowrap" align="stretch" style={{ height: 'calc(100vh - 80px)' }}>
-        {/* Left panel with tabs and listings */}
+        {/* Left Panel */}
         <Box style={{ width: 515, padding: 16, overflow: 'hidden' }}>
           <Tabs value={activeTab} onChange={setActiveTab} variant="outline" keepMounted={false}>
             <Tabs.List style={{ flexWrap: 'wrap', gap: 8 }}>
@@ -116,9 +207,9 @@ export function SurroundingsMapModal({ opened, onClose, hotel, surroundings }: P
               <Tabs.Panel value={category} key={category}>
                 <ScrollArea h="calc(100vh - 180px)">
                   <Stack gap="sm" mt="sm">
-                    {grouped[category].map((item, i) => (
+                    {grouped[category as Category].map((item, i) => (
                       <Group key={i} align="flex-start" gap={8}>
-                        {getSurroundingIcon(item.type)}
+                        {getPOIIcon(category as Category)}
                         <Box>
                           <Text fw={500} fz="sm">
                             {item.name}
@@ -136,14 +227,46 @@ export function SurroundingsMapModal({ opened, onClose, hotel, surroundings }: P
           </Tabs>
         </Box>
 
-        {/* Right panel with filtered map */}
+        {/* Right Map Panel */}
         <Box style={{ flex: 1 }}>
-          <HotelMap
-            hotels={[hotel]}
-            surroundings={filteredSurroundings}
+          <MapContainer
             center={[hotel.latitude, hotel.longitude]}
             zoom={18}
-          />
+            scrollWheelZoom
+            style={{ height: '100%', width: '100%' }}
+            attributionControl={false}
+            zoomControl={false}
+          >
+            <ZoomControl position="topright" />
+
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+            {/* Hotel Marker */}
+            <Marker position={[hotel.latitude, hotel.longitude]} icon={getHotelIcon()} />
+
+            {/* POI Markers */}
+            {filteredSurroundings.map((poi, idx) => {
+              const category = categorizeType(poi.type);
+              return (
+                <Marker
+                  key={`poi-${idx}`}
+                  position={[poi.latitude, poi.longitude]}
+                  icon={divIcon({
+                    className: 'custom-icon',
+                    html: renderToStaticMarkup(getPOIIcon(category)),
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                  })}
+                >
+                  <Popup>
+                    <strong>{poi.type}</strong>: {poi.name}
+                    <br />
+                    {poi.distance}
+                  </Popup>
+                </Marker>
+              );
+            })}
+          </MapContainer>
         </Box>
       </Group>
     </Modal>
