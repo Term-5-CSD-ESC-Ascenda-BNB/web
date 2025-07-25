@@ -1,12 +1,5 @@
 import { Box, Group, Text } from '@mantine/core';
-import {
-  IconTrain,
-  IconPlane,
-  IconShoppingBag,
-  IconStar,
-  IconToolsKitchen,
-  IconMapPin,
-} from '@tabler/icons-react';
+import { getSurroundingIcon } from '@/utils/getSurroundingIcon';
 
 export interface Surrounding {
   type: string;
@@ -14,33 +7,27 @@ export interface Surrounding {
   distance: string;
 }
 
-const ICON_MAP: Record<string, React.ReactElement> = {
-  Metro: <IconTrain size={18} />,
-  Train: <IconTrain size={18} />,
-  Airport: <IconPlane size={18} />,
-  Shopping: <IconShoppingBag size={18} />,
-  Dining: <IconToolsKitchen size={18} />,
-  Attraction: <IconStar size={18} />,
-};
-
 interface SurroundingsListProps {
   surroundings: Surrounding[];
+  maxItems?: number; // optional limit
 }
 
-export function SurroundingsList({ surroundings }: SurroundingsListProps) {
+export function SurroundingsList({ surroundings, maxItems }: SurroundingsListProps) {
   if (!surroundings || surroundings.length === 0) {
     return <Text c="dimmed">No nearby places found.</Text>;
   }
 
+  const visible = maxItems ? surroundings.slice(0, maxItems) : surroundings;
+
   return (
     <Box>
       <Group gap="xs" wrap="wrap" align="start">
-        {surroundings.map((item, i) => (
+        {visible.map((item, i) => (
           <Group key={i} gap={8} align="center" style={{ width: '100%' }}>
-            {ICON_MAP[item.type] ?? <IconMapPin size={18} />}
-            <Text>
+            {getSurroundingIcon(item.type)}
+            <Text fz="sm">
               {item.type}: {item.name}{' '}
-              <Text span c="dimmed">
+              <Text span c="dimmed" fz="sm">
                 ({item.distance})
               </Text>
             </Text>

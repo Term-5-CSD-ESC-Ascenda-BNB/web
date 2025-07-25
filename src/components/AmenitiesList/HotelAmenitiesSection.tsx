@@ -8,7 +8,7 @@ interface HotelAmenitiesSectionProps {
 
 export function HotelAmenitiesSection({ amenities }: HotelAmenitiesSectionProps) {
   const [opened, setOpened] = useState(false);
-  const THRESHOLD = 8;
+  const THRESHOLD = 10;
 
   const formattedAmenities = amenities
     ? Object.keys(amenities)

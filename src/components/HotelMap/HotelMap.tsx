@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, ZoomControl, Marker, Popup } from 'react-leaflet';
 import { useEffect, useMemo, useRef } from 'react';
 import { latLng, LatLngBounds, Map as LeafletMap, divIcon, Marker as LeafletMarker } from 'leaflet';
-import * as L from 'leaflet'; // ✅ Required for correct typing
+import * as L from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
   IconPlus,
@@ -27,7 +27,6 @@ interface Surrounding {
   longitude: number;
 }
 
-// ✅ FIX: Use L.Marker instead of any
 type MarkerRefHandler = (id: string) => (marker: L.Marker | null) => void;
 type PopupHandler = (id: string) => void;
 
@@ -37,6 +36,8 @@ interface HotelMapProps {
   getMarkerRef?: MarkerRefHandler;
   onPopupOpen?: PopupHandler;
   onPopupClose?: PopupHandler;
+  center?: [number, number];
+  zoom?: number;
 }
 
 export function HotelMap({
@@ -45,9 +46,11 @@ export function HotelMap({
   getMarkerRef,
   onPopupOpen,
   onPopupClose,
+  center: providedCenter,
+  zoom: providedZoom = 13,
 }: HotelMapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
-  const center = latLng(1.3521, 103.8198);
+  const center = providedCenter ?? latLng(1.3521, 103.8198);
 
   const bounds = useMemo(() => {
     const b = new LatLngBounds([]);
@@ -77,7 +80,7 @@ export function HotelMap({
     <MapContainer
       ref={mapRef}
       center={center}
-      zoom={13}
+      zoom={providedZoom}
       scrollWheelZoom
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
