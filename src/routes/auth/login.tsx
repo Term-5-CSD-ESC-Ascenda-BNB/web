@@ -1,4 +1,4 @@
-import { LoginForm } from '@/features/AuthPage/LoginForm/LoginForm';
+import { LoginForm } from '@/features/AuthPage/login/LoginForm';
 
 export const Route = createFileRoute({
   component: RouteComponent,

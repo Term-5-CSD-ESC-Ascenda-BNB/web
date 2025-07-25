@@ -1,6 +1,6 @@
 import { useForm } from '@mantine/form';
 import { zodResolver } from 'mantine-form-zod-resolver';
-import { loginSchema } from './loginSchema';
+import { loginSchema } from '../schema';
 
 export function useLoginForm() {
   return useForm({

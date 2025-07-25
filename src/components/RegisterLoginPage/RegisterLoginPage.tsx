@@ -12,6 +12,7 @@ import {
   Alert,
   rem,
 } from '@mantine/core';
+import { SocialLoginButtons } from '../../features/AuthPage/components/SocialLoginButtons/SocialLoginButtons';
 import { IconBrandGoogle, IconBrandFacebook, IconBrandApple } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 
@@ -118,22 +119,6 @@ export function RegisterLoginPage() {
     }
   };
 
-  /**
-  {
-    "id": 126,
-    "createdAt": "2025-06-11T16:15:53.085Z",
-    "updatedAt": "2025-06-11T16:15:53.085Z",
-    "email": "xyf.oco@gmail.com",
-    "emailVerified": true,
-    "firstName": "yufeng",
-    "lastName": "xue",
-    "password": "",
-    "provider": null,
-    "providerId": null,
-    "stripeCustomerId": null
-  }
-   */
-
   const handleGoogle = () => {
     const popup = window.open(`${API_URL}/auth/google`, 'oauth', 'width=500,height=600');
     if (!popup) {
@@ -149,8 +134,12 @@ export function RegisterLoginPage() {
     }, 500);
 
     const messageHandler = (event: MessageEvent) => {
+      console.log(event);
+      console.log('Received message:', event.data);
+      console.log('Event origin:', event.origin);
+
       // Accept only messages from your API
-      if (!event.origin.startsWith('http://localhost:3000')) return;
+      if (!event.origin.startsWith(API_URL)) return;
 
       const data = event.data as { type: string; message?: string } | undefined;
 
@@ -158,7 +147,7 @@ export function RegisterLoginPage() {
         clearInterval(popupTimer);
         popup.close();
         setSuccess('Login successful! Redirecting...');
-        setTimeout(() => (window.location.href = '/search'), 1000);
+        // setTimeout(() => (window.location.href = '/search'), 1000);
       } else if (data?.type === 'OAUTH_ERROR') {
         clearInterval(popupTimer);
         popup.close();
@@ -375,39 +364,7 @@ export function RegisterLoginPage() {
             </Button>
           </form>
           <Divider my="sm" label="or login with" labelPosition="center" />
-          <Group align="center" justify="center" gap={16} mt="md" mb={4}>
-            <Button
-              variant="default"
-              radius="xl"
-              px={0}
-              size="lg"
-              style={{ width: 54, height: 54, background: '#fff', border: '1px solid #e4e4ec' }}
-              onClick={handleGoogle}
-              disabled={loading}
-            >
-              <IconBrandGoogle size={26} color="#EA4335" />
-            </Button>
-            <Button
-              variant="default"
-              radius="xl"
-              px={0}
-              size="lg"
-              style={{ width: 54, height: 54, background: '#fff', border: '1px solid #e4e4ec' }}
-              disabled
-            >
-              <IconBrandFacebook size={26} color="#1877F3" />
-            </Button>
-            <Button
-              variant="default"
-              radius="xl"
-              px={0}
-              size="lg"
-              style={{ width: 54, height: 54, background: '#fff', border: '1px solid #e4e4ec' }}
-              disabled
-            >
-              <IconBrandApple size={26} color="#000" />
-            </Button>
-          </Group>
+          <SocialLoginButtons loading={loading} onGoogleClick={handleGoogle} />
         </Card>
       </Flex>
     </Flex>
