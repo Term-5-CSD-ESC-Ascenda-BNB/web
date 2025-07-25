@@ -187,11 +187,11 @@ export function SurroundingsMapModal({ opened, onClose, hotel, surroundings }: P
       styles={{
         body: {
           padding: 0,
-          height: 'calc(100vh - 80px)',
+          height: 'calc(85vh - 80px)',
         },
       }}
     >
-      <Group wrap="nowrap" align="stretch" style={{ height: 'calc(100vh - 80px)' }}>
+      <Group wrap="nowrap" align="stretch" style={{ height: 'calc(85vh - 80px)' }}>
         {/* Left Panel */}
         <Box style={{ width: 515, padding: 16, overflow: 'hidden' }}>
           <Tabs value={activeTab} onChange={setActiveTab} variant="outline" keepMounted={false}>
@@ -205,7 +205,7 @@ export function SurroundingsMapModal({ opened, onClose, hotel, surroundings }: P
 
             {availableCategories.map((category) => (
               <Tabs.Panel value={category} key={category}>
-                <ScrollArea h="calc(100vh - 180px)">
+                <ScrollArea h="calc(85vh - 180px)">
                   <Stack gap="sm" mt="sm">
                     {grouped[category as Category].map((item, i) => (
                       <Group key={i} align="flex-start" gap={8}>
