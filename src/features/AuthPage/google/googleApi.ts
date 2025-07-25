@@ -32,6 +32,8 @@ export async function loginWithGoogle(): Promise<ResponseSchema> {
 
       const data = event.data as OAuthSuccessMessage;
 
+      console.log('Received message from OAuth popup:', data);
+
       window.removeEventListener('message', handleMessage);
       clearInterval(checkClosed);
 
@@ -39,6 +41,7 @@ export async function loginWithGoogle(): Promise<ResponseSchema> {
       if (result.success) {
         resolve(result.data);
       } else {
+        console.error('Google login failed:', result.error);
         reject(result.error);
       }
     }

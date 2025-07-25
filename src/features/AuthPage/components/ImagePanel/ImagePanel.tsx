@@ -8,23 +8,27 @@ import {
   Stack,
   Title,
   useMantineTheme,
+  type BoxComponentProps,
+  type ElementProps,
 } from '@mantine/core';
 import { Link, useLocation } from '@tanstack/react-router';
 import styles from './ImagePanel.module.css';
 
-export function ImagePanel() {
+interface ImagePanelProps extends BoxComponentProps, ElementProps<'div'> {}
+
+export function ImagePanel({ h = '100vh', pos = 'relative', ...props }: ImagePanelProps) {
   const theme = useMantineTheme();
 
   const { pathname } = useLocation();
 
   // Initialise variables based on the current page
-  const text = pathname === '/auth/login' ? "Don't have an account?" : 'Already have an account?';
-  const buttonText = pathname === '/auth/login' ? 'Register' : 'Log in';
-  const to = pathname === '/auth/login' ? '/auth/register' : '/auth/login';
+  const text = pathname === '/register' ? 'Already have an account?' : "Don't have an account?";
+  const buttonText = pathname === '/register' ? 'Log in' : 'Register';
+  const to = pathname === '/register' ? '/login' : '/register';
 
   return (
     <>
-      <Box flex={1} h={'100vh'} pos={'relative'}>
+      <Box h={h} pos={pos} {...props}>
         <Logo
           pos={'absolute'}
           mx={'xl'}

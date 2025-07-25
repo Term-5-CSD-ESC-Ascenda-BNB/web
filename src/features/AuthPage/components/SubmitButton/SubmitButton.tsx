@@ -1,4 +1,4 @@
-import { Button, useMantineTheme, type ButtonProps, type ElementProps } from '@mantine/core';
+import { Button, type ButtonProps, type ElementProps } from '@mantine/core';
 
 interface SubmitButtonProps extends ButtonProps, ElementProps<'button', keyof ButtonProps> {
   disabled: boolean;

@@ -19,7 +19,7 @@ export function useRegisterNotifications() {
     });
 
     setTimeout(() => {
-      void navigate({ to: '/auth/login', replace: true });
+      void navigate({ to: '/login', replace: true });
     }, AUTO_CLOSE_MS);
   };
 

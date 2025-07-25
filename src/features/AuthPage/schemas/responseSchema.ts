@@ -8,7 +8,7 @@ export const responseSchema = z.object({
   emailVerified: z.boolean(),
   firstName: z.string(),
   lastName: z.string(),
-  password: z.string(), // returned but empty
+  password: z.string().nullable(), // returned but empty
   provider: z.string().nullable(),
   providerId: z.string().nullable(),
   stripeCustomerId: z.string().nullable(),
