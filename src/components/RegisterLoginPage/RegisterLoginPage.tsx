@@ -125,18 +125,18 @@ export function RegisterLoginPage() {
     }
 
     const popupTimer = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(popupTimer);
-        setError('Authentication popup closed. Please try again.');
-      }
+      // if (popup.closed) {
+      //   clearInterval(popupTimer);
+      //   setError('Authentication popup closed. Please try again.');
+      // }
     }, 500);
 
     const messageHandler = (event: MessageEvent) => {
       // Accept only messages from your API
-      if (!event.origin.startsWith('http://localhost:3000')) return;
+      // if (!event.origin.startsWith('http://localhost:3000')) return;
 
       const data = event.data as { type: string; message?: string } | undefined;
-
+      console.log('hi');
       if (data?.type === 'OAUTH_SUCCESS') {
         clearInterval(popupTimer);
         popup.close();
