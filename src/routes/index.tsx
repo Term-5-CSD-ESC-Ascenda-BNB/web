@@ -2,7 +2,6 @@ import styles from './index.module.css';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useHotels } from '@/hooks';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
-import { Footer } from '@/components/Footer/Footer';
 import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
 import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
@@ -69,7 +68,6 @@ function Index() {
 
         <ExceptionalSection />
       </Stack>
-      <Footer />
 
       <HelpButton />
     </>

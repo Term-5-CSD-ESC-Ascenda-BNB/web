@@ -6,7 +6,7 @@ import { Stack } from '@mantine/core';
 export const Route = createRootRoute({
   component: () => (
     <>
-      <Stack mih={'100vh'}>
+      <Stack mih={'100vh'} gap={0}>
         <div style={{ flex: 1 }}>
           <Outlet />
         </div>

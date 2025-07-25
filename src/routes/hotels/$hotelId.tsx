@@ -1,4 +1,3 @@
-import { Footer } from '@/components/Footer/Footer';
 import { ImageGallery } from '@/components/ImageGallery/ImageGallery';
 import { HotelDetails } from '@/features/HotelPage/HotelDetails/HotelDetails';
 import { useHotel } from '@/hooks/useHotel';
@@ -27,7 +26,6 @@ function RouteComponent() {
           reviewScore={hotel.trustyou.score.overall ?? undefined}
         />
       </Stack>
-      <Footer />
     </>
   );
 }
