@@ -13,6 +13,7 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as BookingsuccessRouteImport } from './routes/bookingsuccess'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -26,6 +27,11 @@ const SearchRoute = SearchRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsuccessRoute = BookingsuccessRouteImport.update({
+  id: '/bookingsuccess',
+  path: '/bookingsuccess',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingRoute = BookingRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
@@ -80,16 +89,25 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/register'
     | '/search'
     | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/booking' | '/register' | '/search' | '/hotels/$hotelId'
+  to:
+    | '/'
+    | '/about'
+    | '/booking'
+    | '/bookingsuccess'
+    | '/register'
+    | '/search'
+    | '/hotels/$hotelId'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/register'
     | '/search'
     | '/hotels/$hotelId'
@@ -99,6 +117,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BookingRoute: typeof BookingRoute
+  BookingsuccessRoute: typeof BookingsuccessRoute
   RegisterRoute: typeof RegisterRoute
   SearchRoute: typeof SearchRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
@@ -125,6 +144,13 @@ declare module '@tanstack/react-router' {
       path: '/booking'
       fullPath: '/booking'
       preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookingsuccess': {
+      id: '/bookingsuccess'
+      path: '/bookingsuccess'
+      fullPath: '/bookingsuccess'
+      preLoaderRoute: typeof BookingsuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -178,6 +204,15 @@ declare module './routes/booking' {
     FileRoutesByPath['/booking']['fullPath']
   >
 }
+declare module './routes/bookingsuccess' {
+  const createFileRoute: CreateFileRoute<
+    '/bookingsuccess',
+    FileRoutesByPath['/bookingsuccess']['parentRoute'],
+    FileRoutesByPath['/bookingsuccess']['id'],
+    FileRoutesByPath['/bookingsuccess']['path'],
+    FileRoutesByPath['/bookingsuccess']['fullPath']
+  >
+}
 declare module './routes/register' {
   const createFileRoute: CreateFileRoute<
     '/register',
@@ -210,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BookingRoute: BookingRoute,
+  BookingsuccessRoute: BookingsuccessRoute,
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
