@@ -2,15 +2,41 @@ import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image } from '@man
 import { useForm } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
+
+const createBookingDto = {
+  destinationId: 'dest-001',
+  hotelId: 'hotel-001',
+  bookingInfo: {
+    startDate: '2025-08-01',
+    endDate: '2025-08-05',
+    numberOfNights: 4,
+    adults: 2,
+    children: 1,
+    messageToHotel: 'Late check-in please',
+    roomTypes: ['standard-room'],
+  },
+  price: 499.99,
+  bookingReference: 'BNKG-123456',
+  guest: {
+    salutation: 'Mr.',
+    firstName: 'John',
+    lastName: 'Doe',
+  },
+  payment: {
+    paymentId: 'pay-123456',
+    payeeId: 'payee-98765',
+  },
+};
 
 interface PaymentMethodFormValues {
   name: string;
 }
 
 function PaymentMethodForm() {
-  const stripe = useStripe();
-  const elements = useElements();
+  const stripe: Stripe | null = useStripe();
+  const elements: StripeElements | null = useElements();
 
   const form = useForm({
     initialValues: {
@@ -43,28 +69,13 @@ function PaymentMethodForm() {
       const res = await axios.post(
         'https://api-production-46df.up.railway.app/bookings/pay',
         {
-          destinationId: 'cdwcd',
-          hotelId: 'csdcsf',
-          bookingInfo: {
-            startDate: '04/04/2025',
-            endDate: '08/04/2025',
-            numberOfNights: 4,
-            adults: 2,
-            children: 2,
-            messageToHotel: 'nil',
-            roomTypes: ['Big room', 'Small room'],
-          },
-          price: 200,
-          bookingReference: 'cdcdsdcs',
-          guest: {
-            salutation: 'Mr',
-            firstName: 'qi han',
-            lastName: 'liew',
-          },
-          payment: {
-            paymentId: 'cdsfsdf',
-            payeeId: 'cdsfds',
-          },
+          bookingInfo: createBookingDto.bookingInfo,
+          hotelId: createBookingDto.hotelId,
+          destination_id: createBookingDto.destinationId,
+          country_code: 'SG', // example values — replace with real ones
+          lang: 'en',
+          currency: 'SGD',
+          guests: createBookingDto.bookingInfo.adults + createBookingDto.bookingInfo.children,
         },
         { withCredentials: true }
       );
