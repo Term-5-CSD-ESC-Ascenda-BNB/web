@@ -58,7 +58,9 @@ export function RegisterForm() {
             error={form.errors.confirmPassword ? true : false}
           />
 
-          <SubmitButton disabled={mutation.isPending}>Sign up</SubmitButton>
+          <SubmitButton disabled={mutation.isPending} mt={'lg'}>
+            Sign up
+          </SubmitButton>
         </Stack>
       </form>
     </>

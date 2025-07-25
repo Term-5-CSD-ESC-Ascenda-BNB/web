@@ -32,7 +32,9 @@ export function LoginForm() {
             error={form.errors.password ? true : false}
           />
 
-          <SubmitButton disabled={mutation.isPending}>Log in</SubmitButton>
+          <SubmitButton disabled={mutation.isPending} mt={'lg'}>
+            Log in
+          </SubmitButton>
         </Stack>
       </form>
     </>

@@ -1,4 +1,5 @@
-import { Box, Group, useMantineTheme } from '@mantine/core';
+import { ImagePanel } from '@/features/AuthPage/components/ImagePanel/ImagePanel';
+import { Box, Group } from '@mantine/core';
 import { Outlet, useLocation } from '@tanstack/react-router';
 
 export const Route = createFileRoute({
@@ -6,17 +7,17 @@ export const Route = createFileRoute({
 });
 
 function RouteComponent() {
-  const theme = useMantineTheme();
   const { pathname } = useLocation();
 
   return (
     <Group gap={0}>
-      <Box mih={'100vh'} flex={1} bg={theme.colors.primary[5]}>
-        Test
-      </Box>
-      <Box mih={'100vh'} flex={1}>
+      {pathname === '/auth/login' && <ImagePanel />}
+
+      <Box h={'100vh'} flex={1}>
         <Outlet />
       </Box>
+
+      {pathname === '/auth/register' && <ImagePanel />}
     </Group>
   );
 }
