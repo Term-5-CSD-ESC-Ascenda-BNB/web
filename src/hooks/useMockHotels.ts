@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react';
 import mockData from '@/.mock_data/hotels.json';
 import type { Hotel } from '@/types/Hotel';
 
-export function useHotels() {
+export function useMockHotels() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Replace with actual API call
     const fetchData = async () => {
       setIsLoading(true);
 
-      // TODO: Replace with actual price and score from API
       const updatedHotels = mockData.slice(0, 18).map((hotel) => {
         // Generate images array from hotel image details
         const images: string[] = [];
@@ -42,8 +40,7 @@ export function useHotels() {
       setIsLoading(false);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetchData();
+    void fetchData();
   }, []);
 
   return {
