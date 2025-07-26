@@ -1,6 +1,11 @@
 import { Paper, Stack, Text } from '@mantine/core';
 
-export function CancellationPolicyCard() {
+interface CancellationPolicyCardProps {
+  currency: string;
+  fee: number;
+}
+
+export function CancellationPolicyCard({ currency, fee }: CancellationPolicyCardProps) {
   return (
     <Paper withBorder radius="md" p="md" mt="md">
       <Stack gap={4}>
@@ -8,7 +13,10 @@ export function CancellationPolicyCard() {
           Cancellation Policy
         </Text>
         <Text size="sm">
-          <b>Cancellation fee: S$2,279.20</b>
+          <b>
+            Cancellation fee: {currency}
+            {fee}
+          </b>
         </Text>
         <Text size="xs" c="dimmed">
           This booking cannot be modified, and no refund will be given if you cancel it. If you fail

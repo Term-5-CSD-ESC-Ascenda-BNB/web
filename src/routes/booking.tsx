@@ -36,7 +36,7 @@ function Booking() {
             checkout={'2025-10-10'}
             currency="SGD"
           />
-          <CancellationPolicyCard />
+          <CancellationPolicyCard currency="S$" fee={2123} />
         </Grid.Col>
       </Grid>
     </Container>

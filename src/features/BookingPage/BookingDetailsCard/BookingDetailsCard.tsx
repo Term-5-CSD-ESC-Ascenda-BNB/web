@@ -1,16 +1,4 @@
-import {
-  Paper,
-  Group,
-  Text,
-  Divider,
-  Stack,
-  Image,
-  Badge,
-  Box,
-  ThemeIcon,
-  Button,
-  NumberInput,
-} from '@mantine/core';
+import { Paper, Group, Text, Divider, Stack, Image, Box, ThemeIcon } from '@mantine/core';
 import { IconStar, IconUser, IconRulerMeasure, IconCalendarTime } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useCounter } from '@mantine/hooks';
@@ -22,7 +10,7 @@ interface BookingDetailsCardProps {
   starRating: number;
   address: string;
   roomType: string;
-  reviewScore?: number;
+  reviewScore: number;
   checkin: string;
   checkout: string;
   guests: number;
@@ -82,10 +70,7 @@ export function BookingDetailsCard({
               </Box>
             </Group>
           </Box>
-          {/* <Badge color="violet" size="xl" style={{ alignSelf: 'flex-start' }}>
-            {reviewScore} / 10
-          </Badge> */}
-          <ReviewScoreLarge score={6}></ReviewScoreLarge>
+          <ReviewScoreLarge score={reviewScore}></ReviewScoreLarge>
         </Group>
         <Divider />
         <Group grow>
@@ -108,31 +93,6 @@ export function BookingDetailsCard({
             </Text>
           </Box>
         </Group>
-        {/* <Divider />
-        <Group grow mt="sm">
-          <Group gap={4}>
-            <IconUser size={16} />
-            <Text size="sm">Rooms:</Text>
-            <Group>
-              <Button variant="default" size="xs" radius="xl" onClick={roomCountHandlers.decrement}>
-                -
-              </Button>
-              <Text size="sm">{roomCount}</Text>
-              <Button variant="default" size="xs" radius="xl" onClick={roomCountHandlers.increment}>
-                +
-              </Button>
-            </Group>
-          </Group>
-          <Group gap={4} wrap="nowrap">
-            <IconCalendarTime size={16} />
-            <NumberInput
-              suffix=" Nights"
-              min={1}
-              value={nights}
-              onChange={(val) => setNights(val as number | '')}
-            ></NumberInput>
-          </Group>
-        </Group> */}
       </Stack>
     </Paper>
   );
