@@ -1,8 +1,8 @@
 import React from 'react';
 import { Stack, Button, Group } from '@mantine/core';
-import { PriceRangeSlider } from './PriceRangeSlider';
-import { RatingSelector } from './RatingSelector';
-import { ReviewScoreSlider } from './ReviewScoreSlider';
+import { PriceRangeSlider } from './PriceRangeSlider/PriceRangeSlider';
+import { RatingSelector } from './RatingSelector/RatingSelector';
+import { ReviewScoreSlider } from './ReviewScoreSelector/ReviewScoreSlider';
 
 export interface FilterState {
   priceRange: [number, number];
