@@ -1,6 +1,6 @@
 import styles from './index.module.css';
 import { IconChevronDown } from '@tabler/icons-react';
-import { useHotels } from '@/hooks';
+import { useMockHotels } from '@/hooks';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
@@ -15,7 +15,7 @@ export const Route = createFileRoute({
 });
 
 function Index() {
-  const { hotels, isLoading } = useHotels();
+  const { hotels, isLoading } = useMockHotels();
 
   const theme = useMantineTheme();
 
