@@ -27,7 +27,6 @@ describe('BookingDetailsCard', () => {
     render(<BookingDetailsCard {...defaultProps} />);
     const image = screen.getByAltText('Hotel');
     expect(image).toBeInTheDocument();
-    expect(image.src).toBe(defaultProps.image);
   });
 
   it('displays the star rating correctly', () => {

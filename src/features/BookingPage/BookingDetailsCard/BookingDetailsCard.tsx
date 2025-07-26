@@ -27,9 +27,6 @@ export function BookingDetailsCard({
   checkout,
   guests,
 }: BookingDetailsCardProps) {
-  const [nights, setNights] = useState<number | ''>(1);
-  const [roomCount, roomCountHandlers] = useCounter(1, { min: 1, max: 10 });
-
   function formatDate(dateString: string) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
