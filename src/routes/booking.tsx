@@ -32,11 +32,12 @@ function Booking() {
           <PriceDetailsCard
             roomType={'Deluxe King Room'}
             rooms={2}
+            roomPrice={1200}
             checkin={'2025-10-01'}
             checkout={'2025-10-10'}
-            currency="SGD"
+            currency="S$"
           />
-          <CancellationPolicyCard />
+          <CancellationPolicyCard currency="S$" fee={2123} />
         </Grid.Col>
       </Grid>
     </Container>
