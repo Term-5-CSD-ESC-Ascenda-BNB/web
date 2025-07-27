@@ -1,10 +1,14 @@
 export interface RoomOption {
-  breakfast?: string;
+  title: string;
   refundable: boolean;
+  refundableUntil?: string;
   reschedulable: boolean;
+  breakfast?: string;
   prepay: boolean;
   price: number;
   totalPrice: number;
+  promo?: string;
+  availability?: string;
 }
 
 export interface Room {
