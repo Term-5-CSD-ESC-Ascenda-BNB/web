@@ -1,5 +1,5 @@
 import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, type UseFormReturnType } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
@@ -30,20 +30,31 @@ const createBookingDto = {
   },
 };
 
-interface PaymentMethodFormValues {
-  name: string;
+export interface PaymentMethodFormValues {
+  cardholderName: string;
 }
 
-function PaymentMethodForm() {
+interface PaymentMethodFormProps {
+  guestInfo: UseFormReturnType<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    countryCode: string;
+    phone: string;
+    specialRequests: string;
+  }>;
+}
+
+function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
 
   const form = useForm({
     initialValues: {
-      name: '',
+      cardholderName: '',
     },
     validate: {
-      name: (value) => {
+      cardholderName: (value) => {
         if (!value.trim()) return 'Cardholder name is required';
         if (!/^[A-Za-z\s'-]+$/.test(value)) return 'Name contains invalid characters';
         if (value.length < 2) return 'Name is too short';
@@ -54,6 +65,10 @@ function PaymentMethodForm() {
   });
 
   const handleSubmit = async (values: PaymentMethodFormValues) => {
+    if (guestInfo.validate().hasErrors) {
+      return;
+    }
+
     if (!stripe) {
       console.error('Stripe.js has not loaded.');
       return;
@@ -69,6 +84,8 @@ function PaymentMethodForm() {
       console.error('CardElement not found.');
       return;
     }
+
+    console.log(guestInfo.values);
 
     try {
       const res = await axios.post(
@@ -173,7 +190,7 @@ function PaymentMethodForm() {
                   placeholder="Cardholder's name"
                   withAsterisk
                   radius="xl"
-                  {...form.getInputProps('name')}
+                  {...form.getInputProps('cardholderName')}
                 />
 
                 <div
