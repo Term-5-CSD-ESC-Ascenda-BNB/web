@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchHotels } from './api';
-import { type HotelsResponse, FetchHotelsParamsSchema } from './schemas';
+import { type HotelsResponse, FetchHotelsParamsSchema } from '@/schemas/hotelResults';
 import { useSearch } from '@tanstack/react-router';
 import { stringifyGuestsRooms } from '@/utils/stringifyGuestsRooms';
 

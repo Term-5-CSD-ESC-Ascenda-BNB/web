@@ -1,9 +1,9 @@
 import { SimpleGrid } from '@mantine/core';
 import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
-import type { Hotel } from '@/types/Hotel';
+import type { MockHotel } from '@/types/MockHotel';
 
 interface HotelGridProps {
-  hotels: Hotel[];
+  hotels: MockHotel[];
   isLoading: boolean;
   onHotelMouseEnter?: (hotelId: string) => void;
   onHotelMouseLeave?: (hotelId: string) => void;

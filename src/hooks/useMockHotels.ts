@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import mockData from '@/.mock_data/hotels.json';
-import type { Hotel } from '@/types/Hotel';
+import type { MockHotel } from '@/types/MockHotel';
 
 export function useMockHotels() {
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [hotels, setHotels] = useState<MockHotel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
