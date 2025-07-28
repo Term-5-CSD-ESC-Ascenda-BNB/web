@@ -1,11 +1,10 @@
 import styles from './index.module.css';
-import { IconChevronDown } from '@tabler/icons-react';
-import { useMockHotels } from '@/hooks';
+import { IconChevronDown, IconExclamationCircle } from '@tabler/icons-react';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
 import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
-import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
+import { Alert, Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';
 import { CoordsProvider } from '@/context/CoordsProvider';
@@ -16,7 +15,7 @@ export const Route = createFileRoute({
 });
 
 function Index() {
-  const { data, isLoading, error } = useLandingHotels();
+  const { data, isLoading, error, isError } = useLandingHotels();
   const hotels = data?.hotels || [];
 
   const theme = useMantineTheme();
@@ -50,23 +49,37 @@ function Index() {
       </CoordsProvider>
 
       <Stack mx={'20vw'} my={'10vw'} gap={'10vw'}>
-        <FeaturedSection
-          title="Featured Hotels"
-          hotels={hotels.slice(0, 3)}
-          isLoading={isLoading}
-        />
+        {isError && (
+          <Alert
+            variant="light"
+            title="Error fetching hotels"
+            color="red"
+            radius="md"
+            icon={<IconExclamationCircle size={16} />}
+          >
+            {error.message || 'An error occurred while fetching hotels.'}
+          </Alert>
+        )}
 
-        <FeaturedSection
-          title="Recommended for you"
-          hotels={hotels.slice(3, 6)}
-          isLoading={isLoading}
-        />
-
-        <FeaturedSection
-          title="Your saved searches"
-          hotels={hotels.slice(6, 9)}
-          isLoading={isLoading}
-        />
+        {isLoading && (
+          <Stack>
+            <FeaturedSection
+              title="Featured Hotels"
+              hotels={hotels.slice(0, 3)}
+              isLoading={isLoading}
+            />
+            <FeaturedSection
+              title="Recommended for you"
+              hotels={hotels.slice(3, 6)}
+              isLoading={isLoading}
+            />
+            <FeaturedSection
+              title="Your saved searches"
+              hotels={hotels.slice(6, 9)}
+              isLoading={isLoading}
+            />
+          </Stack>
+        )}
 
         <ExceptionalSection />
       </Stack>

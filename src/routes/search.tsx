@@ -24,8 +24,6 @@ function RouteComponent() {
   const hotels = data?.hotels || [];
   // TODO handle error state
 
-  const [page, setPage] = useState(1);
-
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
 

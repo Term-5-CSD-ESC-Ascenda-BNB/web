@@ -22,11 +22,12 @@ export async function fetchHotels(params: FetchHotelsParams) {
 
   console.log('Fetching hotels with params:', payload);
 
-  const fullUrl = api.getUri({
-    url: '/hotels/prices',
-    params: payload,
-  });
-  console.log('Full API URL:', fullUrl);
+  // Log the full URL for debugging
+  // const fullUrl = api.getUri({
+  //   url: '/hotels/prices',
+  //   params: payload,
+  // });
+  // console.log('Full API URL:', fullUrl);
 
   const response = await api.get('/hotels/prices', { params: payload });
 
@@ -36,12 +37,6 @@ export async function fetchHotels(params: FetchHotelsParams) {
     throw new Error('Invalid response from API');
   } else {
     console.log('Fetched hotels successfully:', result.data);
-
-    // If backend returns a valid response but "completed" is false, throw an error
-    if (result.data.completed === false) {
-      throw new Error('Hotel search not completed');
-    }
-
     return result.data;
   }
 }
