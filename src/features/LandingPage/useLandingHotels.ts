@@ -1,22 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchHotels } from './api';
+import { fetchHotels } from '@/features/SearchPage/api';
 import { type HotelsResponse, FetchHotelsParamsSchema } from '@/schemas/hotelResults';
-import { useSearch } from '@tanstack/react-router';
-import { stringifyGuestsRooms } from '@/utils/stringifyGuestsRooms';
 
-export function useHotels() {
-  const search = useSearch({ from: '/search' });
-
+export function useLandingHotels() {
+  // Hardcoded params for the landing page just for show
   const params = {
-    destination_id: search.uid || '',
-    checkin: search.date[0],
-    checkout: search.date[1],
+    destination_id: 'RsBU',
+    checkin: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    checkout: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     country_code: 'SG',
     lang: 'en',
     currency: 'SGD',
-    guests: stringifyGuestsRooms(search.guests, search.rooms),
+    guests: '1',
   };
-
   const parsedParams = FetchHotelsParamsSchema.parse(params);
 
   return useQuery<HotelsResponse, Error>({
@@ -39,6 +35,7 @@ export function useHotels() {
 
     select: (data) => {
       // Get no of nights from checkin and checkout in seach params
+
       const checkinDate = parsedParams.checkin;
       const checkoutDate = parsedParams.checkout;
 

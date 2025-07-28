@@ -9,13 +9,15 @@ import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';
 import { CoordsProvider } from '@/context/CoordsProvider';
+import { useLandingHotels } from '@/features/LandingPage/useLandingHotels';
 
 export const Route = createFileRoute({
   component: Index,
 });
 
 function Index() {
-  const { hotels, isLoading } = useMockHotels();
+  const { data, isLoading, error } = useLandingHotels();
+  const hotels = data?.hotels || [];
 
   const theme = useMantineTheme();
 

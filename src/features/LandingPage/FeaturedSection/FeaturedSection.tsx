@@ -1,7 +1,7 @@
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
 import { IconCaretRightFilled } from '@tabler/icons-react';
 import { Anchor, Flex, Stack, Title } from '@mantine/core';
-import type { Hotel } from '@/schemas/hotelResults';
+import type { Hotel } from '@/types/Hotel';
 
 interface FeaturedSectionProps {
   title: string;
