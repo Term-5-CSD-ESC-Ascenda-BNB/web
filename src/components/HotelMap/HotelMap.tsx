@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { latLng, LatLngBounds, Map as LeafletMap, divIcon } from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { IconPlus, IconMinus } from '@tabler/icons-react';
+import { HotelPinMarker } from './HotelPinMarker';
 
 import mapStyles from './Map.module.css';
 import PriceMarker from './PriceMarker';
@@ -31,6 +32,7 @@ interface HotelMapProps {
   onPopupClose?: PopupHandler;
   center?: [number, number];
   zoom?: number;
+  interactive?: boolean;
 }
 
 export function HotelMap({
@@ -41,6 +43,7 @@ export function HotelMap({
   onPopupClose,
   center: providedCenter,
   zoom: providedZoom = 13,
+  interactive = true,
 }: HotelMapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const center = providedCenter ?? latLng(1.3521, 103.8198);
@@ -74,7 +77,10 @@ export function HotelMap({
       ref={mapRef}
       center={center}
       zoom={providedZoom}
-      scrollWheelZoom
+      scrollWheelZoom={interactive ?? true}
+      dragging={interactive ?? true}
+      doubleClickZoom={interactive ?? true}
+      touchZoom={interactive ?? true}
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
       zoomControl={false}
@@ -92,18 +98,30 @@ export function HotelMap({
 
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      {hotels.map((hotel) => (
-        <PriceMarker
-          key={hotel.id}
-          position={[hotel.latitude, hotel.longitude]}
-          price={hotel.price}
-          markerRef={getMarkerRef ? getMarkerRef(hotel.id) : undefined}
-          onPopupOpen={() => onPopupOpen?.(hotel.id)}
-          onPopupClose={() => onPopupClose?.(hotel.id)}
-        >
-          <HotelPopup hotel={hotel} onClick={() => console.log(`Clicked on hotel: ${hotel.id}`)} />
-        </PriceMarker>
-      ))}
+      {hotels.map((hotel) => {
+        const position: [number, number] = [hotel.latitude, hotel.longitude];
+
+        // Use pin marker for mini map (interactive=false)
+        if (!interactive) {
+          return <HotelPinMarker key={hotel.id} position={position} />;
+        }
+
+        return (
+          <PriceMarker
+            key={hotel.id}
+            position={position}
+            price={hotel.price}
+            markerRef={getMarkerRef ? getMarkerRef(hotel.id) : undefined}
+            onPopupOpen={() => onPopupOpen?.(hotel.id)}
+            onPopupClose={() => onPopupClose?.(hotel.id)}
+          >
+            <HotelPopup
+              hotel={hotel}
+              onClick={() => console.log(`Clicked on hotel: ${hotel.id}`)}
+            />
+          </PriceMarker>
+        );
+      })}
 
       {surroundings.map((poi, idx) => {
         const category = getCategory(poi.type);
