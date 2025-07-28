@@ -31,7 +31,15 @@ export function ReviewScoreSlider({
       <Text size={'sm'} mb={8}>
         {label}
       </Text>
-      <Slider min={min} max={max} step={step} value={value} onChange={onChange} marks={marks} />
+      <Slider
+        data-testid="slider"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={onChange}
+        marks={marks}
+      />
     </div>
   );
 }

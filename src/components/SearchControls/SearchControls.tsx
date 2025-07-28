@@ -3,7 +3,7 @@ import { GuestsRoomsSelector } from './GuestsRoomsSelector';
 import { DatePicker } from './DatePicker';
 import { DestinationSearch } from './DestinationSearch';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import { SearchParamsSchema } from '@/schemas/SearchParamsSchema';
+import { SearchParamsSchema } from '@/schemas/searchParams';
 import { SearchButton } from '../buttons';
 import { useForm } from '@mantine/form';
 

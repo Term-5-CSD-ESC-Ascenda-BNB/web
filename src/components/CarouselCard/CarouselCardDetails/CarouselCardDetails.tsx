@@ -1,8 +1,8 @@
 import { Group, Stack, Text } from '@mantine/core';
-import { LocationDisplay } from '../LocationDisplay/LocationDisplay';
-import { RatingStars } from '../RatingStars/RatingStars';
-import { ReviewScoreSmall } from '../ReviewScoreSmall/ReviewScoreSmall';
-import { PriceDisplay } from './PriceDisplay';
+import { LocationDisplay } from '../../LocationDisplay/LocationDisplay';
+import { RatingStars } from '../../RatingStars/RatingStars';
+import { ReviewScoreSmall } from '../../ReviewScoreSmall/ReviewScoreSmall';
+import { PriceDisplay } from '../PriceDisplay/PriceDisplay';
 
 export interface CarouselCardDetailsProps {
   name: string;

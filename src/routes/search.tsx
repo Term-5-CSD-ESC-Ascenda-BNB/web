@@ -9,7 +9,7 @@ import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
-import { SearchParamsSchema } from '@/schemas/SearchParamsSchema';
+import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useHotels } from '@/features/SearchPage/useHotels';
 
 export const Route = createFileRoute({

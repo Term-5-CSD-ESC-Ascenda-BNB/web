@@ -1,11 +1,11 @@
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
-import type { Hotel } from '@/types/Hotel';
+import type { MockHotel } from '@/types/MockHotel';
 import { IconCaretRightFilled } from '@tabler/icons-react';
 import { Anchor, Flex, Stack, Title } from '@mantine/core';
 
 interface FeaturedSectionProps {
   title: string;
-  hotels: Hotel[];
+  hotels: MockHotel[];
   isLoading: boolean;
 }
 
