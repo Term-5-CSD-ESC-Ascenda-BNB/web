@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Footer } from '@/components/Footer/Footer';
 import { ImageGallery } from '@/components/ImageGallery/ImageGallery';
 import { useHotel } from '@/hooks/useHotel';
@@ -17,6 +18,7 @@ export const Route = createFileRoute({
 function RouteComponent() {
   const { hotelId } = Route.useParams();
   const { hotel, images } = useHotel(hotelId);
+  const [reviewsModalOpen, setReviewsModalOpen] = useState(false);
 
   const latitude = hotel?.latitude ?? 0;
   const longitude = hotel?.longitude ?? 0;
@@ -37,7 +39,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Stack pl={'10vh'} pr={'10vh'} pt={'2rem'} gap={'xl'} mb={'xl'}>
+      <Stack pl="10vh" pr="10vh" pt="2rem" gap="xl" mb="xl">
         <ImageGallery images={images} />
 
         <HotelHeader
@@ -45,17 +47,30 @@ function RouteComponent() {
           address={address}
           rating={rating}
           trustyouScore={trustyou?.score?.overall ?? undefined}
+          trustyou={trustyou}
+          ratings={amenities_ratings}
+          modalOpen={reviewsModalOpen}
+          setModalOpen={setReviewsModalOpen}
         />
 
         <Flex justify="space-between" wrap="wrap" mt="xl" gap="xl">
           <HotelAmenities amenities={amenities} />
-          <HotelSurroundings hotel={hotel} surroundings={formattedSurroundings} />
+          <HotelSurroundings
+            hotel={hotel}
+            surroundings={formattedSurroundings}
+            dimmed={reviewsModalOpen}
+          />
         </Flex>
 
         <HotelRooms />
-
-        <HotelReviews trustyou={trustyou} ratings={amenities_ratings} />
       </Stack>
+
+      <HotelReviews
+        trustyou={trustyou}
+        ratings={amenities_ratings}
+        opened={reviewsModalOpen}
+        onClose={() => setReviewsModalOpen(false)}
+      />
 
       <Footer />
     </>

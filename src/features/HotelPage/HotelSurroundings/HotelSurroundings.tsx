@@ -8,9 +8,10 @@ import type { Hotel, Surrounding } from '@/types/Hotel';
 interface HotelSurroundingsProps {
   hotel: Hotel;
   surroundings: Surrounding[];
+  dimmed?: boolean;
 }
 
-export function HotelSurroundings({ hotel, surroundings }: HotelSurroundingsProps) {
+export function HotelSurroundings({ hotel, surroundings, dimmed }: HotelSurroundingsProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const [mapHeight, setMapHeight] = useState<number>(220);
@@ -53,7 +54,9 @@ export function HotelSurroundings({ hotel, surroundings }: HotelSurroundingsProp
           <Tooltip label="Click to expand full map" position="bottom" withArrow>
             <Box
               style={{
-                cursor: 'pointer',
+                cursor: dimmed ? 'default' : 'pointer',
+                pointerEvents: dimmed ? 'none' : 'auto',
+                opacity: dimmed ? 0.3 : 1,
                 width: '100%',
                 maxWidth: 320,
                 minWidth: 200,
@@ -62,8 +65,9 @@ export function HotelSurroundings({ hotel, surroundings }: HotelSurroundingsProp
                 overflow: 'hidden',
                 flexShrink: 0,
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                transition: 'opacity 0.3s ease',
               }}
-              onClick={() => setModalOpen(true)}
+              onClick={() => !dimmed && setModalOpen(true)}
             >
               <HotelMap
                 hotels={[hotel]}
