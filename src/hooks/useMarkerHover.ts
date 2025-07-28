@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react';
-import styles from '@/components/HotelMap/PriceTag.module.css';
+import styles from '@/features/SearchPage/HotelMap/PriceTag.module.css';
 
 export function useMarkerHover() {
   const markerRefs = useRef<Record<string, L.Marker>>({});

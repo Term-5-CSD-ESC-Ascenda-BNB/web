@@ -1,0 +1,8 @@
+.filterButton {
+  border: 1px solid var(--mantine-color-primary-2);
+  box-shadow: none;
+}
+
+.filterIcon {
+  color: var(--mantine-color-primary-5);
+}

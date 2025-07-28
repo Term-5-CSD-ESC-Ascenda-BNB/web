@@ -1,1 +1,5 @@
-npm run lint-staged
+if npm.cmd --version >/dev/null 2>&1; then
+  npm.cmd run lint-staged
+else
+  npm run lint-staged
+fi

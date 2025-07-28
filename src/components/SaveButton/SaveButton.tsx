@@ -1,7 +1,7 @@
 import { type MantineStyleProps } from '@mantine/core';
 import { IconHeart, IconHeartFilled } from '@tabler/icons-react';
-import { IconButton } from '../IconButton/IconButton';
 import { useState } from 'react';
+import { LabelledIconButton } from '@/components/buttons/LabelledIconButton/LabelledIconButton';
 
 interface SaveButtonProps {
   width?: MantineStyleProps['w'];
@@ -17,7 +17,7 @@ export function SaveButton({ width }: SaveButtonProps) {
 
   return (
     <>
-      <IconButton
+      <LabelledIconButton
         label="Save"
         icon={isSaved ? <IconHeartFilled size={24} /> : <IconHeart size={24} />}
         onClick={handleSave}

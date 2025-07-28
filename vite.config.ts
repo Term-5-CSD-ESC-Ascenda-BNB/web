@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import path from 'path';
+import restart from 'vite-plugin-restart';
+import glsl from 'vite-plugin-glsl';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -14,6 +16,8 @@ export default defineConfig(({ mode }) => {
         verboseFileRoutes: false,
       }),
       react(),
+      restart({ restart: ['./public/**'] }), // Restart server on static file change
+      glsl(), // Handle shader files
     ],
     resolve: {
       alias: {
@@ -28,6 +32,13 @@ export default defineConfig(({ mode }) => {
     publicDir: './public',
     server: {
       host: true,
+      proxy: {
+        '/api': {
+          target: 'https://api-production-46df.up.railway.app',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
     },
     build: {
       outDir: './dist',

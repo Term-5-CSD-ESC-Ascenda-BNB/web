@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Box, Button, Group, Stack, Text, Tooltip, Divider } from '@mantine/core';
 import { SurroundingsList } from '@/components/SurroundingsList/SurroundingsList';
 import { SurroundingsMapModal } from '@/components/SurroundingsMapModal/SurroundingsMapModal';
-import { HotelMap } from '@/components/HotelMap/HotelMap';
+import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
 import type { Hotel, Surrounding } from '@/types/Hotel';
 
 interface HotelSurroundingsProps {

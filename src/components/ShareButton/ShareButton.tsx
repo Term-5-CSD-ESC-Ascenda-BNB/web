@@ -1,6 +1,6 @@
 import { type MantineStyleProps } from '@mantine/core';
 import { IconShare } from '@tabler/icons-react';
-import { IconButton } from '../IconButton/IconButton';
+import { LabelledIconButton } from '@/components/buttons/LabelledIconButton/LabelledIconButton';
 
 interface ShareButtonProps {
   width?: MantineStyleProps['w'];
@@ -14,7 +14,7 @@ export function ShareButton({ width }: ShareButtonProps) {
 
   return (
     <>
-      <IconButton
+      <LabelledIconButton
         label="Share"
         icon={<IconShare size={24} />}
         onClick={handleShare}

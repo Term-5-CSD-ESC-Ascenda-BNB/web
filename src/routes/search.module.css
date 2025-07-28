@@ -31,11 +31,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1;
   padding: 8px 16px;
   color: var(--mantine-color-primary-8);
   background: rgba(255, 255, 255, 0.3);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-bottom-right-radius: 16px;
 }

@@ -71,8 +71,6 @@ function RouteComponent() {
         opened={reviewsModalOpen}
         onClose={() => setReviewsModalOpen(false)}
       />
-
-      <Footer />
     </>
   );
 }

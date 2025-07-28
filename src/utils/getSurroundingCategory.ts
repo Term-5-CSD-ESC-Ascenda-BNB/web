@@ -1,4 +1,4 @@
-import type { Category } from '@/components/HotelMap/mapHelpers';
+import type { Category } from '@/features/SearchPage/HotelMap/mapHelpers';
 
 export function getCategory(type: string): Category {
   const t = type.toLowerCase();
