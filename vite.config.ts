@@ -50,6 +50,19 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       globals: true,
       setupFiles: ['/src/tests/setup.ts', '/src/tests/vitest.setup.mjs'],
+      exclude: ['node_modules', 'src/routeTree.gen.ts', 'src/**/index.ts'],
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'json', 'html'],
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: [
+          'src/routeTree.gen.ts',
+          'src/**/index.ts',
+          'src/vite-env.d.ts',
+          'src/tests/**',
+          'src/main.tsx',
+        ],
+      },
     },
   };
 });

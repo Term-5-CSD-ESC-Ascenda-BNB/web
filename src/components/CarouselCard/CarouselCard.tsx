@@ -1,6 +1,6 @@
 import { Stack } from '@mantine/core';
 import { ImageCarousel } from './ImageCarousel';
-import { CarouselCardDetails } from './CarouselCardDetails';
+import { CarouselCardDetails } from './CarouselCardDetails/CarouselCardDetails';
 
 export interface CarouselCardProps {
   id: string;
@@ -9,7 +9,7 @@ export interface CarouselCardProps {
   rating: number;
   images: string[];
   price: number;
-  score: number;
+  score: number | null;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
@@ -30,7 +30,12 @@ export function CarouselCard({
   };
 
   return (
-    <Stack gap="xs" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <Stack
+      gap="xs"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      data-testid="carousel-card"
+    >
       <div style={{ borderRadius: 'var(--mantine-radius-lg)', overflow: 'hidden' }}>
         <ImageCarousel images={images} onImageClick={handleCardClick} />
       </div>

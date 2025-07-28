@@ -1,9 +1,9 @@
 import { IconFilter } from '@tabler/icons-react';
 import { IconButton } from '../../IconButton/IconButton';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Popover, Indicator } from '@mantine/core';
 import { FilterPanel, type FilterState } from './FilterPanel';
-import { useFilterState } from './useFilterState';
+import { useFilterState } from './hooks/useFilterState';
 import styles from './FilterButton.module.css';
 
 interface FilterButtonProps
@@ -68,6 +68,7 @@ export function FilterButton({ onFiltersChange, initialFilters, ...props }: Filt
             onClick={handleButtonClick}
             className={styles.filterButton}
             w={36}
+            data-testid="filter-button"
             {...props}
           />
         </Indicator>

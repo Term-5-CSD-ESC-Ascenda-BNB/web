@@ -1,15 +1,15 @@
 import { Group, Stack, Text } from '@mantine/core';
-import { LocationDisplay } from '../LocationDisplay/LocationDisplay';
-import { RatingStars } from '../RatingStars/RatingStars';
-import { ReviewScoreSmall } from '../ReviewScoreSmall/ReviewScoreSmall';
-import { PriceDisplay } from './PriceDisplay';
+import { LocationDisplay } from '../../LocationDisplay/LocationDisplay';
+import { RatingStars } from '../../RatingStars/RatingStars';
+import { ReviewScoreSmall } from '../../ReviewScoreSmall/ReviewScoreSmall';
+import { PriceDisplay } from '../PriceDisplay/PriceDisplay';
 
 export interface CarouselCardDetailsProps {
   name: string;
   address: string;
   rating: number;
   price: number;
-  score: number;
+  score: number | null;
   onClick: () => void;
 }
 
@@ -37,7 +37,7 @@ export function CarouselCardDetails({
         <LocationDisplay address={address} />
         <Group justify="space-between">
           <RatingStars rating={rating} showEmpty={false} size={20} />
-          <ReviewScoreSmall score={score} />
+          {score !== null && <ReviewScoreSmall score={score} />}
         </Group>
       </Stack>
 

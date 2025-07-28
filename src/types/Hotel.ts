@@ -1,14 +1,14 @@
-import mockData from '@/.mock_data/hotels.json';
+import type { HotelSchema } from '@/schemas/hotelResults';
+import { z } from 'zod';
 
-// Use inferred shape of mock hotel object
-type MockHotel = typeof mockData extends Array<infer U> ? U : never;
+export type ImageDetails = {
+  suffix: string;
+  count: number;
+  prefix: string;
+};
 
 // Main Hotel type (with additions)
-export type Hotel = MockHotel & {
-  price: number;
-  images: string[];
-  score: number;
-};
+export type Hotel = z.infer<typeof HotelSchema>;
 
 // For HotelReviews
 export interface AmenityRating {

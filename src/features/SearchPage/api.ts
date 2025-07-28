@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { HotelsResponseSchema, type FetchHotelsParams } from './schemas';
+import { HotelsResponseSchema, type FetchHotelsParams } from '@/schemas/hotelResults';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
@@ -20,7 +20,28 @@ export async function fetchHotels(params: FetchHotelsParams) {
     guests: params.guests,
   };
 
+  console.log('Fetching hotels with params:', payload);
+
+  const fullUrl = api.getUri({
+    url: '/hotels/prices',
+    params: payload,
+  });
+  console.log('Full API URL:', fullUrl);
+
   const response = await api.get('/hotels/prices', { params: payload });
 
-  return HotelsResponseSchema.parse(response.data);
+  const result = HotelsResponseSchema.safeParse(response.data);
+  if (!result.success) {
+    console.error('Invalid response from API:', result.error);
+    throw new Error('Invalid response from API');
+  } else {
+    console.log('Fetched hotels successfully:', result.data);
+
+    // If backend returns a valid response but "completed" is false, throw an error
+    if (result.data.completed === false) {
+      throw new Error('Hotel search not completed');
+    }
+
+    return result.data;
+  }
 }
