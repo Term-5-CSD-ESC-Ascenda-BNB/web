@@ -9,10 +9,9 @@ import {
   Radio,
   Button,
   Divider,
-  Badge,
   Tooltip,
 } from '@mantine/core';
-import { IconBed, IconRulerMeasure, IconUsers, IconWifi, IconEye } from '@tabler/icons-react';
+import { getRoomFeatureIcon } from '@/utils/getRoomFeatureIcon';
 
 interface RoomOption {
   title: string;
@@ -23,8 +22,6 @@ interface RoomOption {
   prepay: boolean;
   price: number;
   totalPrice: number;
-  promo?: string;
-  availability?: string;
 }
 
 interface RoomCardProps {
@@ -32,10 +29,38 @@ interface RoomCardProps {
   images: string[];
   features: string[];
   options: RoomOption[];
+  size: string;
+  occupancy: string;
+  bedType: string;
+  wifi: string;
+  view: string;
+  tv?: string;
+  bath?: string;
 }
 
-export function RoomCard({ name, images, options }: RoomCardProps) {
+export function RoomCard({
+  name,
+  images,
+  options,
+  size,
+  occupancy,
+  bedType,
+  wifi,
+  view,
+  tv,
+  bath,
+}: RoomCardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const featureList = [
+    { label: size },
+    { label: occupancy },
+    { label: bedType },
+    { label: wifi },
+    { label: view },
+    ...(tv ? [{ label: tv }] : []),
+    ...(bath ? [{ label: bath }] : []),
+  ];
 
   return (
     <Card
@@ -56,42 +81,21 @@ export function RoomCard({ name, images, options }: RoomCardProps) {
         <Image src={images?.[0]} height={180} alt={name} />
       </Card.Section>
 
-      {/* Middle Section - Grows to push button down */}
+      {/* Room Info and Features */}
       <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-        {/* Room Info */}
         <Stack gap="xs" mt="xs">
           <Text fw={600}>{name}</Text>
-          <Text fz="sm" c="dimmed">
-            Good • 4 reviews
-          </Text>
 
-          {/* Icons */}
+          {/* Features Icons */}
           <Group gap="xs" wrap="wrap" mt="xs">
-            <Tooltip label="Size">
-              <Group gap={4}>
-                <IconRulerMeasure size={14} /> <Text fz="xs">409 sq ft</Text>
-              </Group>
-            </Tooltip>
-            <Tooltip label="Occupancy">
-              <Group gap={4}>
-                <IconUsers size={14} /> <Text fz="xs">Sleeps 3</Text>
-              </Group>
-            </Tooltip>
-            <Tooltip label="Bedding">
-              <Group gap={4}>
-                <IconBed size={14} /> <Text fz="xs">1 Double OR 2 Twin Beds</Text>
-              </Group>
-            </Tooltip>
-            <Tooltip label="Wi-Fi">
-              <Group gap={4}>
-                <IconWifi size={14} /> <Text fz="xs">Free WiFi</Text>
-              </Group>
-            </Tooltip>
-            <Tooltip label="View">
-              <Group gap={4}>
-                <IconEye size={14} /> <Text fz="xs">Hill view</Text>
-              </Group>
-            </Tooltip>
+            {featureList.map(({ label }, idx) => (
+              <Tooltip key={idx} label={label}>
+                <Group gap={4}>
+                  {getRoomFeatureIcon(label)}
+                  <Text fz="xs">{label}</Text>
+                </Group>
+              </Tooltip>
+            ))}
           </Group>
         </Stack>
 
@@ -101,6 +105,7 @@ export function RoomCard({ name, images, options }: RoomCardProps) {
         <Radio.Group
           value={String(selectedIndex)}
           onChange={(value) => setSelectedIndex(parseInt(value))}
+          color="#514D8A"
         >
           <Stack gap="xs">
             {options.map((opt, idx) => (
@@ -110,8 +115,8 @@ export function RoomCard({ name, images, options }: RoomCardProps) {
                 radius="md"
                 padding="sm"
                 style={{
-                  borderColor: idx === selectedIndex ? '#1c7ed6' : undefined,
-                  backgroundColor: idx === selectedIndex ? '#f0f8ff' : undefined,
+                  borderColor: idx === selectedIndex ? '#7B76B5' : undefined,
+                  backgroundColor: idx === selectedIndex ? '#F1F0FB' : undefined,
                 }}
               >
                 <Radio value={String(idx)} label={opt.title} />
@@ -124,12 +129,6 @@ export function RoomCard({ name, images, options }: RoomCardProps) {
                   <Text fz="xs">
                     {opt.breakfast === 'Included' ? 'Breakfast included' : 'No breakfast'}
                   </Text>
-                  {opt.promo && <Badge color="yellow">{opt.promo}</Badge>}
-                  {opt.availability && (
-                    <Text c="red" fz="xs">
-                      {opt.availability}
-                    </Text>
-                  )}
                   <Text fw={600} mt="xs">
                     + ${opt.totalPrice.toFixed(2)}
                   </Text>
@@ -139,12 +138,11 @@ export function RoomCard({ name, images, options }: RoomCardProps) {
           </Stack>
         </Radio.Group>
 
-        {/* Spacer to push button down */}
         <Box mt="auto" />
       </Box>
 
-      {/* Sticky Select Button at Bottom */}
-      <Button fullWidth mt="md">
+      {/* Select Button */}
+      <Button fullWidth mt="md" color="#514D8A">
         Select
       </Button>
     </Card>

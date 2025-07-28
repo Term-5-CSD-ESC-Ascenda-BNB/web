@@ -1,6 +1,7 @@
 import { Box, Text } from '@mantine/core';
 import { RoomCard } from '@/components/Room/RoomCard';
 import roomData from '@/.mock_data/price.json';
+import { parseRoomFeatures } from '@/utils/parseRoomFeatures';
 
 interface RoomRaw {
   key: string;
@@ -13,6 +14,9 @@ interface RoomRaw {
   amenities: string[];
   images: { url: string }[];
   price: number;
+  roomAdditionalInfo?: {
+    breakfastInfo?: string;
+  };
 }
 
 interface RoomOption {
@@ -24,11 +28,8 @@ interface RoomOption {
   prepay: boolean;
   price: number;
   totalPrice: number;
-  promo?: string;
-  availability?: string;
 }
 
-// Helper: group rooms by normalized description
 function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
   return rooms.reduce(
     (acc, room) => {
@@ -58,22 +59,26 @@ export function HotelRoomsSection() {
           gap: '1.5rem',
         }}
       >
-        {Object.entries(groupedRooms).map(([roomName, variations], idx) => {
+        {Object.entries(groupedRooms).map(([roomName, variations]) => {
           const firstRoom = variations[0];
           const images = firstRoom.images.map((img) => img.url);
+          const features = parseRoomFeatures(firstRoom.long_description, firstRoom.amenities);
 
-          const options: RoomOption[] = variations.map((room, optionIdx) => ({
-            title: room.description,
-            refundable: room.free_cancellation,
-            refundableUntil: room.free_cancellation ? 'Sep 26' : undefined,
-            reschedulable: true,
-            breakfast: room.amenities.includes('Breakfast') ? 'Included' : 'Not included',
-            prepay: true,
-            price: room.price,
-            totalPrice: room.price,
-            promo: optionIdx % 2 === 0 ? 'Bundle & Save $100' : undefined,
-            availability: optionIdx % 3 === 0 ? 'Only 2 rooms left at this price' : undefined,
-          }));
+          const options: RoomOption[] = variations.map((room) => {
+            const label = room.roomAdditionalInfo?.breakfastInfo?.toLowerCase();
+            const hasBreakfast = label?.includes('breakfast') && !label?.includes('room_only');
+
+            return {
+              title: room.description,
+              refundable: room.free_cancellation,
+              refundableUntil: room.free_cancellation ? 'Sep 26' : undefined,
+              reschedulable: true,
+              breakfast: hasBreakfast ? 'Included' : 'Not included',
+              prepay: true,
+              price: room.price,
+              totalPrice: room.price,
+            };
+          });
 
           return (
             <RoomCard
@@ -82,6 +87,17 @@ export function HotelRoomsSection() {
               images={images}
               features={firstRoom.amenities}
               options={options}
+              size={features.size}
+              occupancy={features.occupancy}
+              bedType={features.bedType}
+              wifi={
+                firstRoom.amenities.some((a) => a.toLowerCase().includes('wifi'))
+                  ? 'Free WiFi'
+                  : 'No WiFi'
+              }
+              view={features.view}
+              tv={features.tv}
+              bath={features.bath}
             />
           );
         })}
