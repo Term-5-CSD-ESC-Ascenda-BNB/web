@@ -22,19 +22,20 @@ export function useHotels() {
   return useQuery<HotelsResponse, Error>({
     queryKey: ['hotels', params],
     queryFn: () => fetchHotels(parsedParams),
-    retry: (failureCount, error) => {
-      console.error(`Error fetching hotels (attempt ${failureCount}):`, error);
-      return failureCount < 10; // Retry up to 10 times
+    retry: (failureCount) => {
+      return failureCount < 2; // Retry twice
     },
     refetchInterval: (query) => {
-      console.log('Refetching hotels data...');
-      console.log('Current query:', query);
+      console.log('Refetching with query:', query);
 
-      const data = query.state.data;
-      console.log('Current data:', data);
+      // if error stop polling
+      if (query.state.status === 'error') {
+        console.error('Error fetching hotels, stopping refetching:', query.state.error);
+        return false;
+      }
 
       // If data complete, return false to stop refetching else refetch in 2 sec
-      return data?.completed ? false : 2000;
+      return query.state.data?.completed ? false : 2000;
     },
 
     select: (data) => {

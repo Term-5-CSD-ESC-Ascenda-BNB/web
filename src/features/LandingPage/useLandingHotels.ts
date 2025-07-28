@@ -1,6 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchHotels } from '@/features/SearchPage/api';
 import { type HotelsResponse, FetchHotelsParamsSchema } from '@/schemas/hotelResults';
+import type { AxiosError } from 'axios';
+
+interface ApiError {
+  message: string;
+  status: number;
+}
 
 export function useLandingHotels() {
   // Hardcoded params for the landing page just for show
@@ -15,27 +21,28 @@ export function useLandingHotels() {
   };
   const parsedParams = FetchHotelsParamsSchema.parse(params);
 
-  return useQuery<HotelsResponse, Error>({
+  return useQuery<HotelsResponse, AxiosError<ApiError>>({
     queryKey: ['hotels', params],
     queryFn: () => fetchHotels(parsedParams),
-    retry: (failureCount, error) => {
-      console.error(`Error fetching hotels (attempt ${failureCount}):`, error);
-      return failureCount < 10; // Retry up to 10 times
+    placeholderData: keepPreviousData,
+    retry: (failureCount) => {
+      return failureCount < 2; // Retry twice
     },
     refetchInterval: (query) => {
-      console.log('Refetching hotels data...');
-      console.log('Current query:', query);
+      console.log('Refetching with query:', query);
 
-      const data = query.state.data;
-      console.log('Current data:', data);
+      // if error stop polling
+      if (query.state.status === 'error') {
+        console.error('Error fetching hotels, stopping refetching:', query.state.error);
+        return false;
+      }
 
       // If data complete, return false to stop refetching else refetch in 2 sec
-      return data?.completed ? false : 2000;
+      return query.state.data?.completed ? false : 2000;
     },
 
     select: (data) => {
       // Get no of nights from checkin and checkout in seach params
-
       const checkinDate = parsedParams.checkin;
       const checkoutDate = parsedParams.checkout;
 

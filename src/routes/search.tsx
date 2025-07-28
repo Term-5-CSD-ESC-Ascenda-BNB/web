@@ -1,7 +1,7 @@
 import { useMarkerHover } from '@/hooks';
 import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
-import { Center, Group, Pagination, Skeleton, Stack, Text } from '@mantine/core';
+import { Group, Skeleton, Stack, Text } from '@mantine/core';
 import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
 import { MenuButton } from '@/components/buttons/MenuButton/MenuButton';
@@ -11,8 +11,8 @@ import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
 import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useHotels } from '@/features/SearchPage/useHotels';
-import { useState } from 'react';
 import { SearchPagination } from '@/features/SearchPage/SearchPagination/SearchPagination';
+import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -20,11 +20,8 @@ export const Route = createFileRoute({
 });
 
 function RouteComponent() {
-  const { data, isLoading, error } = useHotels();
+  const { data, isLoading, error, isError } = useHotels();
   const hotels = data?.hotels || [];
-  // TODO handle error state
-
-  const [page, setPage] = useState(1);
 
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
@@ -77,13 +74,17 @@ function RouteComponent() {
           </Group>
 
           {/* Results grid */}
-          <HotelGrid
-            hotels={hotels}
-            isLoading={isLoading}
-            onHotelMouseEnter={handleMouseEnter}
-            onHotelMouseLeave={handleMouseLeave}
-            flex={1}
-          />
+          {isError && <ErrorAlert title={'Error fetching hotels'} message={error.message} />}
+
+          {!isError && (
+            <HotelGrid
+              hotels={hotels}
+              isLoading={isLoading}
+              onHotelMouseEnter={handleMouseEnter}
+              onHotelMouseLeave={handleMouseLeave}
+              flex={1}
+            />
+          )}
 
           <SearchPagination totalPages={Math.ceil(hotels.length / 18)} mb={'xl'} />
         </Stack>
