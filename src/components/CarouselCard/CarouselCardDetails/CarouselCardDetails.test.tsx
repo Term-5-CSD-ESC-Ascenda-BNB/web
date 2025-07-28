@@ -8,16 +8,16 @@ vi.mock('@/components/LocationDisplay/LocationDisplay', () => ({
   ),
 }));
 
+interface MockRatingStarsProps {
+  rating: number;
+  showEmpty: boolean;
+  size: number;
+}
+
 vi.mock('@/components/RatingStars/RatingStars', () => ({
-  RatingStars: ({
-    rating,
-    showEmpty,
-    size,
-  }: {
-    rating: number;
-    showEmpty: boolean;
-    size: number;
-  }) => <div data-testid="rating-stars">{`${rating}-${showEmpty}-${size}`}</div>,
+  RatingStars: ({ rating, showEmpty, size }: MockRatingStarsProps) => (
+    <div data-testid="rating-stars">{`${rating}-${showEmpty}-${size}`}</div>
+  ),
 }));
 
 vi.mock('@/components/ReviewScoreSmall/ReviewScoreSmall', () => ({

@@ -15,7 +15,7 @@ const defaultFilters: FilterState = {
   minReviewScore: 0,
 };
 
-// 1) Mock the useFilterState hook
+//  useFilterState hook
 vi.mock('./hooks/useFilterState', () => ({
   useFilterState: ({ initialFilters }: { initialFilters?: FilterState }) => ({
     draftFilters: initialFilters ?? defaultFilters,
@@ -33,7 +33,7 @@ type FilterPanelProps = {
   onReset: () => void;
 };
 
-// 2) Stub FilterPanel to observe apply/reset behavior
+// Stub FilterPanel to observe apply/reset behavior
 vi.mock('./FilterPanel', () => ({
   FilterPanel: ({ onApply, onReset }: FilterPanelProps) => (
     <div data-testid="panel">
@@ -43,7 +43,6 @@ vi.mock('./FilterPanel', () => ({
   ),
 }));
 
-// 3) Now import the component under test
 import { FilterButton } from './FilterButton';
 
 describe('FilterButton', () => {

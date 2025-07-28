@@ -3,62 +3,41 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { FilterState } from './FilterPanel';
 import { FilterPanel } from './FilterPanel';
 
-vi.mock(
-  './PriceRangeSlider/PriceRangeSlider',
-  async (importOriginal: () => Promise<typeof import('@mantine/core')>) => {
-    const actual = await importOriginal();
-    return {
-      ...actual,
-      PriceRangeSlider: ({
-        value,
-        onChange,
-      }: {
-        value: [number, number];
-        onChange: (v: [number, number]) => void;
-      }) => (
-        <button data-testid="price-slider" onClick={() => onChange([value[0] + 1, value[1] + 1])}>
-          Price
-        </button>
-      ),
-    };
-  }
-);
+vi.mock('./PriceRangeSlider/PriceRangeSlider', () => {
+  return {
+    PriceRangeSlider: ({
+      value,
+      onChange,
+    }: {
+      value: [number, number];
+      onChange: (v: [number, number]) => void;
+    }) => (
+      <button data-testid="price-slider" onClick={() => onChange([value[0] + 1, value[1] + 1])}>
+        Price
+      </button>
+    ),
+  };
+});
 
-vi.mock(
-  './RatingSelector/RatingSelector',
-  async (importOriginal: () => Promise<typeof import('@mantine/core')>) => {
-    const actual = await importOriginal();
-    return {
-      ...actual,
-      RatingSelector: ({ value, onChange }: { value: number; onChange: (v: number) => void }) => (
-        <button data-testid="rating-selector" onClick={() => onChange(value + 1)}>
-          Rating
-        </button>
-      ),
-    };
-  }
-);
+vi.mock('./RatingSelector/RatingSelector', () => {
+  return {
+    RatingSelector: ({ value, onChange }: { value: number; onChange: (v: number) => void }) => (
+      <button data-testid="rating-selector" onClick={() => onChange(value + 1)}>
+        Rating
+      </button>
+    ),
+  };
+});
 
-vi.mock(
-  './ReviewScoreSelector/ReviewScoreSlider',
-  async (importOriginal: () => Promise<typeof import('@mantine/core')>) => {
-    const actual = await importOriginal();
-    return {
-      ...actual,
-      ReviewScoreSlider: ({
-        value,
-        onChange,
-      }: {
-        value: number;
-        onChange: (v: number) => void;
-      }) => (
-        <button data-testid="review-score-slider" onClick={() => onChange(value + 1)}>
-          Score
-        </button>
-      ),
-    };
-  }
-);
+vi.mock('./ReviewScoreSelector/ReviewScoreSlider', () => {
+  return {
+    ReviewScoreSlider: ({ value, onChange }: { value: number; onChange: (v: number) => void }) => (
+      <button data-testid="review-score-slider" onClick={() => onChange(value + 1)}>
+        Review Score
+      </button>
+    ),
+  };
+});
 
 describe('FilterPanel', () => {
   const initialFilters: FilterState = {
