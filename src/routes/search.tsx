@@ -1,7 +1,7 @@
-import { useMockHotels, useMarkerHover } from '@/hooks';
+import { useMarkerHover } from '@/hooks';
 import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
-import { Group, Skeleton, Stack, Text } from '@mantine/core';
+import { Center, Group, Pagination, Skeleton, Stack, Text } from '@mantine/core';
 import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
 import { MenuButton } from '@/components/buttons/MenuButton/MenuButton';
@@ -11,6 +11,8 @@ import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
 import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useHotels } from '@/features/SearchPage/useHotels';
+import { useState } from 'react';
+import { SearchPagination } from '@/features/SearchPage/SearchPagination/SearchPagination';
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -18,13 +20,11 @@ export const Route = createFileRoute({
 });
 
 function RouteComponent() {
-  // Mock data
-  const { hotels: mockHotels, isLoading: mockIsLoading } = useMockHotels();
-
-  // Real data (ascenda api is currently returning empty results)
-  // TODO: implement it when the API isnt broken
   const { data, isLoading, error } = useHotels();
-  console.log('Hotels data:', data);
+  const hotels = data?.hotels || [];
+  // TODO handle error state
+
+  const [page, setPage] = useState(1);
 
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
@@ -50,7 +50,7 @@ function RouteComponent() {
         {/* Left panel - Map view */}
         <div className={styles['map-container']}>
           <HotelMap
-            hotels={mockHotels}
+            hotels={hotels}
             getMarkerRef={makeMarkerRef}
             onPopupOpen={handlePopupOpen}
             onPopupClose={handlePopupClose}
@@ -65,11 +65,7 @@ function RouteComponent() {
           </Group>
 
           <Group justify="flex-start" gap={'xs'}>
-            {mockIsLoading ? (
-              <Skeleton h={20} w={80} />
-            ) : (
-              <Text mr="xs">{mockHotels.length} results</Text>
-            )}
+            {isLoading ? <Skeleton h={20} w={80} /> : <Text mr="xs">{hotels.length} results</Text>}
 
             <Text c={'dimmed'}>Sort by:</Text>
             <SortableSelect
@@ -82,11 +78,14 @@ function RouteComponent() {
 
           {/* Results grid */}
           <HotelGrid
-            hotels={mockHotels}
-            isLoading={mockIsLoading}
+            hotels={hotels}
+            isLoading={isLoading}
             onHotelMouseEnter={handleMouseEnter}
             onHotelMouseLeave={handleMouseLeave}
+            flex={1}
           />
+
+          <SearchPagination totalPages={Math.ceil(hotels.length / 18)} mb={'xl'} />
         </Stack>
       </div>
     </>

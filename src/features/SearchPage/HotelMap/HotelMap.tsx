@@ -1,5 +1,4 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import type { MockHotel } from '@/types/MockHotel';
 import { useEffect, useMemo, useRef } from 'react';
 import { latLng, LatLngBounds, Map as LeafletMap } from 'leaflet';
 import PriceMarker from './PriceMarker';
@@ -7,9 +6,10 @@ import { HotelPopup } from './HotelPopup';
 import mapStyles from './Map.module.css';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
+import type { Hotel } from '@/types/Hotel';
 
 interface HotelMapProps {
-  hotels: MockHotel[];
+  hotels: Hotel[];
   getMarkerRef: (id: string) => (marker: L.Marker | null) => void;
   onPopupOpen: (id: string) => void;
   onPopupClose: (id: string) => void;

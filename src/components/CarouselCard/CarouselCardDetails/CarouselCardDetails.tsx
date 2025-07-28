@@ -9,7 +9,7 @@ export interface CarouselCardDetailsProps {
   address: string;
   rating: number;
   price: number;
-  score: number;
+  score: number | null;
   onClick: () => void;
 }
 
@@ -37,7 +37,7 @@ export function CarouselCardDetails({
         <LocationDisplay address={address} />
         <Group justify="space-between">
           <RatingStars rating={rating} showEmpty={false} size={20} />
-          <ReviewScoreSmall score={score} />
+          {score !== null && <ReviewScoreSmall score={score} />}
         </Group>
       </Stack>
 

@@ -1,9 +1,10 @@
-import { SimpleGrid } from '@mantine/core';
+import { SimpleGrid, type SimpleGridProps } from '@mantine/core';
 import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
-import type { MockHotel } from '@/types/MockHotel';
+import { getFirstFiveImages } from '@/utils/getFirstFiveImages';
+import type { Hotel } from '@/types/Hotel';
 
-interface HotelGridProps {
-  hotels: MockHotel[];
+interface HotelGridProps extends SimpleGridProps {
+  hotels: Hotel[];
   isLoading: boolean;
   onHotelMouseEnter?: (hotelId: string) => void;
   onHotelMouseLeave?: (hotelId: string) => void;
@@ -14,6 +15,7 @@ export function HotelGrid({
   isLoading,
   onHotelMouseEnter,
   onHotelMouseLeave,
+  ...props
 }: HotelGridProps) {
   const renderSkeletons = () => {
     return Array(6)
@@ -33,7 +35,7 @@ export function HotelGrid({
           name={hotel.name}
           address={hotel.address ?? ''}
           rating={hotel.rating}
-          images={hotel.images}
+          images={getFirstFiveImages(hotel.image_details)}
           price={hotel.price}
           score={hotel.score}
           onMouseEnter={() => onHotelMouseEnter?.(hotel.id)}
@@ -44,7 +46,7 @@ export function HotelGrid({
   };
 
   return (
-    <SimpleGrid type="container" cols={{ base: 2, '620px': 3 }} mb={'xl'}>
+    <SimpleGrid type="container" cols={{ base: 2, '620px': 3 }} mb={'xl'} {...props}>
       {isLoading ? renderSkeletons() : renderHotelCards()}
     </SimpleGrid>
   );

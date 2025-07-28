@@ -39,9 +39,10 @@ export function DatePicker({ date, setDate, error }: DatePickerProps) {
         onChange={handleDateChange}
         valueFormat="D MMM"
         excludeDate={(dateStr) => {
-          const today = new Date();
+          const tomorrow = new Date();
+          tomorrow.setDate(tomorrow.getDate() + 1);
           const selectedDate = new Date(dateStr);
-          return selectedDate <= today;
+          return selectedDate <= tomorrow;
         }}
         leftSection={<IconCalendar size={16} />}
         style={{ width: 165 }}
