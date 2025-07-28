@@ -9,7 +9,7 @@ export interface CarouselCardProps {
   rating: number;
   images: string[];
   price: number;
-  score: number;
+  score: number | null;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }

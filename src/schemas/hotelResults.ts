@@ -15,11 +15,12 @@ export const HotelSchema = z.object({
   name: z.string(),
   address: z.string(),
   rating: z.number(),
-  score: z.number(),
+  score: z.number().nullable(),
   image_details: ImageDetailsSchema,
 });
 
 export const HotelsResponseSchema = z.object({
+  completed: z.boolean(),
   currency: z.string(),
   hotels: z.array(HotelSchema),
 });
@@ -39,6 +40,5 @@ export const FetchHotelsParamsSchema = z
     path: ['checkout'],
   });
 
-export type Hotel = z.infer<typeof HotelSchema>;
 export type HotelsResponse = z.infer<typeof HotelsResponseSchema>;
 export type FetchHotelsParams = z.infer<typeof FetchHotelsParamsSchema>;
