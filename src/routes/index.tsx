@@ -1,14 +1,15 @@
 import styles from './index.module.css';
-import { IconChevronDown, IconExclamationCircle } from '@tabler/icons-react';
+import { IconChevronDown } from '@tabler/icons-react';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
 import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
-import { Alert, Flex, Stack, Text, useMantineTheme } from '@mantine/core';
+import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';
 import { CoordsProvider } from '@/context/CoordsProvider';
 import { useLandingHotels } from '@/features/LandingPage/useLandingHotels';
+import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
 
 export const Route = createFileRoute({
   component: Index,
@@ -49,19 +50,9 @@ function Index() {
       </CoordsProvider>
 
       <Stack mx={'20vw'} my={'10vw'} gap={'10vw'}>
-        {isError && (
-          <Alert
-            variant="light"
-            title="Error fetching hotels"
-            color="red"
-            radius="md"
-            icon={<IconExclamationCircle size={16} />}
-          >
-            {error.message || 'An error occurred while fetching hotels.'}
-          </Alert>
-        )}
+        {isError && <ErrorAlert title={'Error fetching hotels'} message={error.message} />}
 
-        {isLoading && (
+        {!isError && (
           <Stack>
             <FeaturedSection
               title="Featured Hotels"
