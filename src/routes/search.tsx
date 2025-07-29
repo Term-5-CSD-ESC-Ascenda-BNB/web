@@ -25,7 +25,7 @@ function RouteComponent() {
   const searchParams = useSearch({ from: '/search' });
 
   // Fetch hotels data
-  const { data, isLoading, error, isError } = useHotels();
+  const { data, isLoading, error, isError, isFetching } = useHotels();
   const hotels = data?.hotels || [];
 
   // Handle marker and card hover events
@@ -77,7 +77,11 @@ function RouteComponent() {
           </Group>
 
           <Group justify="flex-start" gap={'xs'}>
-            {isLoading ? <Skeleton h={20} w={80} /> : <Text mr="xs">{hotels.length} results</Text>}
+            {isLoading || hotels.length === 0 ? (
+              <Skeleton h={20} w={80} />
+            ) : (
+              <Text mr="xs">{hotels.length} results</Text>
+            )}
 
             <Text c={'dimmed'}>Sort by:</Text>
             <SortableSelect
@@ -94,7 +98,7 @@ function RouteComponent() {
           {!isError && (
             <HotelGrid
               hotels={hotels}
-              isLoading={isLoading}
+              isLoading={isLoading || hotels.length === 0}
               onHotelMouseEnter={handleMouseEnter}
               onHotelMouseLeave={handleMouseLeave}
               onHotelClick={handleNavigateToHotel}
