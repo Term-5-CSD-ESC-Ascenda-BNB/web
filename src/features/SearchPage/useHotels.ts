@@ -52,8 +52,8 @@ export function useHotels() {
       // For all hotels divide score by 10 to match the UI requirements
       const hotels = data.hotels.map((hotel) => ({
         ...hotel,
-        score: hotel.score ? hotel.score / 10 : null,
-        price: hotel.price / nights, // Adjust price based on number of nights
+        score: hotel.score ? Number((hotel.score / 10).toFixed(2)) : null,
+        price: Number((hotel.price / nights).toFixed(2)),
       }));
 
       const newData = {
