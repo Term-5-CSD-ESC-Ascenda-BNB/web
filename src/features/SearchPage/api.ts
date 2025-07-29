@@ -10,18 +10,6 @@ const api = axios.create({
 });
 
 export async function fetchHotels(params: FetchHotelsParams) {
-  const payload = {
-    destination_id: params.destination_id,
-    checkin: params.checkin,
-    checkout: params.checkout,
-    country_code: params.country_code,
-    lang: params.lang,
-    currency: params.currency,
-    guests: params.guests,
-  };
-
-  console.log('Fetching hotels with params:', payload);
-
   // Log the full URL for debugging
   // const fullUrl = api.getUri({
   //   url: '/hotels/prices',
@@ -29,7 +17,7 @@ export async function fetchHotels(params: FetchHotelsParams) {
   // });
   // console.log('Full API URL:', fullUrl);
 
-  const response = await api.get('/hotels/prices', { params: payload });
+  const response = await api.get('/hotels/prices', { params });
 
   const result = HotelsResponseSchema.safeParse(response.data);
   if (!result.success) {

@@ -26,7 +26,7 @@ export function SurroundingsList({ surroundings, maxItems }: SurroundingsListPro
           <Group key={i} gap={8} align="center" style={{ width: '100%' }}>
             {getSurroundingIcon(item.type)}
             <Text fz="sm">
-              {item.type}: {item.name}{' '}
+              {item.name}{' '}
               <Text span c="dimmed" fz="sm">
                 ({item.distance})
               </Text>

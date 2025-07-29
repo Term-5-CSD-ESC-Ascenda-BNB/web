@@ -3,10 +3,11 @@ import { Box, Button, Group, Stack, Text, Tooltip, Divider } from '@mantine/core
 import { SurroundingsList } from '@/components/SurroundingsList/SurroundingsList';
 import { SurroundingsMapModal } from '@/components/SurroundingsMapModal/SurroundingsMapModal';
 import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
-import type { Hotel, Surrounding } from '@/types/Hotel';
+import type { Surrounding } from '@/types/HotelDetails';
+import type { HotelResponse } from '@/schemas/hotelResult';
 
 interface HotelSurroundingsProps {
-  hotel: Hotel;
+  hotel: HotelResponse;
   surroundings: Surrounding[];
   dimmed?: boolean;
 }
@@ -70,7 +71,8 @@ export function HotelSurroundings({ hotel, surroundings, dimmed }: HotelSurround
               onClick={() => !dimmed && setModalOpen(true)}
             >
               <HotelMap
-                hotels={[hotel]}
+                // TODO adapt data to match expected format
+                hotels={[]}
                 surroundings={surroundings.slice(0, 5)}
                 center={[hotel.latitude, hotel.longitude]}
                 zoom={17}

@@ -8,7 +8,7 @@ export type Hotel = MockHotel & {
   score: number;
 };
 
-export function useHotel(hotelId: string) {
+export function useMockHotel(hotelId: string) {
   const baseHotel = hotelsData.find((hotel: MockHotel) => hotel.id === hotelId);
 
   const images: string[] = [];

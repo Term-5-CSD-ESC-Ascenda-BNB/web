@@ -1,4 +1,4 @@
-import type { ImageDetails } from '@/types/Hotel';
+import type { ImageDetails } from '@/types/HotelDetails';
 
 /**
  * Extracts the first five image URLs from a hotel object.

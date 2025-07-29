@@ -2,7 +2,7 @@ import { Modal, Stack, Group, Text, Divider, Tooltip } from '@mantine/core';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
 import { ReviewScoreSub } from '@/components/ReviewScoreSub/ReviewScoreSub';
 import { getReviewIcon } from '@/utils/getReviewIcon';
-import type { TrustYouScore, AmenityRating } from '@/types/Hotel';
+import type { TrustYouScore, AmenityRating } from '@/types/HotelDetails';
 
 interface HotelReviewsProps {
   trustyou?: TrustYouScore;

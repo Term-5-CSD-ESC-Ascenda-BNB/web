@@ -1,13 +1,14 @@
 import { SimpleGrid, type SimpleGridProps } from '@mantine/core';
 import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
 import { getFirstFiveImages } from '@/utils/getFirstFiveImages';
-import type { Hotel } from '@/types/Hotel';
+import type { HotelResult } from '@/schemas/hotelResults';
 
 interface HotelGridProps extends SimpleGridProps {
-  hotels: Hotel[];
+  hotels: HotelResult[];
   isLoading: boolean;
   onHotelMouseEnter?: (hotelId: string) => void;
   onHotelMouseLeave?: (hotelId: string) => void;
+  onHotelClick: (hotelId: string) => void;
 }
 
 export function HotelGrid({
@@ -15,6 +16,7 @@ export function HotelGrid({
   isLoading,
   onHotelMouseEnter,
   onHotelMouseLeave,
+  onHotelClick,
   ...props
 }: HotelGridProps) {
   const renderSkeletons = () => {
@@ -40,6 +42,7 @@ export function HotelGrid({
           score={hotel.score}
           onMouseEnter={() => onHotelMouseEnter?.(hotel.id)}
           onMouseLeave={() => onHotelMouseLeave?.(hotel.id)}
+          onClick={() => onHotelClick(hotel.id)}
         />
       </div>
     ));

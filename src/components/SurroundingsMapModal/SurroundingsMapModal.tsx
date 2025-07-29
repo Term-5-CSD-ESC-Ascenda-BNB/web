@@ -3,8 +3,8 @@ import { Modal, Box, Group, Text, Stack, Tabs, ScrollArea } from '@mantine/core'
 import { MapContainer, TileLayer, ZoomControl, Marker, Popup } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
-import type { Hotel } from '@/types/Hotel';
 import { getHotelIcon, getPOIIcon, categorizeType } from '@/utils/getSurroundingMapIcon';
+import type { HotelResponse } from '@/schemas/hotelResult';
 
 export interface Surrounding {
   type: string;
@@ -17,7 +17,7 @@ export interface Surrounding {
 interface Props {
   opened: boolean;
   onClose: () => void;
-  hotel: Hotel;
+  hotel: HotelResponse;
   surroundings: Surrounding[];
 }
 

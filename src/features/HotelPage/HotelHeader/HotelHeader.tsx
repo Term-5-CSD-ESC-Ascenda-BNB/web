@@ -5,7 +5,7 @@ import { SaveButton } from '@/components/SaveButton/SaveButton';
 import { ShareButton } from '@/components/ShareButton/ShareButton';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
 import { HotelReviews } from '@/features/HotelPage/HotelReviews/HotelReviews';
-import type { TrustYouScore, AmenityRating } from '@/types/Hotel';
+import type { TrustYouScore, AmenityRating } from '@/types/HotelDetails';
 
 interface HotelHeaderProps {
   name: string;

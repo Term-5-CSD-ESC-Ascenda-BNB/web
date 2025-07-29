@@ -2,11 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchHotels } from '@/features/SearchPage/api';
 import { type HotelsResponse, FetchHotelsParamsSchema } from '@/schemas/hotelResults';
 import type { AxiosError } from 'axios';
-
-interface ApiError {
-  message: string;
-  status: number;
-}
+import type { ApiError } from '@/types/ApiError';
 
 export function useLandingHotels() {
   // Hardcoded params for the landing page just for show

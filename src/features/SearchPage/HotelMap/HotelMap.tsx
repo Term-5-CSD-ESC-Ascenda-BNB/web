@@ -8,7 +8,7 @@ import { HotelPinMarker } from './HotelPinMarker';
 import mapStyles from './Map.module.css';
 import PriceMarker from './PriceMarker';
 import { HotelPopup } from './HotelPopup';
-import type { Hotel } from '@/types/Hotel';
+import type { HotelResult } from '@/schemas/hotelResults';
 
 import { getSurroundingIcon } from '@/utils/getSurroundingIcon';
 import { getCategory, getCategoryColor } from '@/utils/getSurroundingCategory';
@@ -25,7 +25,7 @@ type MarkerRefHandler = (id: string) => (marker: L.Marker | null) => void;
 type PopupHandler = (id: string) => void;
 
 interface HotelMapProps {
-  hotels?: Hotel[];
+  hotels?: HotelResult[];
   surroundings?: Surrounding[];
   getMarkerRef?: MarkerRefHandler;
   onPopupOpen?: PopupHandler;
