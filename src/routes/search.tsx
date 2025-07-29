@@ -13,6 +13,7 @@ import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useHotels } from '@/features/SearchPage/useHotels';
 import { SearchPagination } from '@/features/SearchPage/SearchPagination/SearchPagination';
 import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -20,9 +21,14 @@ export const Route = createFileRoute({
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
+  const searchParams = useSearch({ from: '/search' });
+
+  // Fetch hotels data
   const { data, isLoading, error, isError } = useHotels();
   const hotels = data?.hotels || [];
 
+  // Handle marker and card hover events
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
 
@@ -34,6 +40,15 @@ function RouteComponent() {
   const handleSortChange = (field: string, order: 'asc' | 'desc') => {
     // TODO
     console.log('Sort changed:', field, order);
+  };
+
+  const handleNavigateToHotel = (hotelId: string) => {
+    console.log(`Navigating to hotel ${hotelId}`);
+
+    void navigate({
+      to: `/hotels/${hotelId}`,
+      search: SearchParamsSchema.parse(searchParams),
+    });
   };
 
   return (
@@ -82,6 +97,7 @@ function RouteComponent() {
               isLoading={isLoading}
               onHotelMouseEnter={handleMouseEnter}
               onHotelMouseLeave={handleMouseLeave}
+              onHotelClick={handleNavigateToHotel}
               flex={1}
             />
           )}

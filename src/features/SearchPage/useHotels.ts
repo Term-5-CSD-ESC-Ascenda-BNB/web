@@ -3,6 +3,8 @@ import { fetchHotels } from './api';
 import { type HotelsResponse, FetchHotelsParamsSchema } from '@/schemas/hotelResults';
 import { useSearch } from '@tanstack/react-router';
 import { stringifyGuestsRooms } from '@/utils/stringifyGuestsRooms';
+import type { AxiosError } from 'axios';
+import type { ApiError } from '@/types/ApiError';
 
 export function useHotels() {
   const search = useSearch({ from: '/search' });
@@ -19,7 +21,7 @@ export function useHotels() {
 
   const parsedParams = FetchHotelsParamsSchema.parse(params);
 
-  return useQuery<HotelsResponse, Error>({
+  return useQuery<HotelsResponse, AxiosError<ApiError>>({
     queryKey: ['hotels', params],
     queryFn: () => fetchHotels(parsedParams),
     retry: (failureCount) => {

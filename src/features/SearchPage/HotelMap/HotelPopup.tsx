@@ -3,10 +3,10 @@ import { CarouselCardDetails, ImageCarousel } from '@/components/CarouselCard';
 import { Popup } from 'react-leaflet';
 import popupStyles from './Popup.module.css';
 import { getFirstFiveImages } from '@/utils/getFirstFiveImages';
-import type { Hotel } from '@/types/Hotel';
+import type { HotelResult } from '@/schemas/hotelResults';
 
 interface HotelPopupProps {
-  hotel: Hotel;
+  hotel: HotelResult;
   onClick?: (hotelId: string) => void;
 }
 

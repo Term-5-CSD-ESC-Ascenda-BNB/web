@@ -48,6 +48,9 @@ describe('CarouselCard', () => {
     score: 8.7,
     onMouseEnter: vi.fn(),
     onMouseLeave: vi.fn(),
+    onClick: vi.fn(
+      () => (window.location.href = '/hotels/hotel-123') // Mock navigation
+    ),
   };
 
   beforeEach(() => {

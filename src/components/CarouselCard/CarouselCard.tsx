@@ -12,10 +12,10 @@ export interface CarouselCardProps {
   score: number | null;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  onClick: () => void;
 }
 
 export function CarouselCard({
-  id,
   name,
   address,
   rating,
@@ -24,11 +24,8 @@ export function CarouselCard({
   score,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: CarouselCardProps) {
-  const handleCardClick = () => {
-    window.location.href = `/hotels/${id}`;
-  };
-
   return (
     <Stack
       gap="xs"
@@ -37,7 +34,7 @@ export function CarouselCard({
       data-testid="carousel-card"
     >
       <div style={{ borderRadius: 'var(--mantine-radius-lg)', overflow: 'hidden' }}>
-        <ImageCarousel images={images} onImageClick={handleCardClick} />
+        <ImageCarousel images={images} onImageClick={onClick} />
       </div>
 
       <CarouselCardDetails
@@ -46,7 +43,7 @@ export function CarouselCard({
         rating={rating}
         price={price}
         score={score}
-        onClick={handleCardClick}
+        onClick={onClick}
       />
     </Stack>
   );
