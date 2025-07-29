@@ -14,10 +14,9 @@ export const HotelResponseSchema = z.object({
   address1: z.string(),
   rating: z.number(),
   trustyou: z.object({
-    id: z.string(),
+    id: z.string().nullable(),
     score: z.object({
-      // cant check api now but not sure if this is always the same
-      overall: z.number(),
+      overall: z.number().nullable(),
       kaligo_overall: z.number().nullable(),
       solo: z.number().nullable(),
       couple: z.number().nullable(),
