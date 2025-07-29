@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GuestInfoForm from './GuestInfoForm';
-import { render } from '@/tests/utils'; // your custom render with MantineProvider
+import { render, screen } from '@/tests/utils';
 
 describe('GuestInfoForm', () => {
   it('renders all form inputs', () => {
