@@ -12,10 +12,12 @@
     "format:check": "prettier --check .",
     "preview": "vite preview",
     "prepare": "husky || true",
+    "lint-staged": "lint-staged",
     "test": "vitest",
     "test:run": "vitest --run",
-    "lint-staged": "lint-staged",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest --include 'src/**/*.test.{ts,tsx}'",
+    "test:integration": "vitest --include 'src/**/*.int.test.{ts,tsx}'"
   },
   "dependencies": {
     "@mantine/carousel": "^8.1.1",
