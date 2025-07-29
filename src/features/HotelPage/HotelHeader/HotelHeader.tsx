@@ -11,7 +11,7 @@ interface HotelHeaderProps {
   name: string;
   address: string;
   rating: number;
-  trustyouScore?: number;
+  trustyouScore?: number | null;
   trustyou?: TrustYouScore;
   ratings: AmenityRating[];
   modalOpen: boolean;
