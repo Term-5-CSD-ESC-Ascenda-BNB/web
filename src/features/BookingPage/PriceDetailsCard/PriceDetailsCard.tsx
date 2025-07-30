@@ -44,10 +44,11 @@ export function PriceDetailsCard({
         </Group>
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
-            Add-Ons
+            Add-Ons Add-Ons
           </Text>
           <Text size="sm">{currency}0</Text>
         </Group>
+
         <Divider />
         <Group justify="space-between">
           <Text fw={600}>Total</Text>

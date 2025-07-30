@@ -22,7 +22,7 @@ npm run dev
 
 - **Contributing:** Please use clear commit messages (e.g., `feat: add search bar`, `fix: correct image loading`).
 - **Branching:** Use feature branches (e.g. `feature/search-bar`).
-- **Merging:** Test your build with `npm run build` before pushing to main.
+- **Merging:** Test your build with `npm run build` before making a **pull request** to merge your branch into main.
 - **Styling:** Use CSS Modules to prevent naming conflicts.
 
 ## 🧩 Recommended VS Code Extensions
@@ -65,6 +65,6 @@ It may be a bit troublesome, but ultimately it helps keep our codebase clean and
 - **TanStack Router** for routing
 - **TanStack Query** + **Axios** for data fetching/caching
 - **ESLint** + **Prettier** for code quality and formatting
-- **Vitest** +**RTL** for unit and integration testing
+- **Vitest** + **RTL** for unit and integration testing
 
 ---

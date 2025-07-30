@@ -70,7 +70,7 @@ function Booking() {
             checkout={HotelProps.checkout}
             currency={HotelProps.currency}
           />
-          <CancellationPolicyCard />
+          <CancellationPolicyCard currency="S$" fee={2123} />
         </Grid.Col>
       </Grid>
     </Container>

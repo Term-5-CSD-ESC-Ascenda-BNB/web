@@ -26,6 +26,7 @@ export interface DestinationSearchResult {
   term: string;
   uid: string;
   icon: TablerIcon;
+  coordinates: { lat: number; lng: number };
 }
 
 const fetchDestinations = async (searchValue: string): Promise<ApiResponse[]> => {
@@ -60,6 +61,10 @@ export function useDestinationSearch(searchValue: string) {
         uid: destination.uid,
         term: destination.term,
         icon: getIconByType(destination.type),
+        coordinates: {
+          lat: destination.location.coordinates[1],
+          lng: destination.location.coordinates[0],
+        },
       };
     });
   }, [destinations]);

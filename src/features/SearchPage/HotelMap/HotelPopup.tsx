@@ -1,11 +1,12 @@
 import { Stack } from '@mantine/core';
 import { CarouselCardDetails, ImageCarousel } from '@/components/CarouselCard';
-import type { Hotel } from '@/types/Hotel';
 import { Popup } from 'react-leaflet';
 import popupStyles from './Popup.module.css';
+import { getFirstFiveImages } from '@/utils/getFirstFiveImages';
+import type { HotelResult } from '@/schemas/hotelResults';
 
 interface HotelPopupProps {
-  hotel: Hotel;
+  hotel: HotelResult;
   onClick?: (hotelId: string) => void;
 }
 
@@ -22,7 +23,7 @@ export function HotelPopup({ hotel, onClick }: HotelPopupProps) {
           }}
         >
           <ImageCarousel
-            images={hotel.images}
+            images={getFirstFiveImages(hotel.image_details)}
             aspectRatio={4 / 3}
             onImageClick={() => {
               onClick(hotel.id);

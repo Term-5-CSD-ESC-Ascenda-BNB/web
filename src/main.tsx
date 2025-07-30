@@ -8,8 +8,10 @@ import { routeTree } from './routeTree.gen';
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 import 'leaflet/dist/leaflet.css';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { theme } from './theme/index.ts';
@@ -49,6 +51,7 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <Elements stripe={stripePromise}>
           <MantineProvider theme={theme}>
+            <Notifications />
             <RouterProvider router={router} />
           </MantineProvider>
         </Elements>

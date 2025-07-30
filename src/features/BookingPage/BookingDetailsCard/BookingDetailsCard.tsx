@@ -1,5 +1,7 @@
 import { Paper, Group, Text, Divider, Stack, Image, Box, ThemeIcon } from '@mantine/core';
-import { IconStar, IconUser, IconRulerMeasure } from '@tabler/icons-react';
+import { IconStar, IconUser, IconRulerMeasure, IconCalendarTime } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useCounter } from '@mantine/hooks';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
 
 interface BookingDetailsCardProps {
