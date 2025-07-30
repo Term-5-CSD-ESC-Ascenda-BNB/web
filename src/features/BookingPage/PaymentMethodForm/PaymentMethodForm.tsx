@@ -6,13 +6,13 @@ import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
 
 const createBookingDto = {
-  destinationId: 'dest-001',
-  hotelId: 'hotel-001',
+  destinationId: 'RsBU',
+  hotelId: 'jOZC',
   bookingInfo: {
-    startDate: '2025-08-01',
-    endDate: '2025-08-05',
-    numberOfNights: 4,
-    adults: 2,
+    startDate: '2025-10-10',
+    endDate: '2025-10-17',
+    numberOfNights: 6,
+    adults: 1,
     children: 1,
     messageToHotel: 'Late check-in please',
     roomTypes: ['standard-room'],
@@ -91,13 +91,16 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
       const res = await axios.post(
         'https://api-production-46df.up.railway.app/bookings/pay',
         {
-          bookingInfo: createBookingDto.bookingInfo,
           hotelId: createBookingDto.hotelId,
           destination_id: createBookingDto.destinationId,
           country_code: 'SG', // example values — replace with real ones
-          lang: 'en',
+          lang: 'en_US',
           currency: 'SGD',
           guests: createBookingDto.bookingInfo.adults + createBookingDto.bookingInfo.children,
+          startDate: createBookingDto.bookingInfo.startDate,
+          endDate: createBookingDto.bookingInfo.endDate,
+          roomTypes: createBookingDto.bookingInfo.roomTypes,
+          roomDescription: 'Superior Double or Twin Room 1 King Bed',
         },
         { withCredentials: true }
       );
