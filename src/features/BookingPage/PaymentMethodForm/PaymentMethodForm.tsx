@@ -4,13 +4,14 @@ import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
+import type { StringValidation } from 'zod';
 
 const createBookingDto = {
   destinationId: 'RsBU',
   hotelId: 'jOZC',
   bookingInfo: {
-    startDate: '2025-10-10',
-    endDate: '2025-10-17',
+    startDate: '2025-09-10',
+    endDate: '2025-09-15',
     numberOfNights: 6,
     adults: 1,
     children: 1,
@@ -23,10 +24,6 @@ const createBookingDto = {
     salutation: 'Mr.',
     firstName: 'John',
     lastName: 'Doe',
-  },
-  payment: {
-    paymentId: 'pay-123456',
-    payeeId: 'payee-98765',
   },
 };
 
@@ -64,6 +61,12 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
     },
   });
 
+  interface CreatePaymentResponse {
+    clientSecret: string;
+    payeeId: string;
+    paymentId: string;
+  }
+
   const handleSubmit = async (values: PaymentMethodFormValues) => {
     if (guestInfo.validate().hasErrors) {
       return;
@@ -88,7 +91,7 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
     console.log(guestInfo.values);
 
     try {
-      const res = await axios.post(
+      const res = await axios.post<CreatePaymentResponse>(
         'https://api-production-46df.up.railway.app/bookings/pay',
         {
           hotelId: createBookingDto.hotelId,
@@ -100,12 +103,64 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
           startDate: createBookingDto.bookingInfo.startDate,
           endDate: createBookingDto.bookingInfo.endDate,
           roomTypes: createBookingDto.bookingInfo.roomTypes,
-          roomDescription: 'Superior Double or Twin Room 1 King Bed',
+          roomDescription: 'Deluxe Double or Twin Room 1 Double Bed',
         },
         { withCredentials: true }
       );
 
       console.log('✅ Payment response:', res.data);
+
+      const clientSecret = res.data.clientSecret;
+      const payeeId = String(res.data.payeeId);
+      const paymentId = String(res.data.paymentId);
+      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: values.cardholderName,
+            email: guestInfo.values.email,
+          },
+        },
+      });
+      if (stripeError) {
+        console.error('❌ Payment failed:', stripeError.message);
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('✅ Payment successful:', paymentIntent);
+        const bookingPayload = {
+          hotelId: createBookingDto.hotelId,
+          destinationId: createBookingDto.destinationId,
+
+          bookingInfo: {
+            startDate: createBookingDto.bookingInfo.startDate,
+            endDate: createBookingDto.bookingInfo.endDate,
+            numberOfNights: createBookingDto.bookingInfo.numberOfNights,
+            adults: createBookingDto.bookingInfo.adults,
+            children: createBookingDto.bookingInfo.children,
+            roomTypes: createBookingDto.bookingInfo.roomTypes,
+            messageToHotel: createBookingDto.bookingInfo.messageToHotel,
+          },
+          price: createBookingDto.price,
+          guest: {
+            salutation: createBookingDto.guest.salutation,
+            firstName: guestInfo.values.firstName,
+            lastName: guestInfo.values.lastName,
+          },
+          payment: {
+            paymentId: paymentId,
+            payeeId: payeeId,
+          },
+        };
+        try {
+          const bookingRes = await axios.post(
+            'https://api-production-46df.up.railway.app/bookings',
+            bookingPayload,
+            { withCredentials: true }
+          );
+          console.log('✅ Booking successful:', bookingRes.data);
+        } catch (bookingError) {
+          console.error('❌ Booking failed:', bookingError);
+        }
+      }
     } catch (error) {
       console.error('❌ Error submitting payment:', error);
     }
