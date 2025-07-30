@@ -71,11 +71,7 @@ export function useSurroundings({ lat, lng }: Props) {
               point: { lat: e.lat, lon: e.lon },
               dist: d,
               type:
-                e.tags.amenity ??
-                e.tags.shop ??
-                e.tags.tourism ??
-                e.tags.public_transport ??
-                'POI',
+                e.tags.amenity ?? e.tags.shop ?? e.tags.tourism ?? e.tags.public_transport ?? 'POI',
             };
           })
           .filter((s: Surrounding) => s.dist <= 300)
