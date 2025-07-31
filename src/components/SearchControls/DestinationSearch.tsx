@@ -2,6 +2,7 @@ import { Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
 import { useDestinationSearch, type DestinationSearchResult } from '@/hooks/useDestinationSearch';
 import { IconMapPinFilled, IconX } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
+import { useCoords } from '@/context/coords-store';
 
 interface DestinationSearchProps {
   destination?: string;
@@ -18,6 +19,9 @@ export function DestinationSearch({
   const [isHoveringClear, setIsHoveringClear] = useState(false);
   const lastValidTerm = useRef(destination);
   const { searchResults, isLoading, error } = useDestinationSearch(searchValue);
+
+  // Supply coordinates
+  const { setCoords } = useCoords();
 
   const combobox = useCombobox({
     onDropdownClose: () => {
@@ -36,6 +40,8 @@ export function DestinationSearch({
   };
 
   const handleSubmit = (value: DestinationSearchResult) => {
+    setCoords({ lat: value.coordinates.lat, lng: value.coordinates.lng });
+
     onDestinationChange(value.uid, value.term);
     setSearchValue(value.term);
     lastValidTerm.current = value.term;

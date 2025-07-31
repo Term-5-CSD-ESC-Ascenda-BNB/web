@@ -1,17 +1,19 @@
 import { Stack } from '@mantine/core';
 import { CarouselCardDetails, ImageCarousel } from '@/components/CarouselCard';
-import type { Hotel } from '@/types/Hotel';
 import { Popup } from 'react-leaflet';
 import popupStyles from './Popup.module.css';
+import type { HotelResult } from '@/schemas/hotelResults';
+import { useFirstFiveImages } from '@/components/CarouselCard/hooks/useFirstFiveImages';
 
 interface HotelPopupProps {
-  hotel: Hotel;
+  hotel: HotelResult;
   onClick?: (hotelId: string) => void;
 }
 
 export function HotelPopup({ hotel, onClick }: HotelPopupProps) {
   onClick = onClick ?? (() => {});
 
+  const { images } = useFirstFiveImages(hotel.image_details);
   return (
     <Popup className={popupStyles.popup} minWidth={300} maxWidth={300}>
       <Stack gap={0} w={300}>
@@ -22,7 +24,7 @@ export function HotelPopup({ hotel, onClick }: HotelPopupProps) {
           }}
         >
           <ImageCarousel
-            images={hotel.images}
+            images={images}
             aspectRatio={4 / 3}
             onImageClick={() => {
               onClick(hotel.id);
@@ -32,7 +34,7 @@ export function HotelPopup({ hotel, onClick }: HotelPopupProps) {
         <div style={{ cursor: 'pointer', margin: '0.6rem 1rem' }}>
           <CarouselCardDetails
             name={hotel.name}
-            address={hotel.address ?? ''}
+            address={hotel.address}
             rating={hotel.rating}
             price={hotel.price}
             score={hotel.score}

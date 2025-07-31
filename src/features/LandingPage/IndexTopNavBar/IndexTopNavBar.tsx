@@ -14,7 +14,11 @@ export function IndexTopNavBar() {
       py={'lg'}
     >
       <Logo fz={'1.75rem'} />
-      <MenuButton />
+
+      <Group>
+        {/* // TODO: add login button */}
+        <MenuButton />
+      </Group>
     </Group>
   );
 }

@@ -13,10 +13,14 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as BookingsuccessRouteImport } from './routes/bookingsuccess'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels/$hotelId'
+import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -26,6 +30,11 @@ const SearchRoute = SearchRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsuccessRoute = BookingsuccessRouteImport.update({
+  id: '/bookingsuccess',
+  path: '/bookingsuccess',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingRoute = BookingRouteImport.update({
@@ -38,6 +47,10 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -48,30 +61,50 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   path: '/hotels/$hotelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/register': typeof AuthRegisterRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
@@ -80,25 +113,43 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/profile'
     | '/search'
+    | '/login'
+    | '/register'
     | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/booking' | '/profile' | '/search' | '/hotels/$hotelId'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/profile'
     | '/search'
+    | '/login'
+    | '/register'
+    | '/hotels/$hotelId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/about'
+    | '/booking'
+    | '/bookingsuccess'
+    | '/profile'
+    | '/search'
+    | '/_auth/login'
+    | '/_auth/register'
     | '/hotels/$hotelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   BookingRoute: typeof BookingRoute
+  BookingsuccessRoute: typeof BookingsuccessRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
@@ -111,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -127,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bookingsuccess': {
+      id: '/bookingsuccess'
+      path: '/bookingsuccess'
+      fullPath: '/bookingsuccess'
+      preLoaderRoute: typeof BookingsuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -140,6 +205,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/register': {
+      id: '/_auth/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/hotels/$hotelId': {
       id: '/hotels/$hotelId'
@@ -160,6 +239,15 @@ declare module './routes/index' {
     FileRoutesByPath['/']['fullPath']
   >
 }
+declare module './routes/_auth/route' {
+  const createFileRoute: CreateFileRoute<
+    '/_auth',
+    FileRoutesByPath['/_auth']['parentRoute'],
+    FileRoutesByPath['/_auth']['id'],
+    FileRoutesByPath['/_auth']['path'],
+    FileRoutesByPath['/_auth']['fullPath']
+  >
+}
 declare module './routes/about' {
   const createFileRoute: CreateFileRoute<
     '/about',
@@ -176,6 +264,15 @@ declare module './routes/booking' {
     FileRoutesByPath['/booking']['id'],
     FileRoutesByPath['/booking']['path'],
     FileRoutesByPath['/booking']['fullPath']
+  >
+}
+declare module './routes/bookingsuccess' {
+  const createFileRoute: CreateFileRoute<
+    '/bookingsuccess',
+    FileRoutesByPath['/bookingsuccess']['parentRoute'],
+    FileRoutesByPath['/bookingsuccess']['id'],
+    FileRoutesByPath['/bookingsuccess']['path'],
+    FileRoutesByPath['/bookingsuccess']['fullPath']
   >
 }
 declare module './routes/profile' {
@@ -196,6 +293,24 @@ declare module './routes/search' {
     FileRoutesByPath['/search']['fullPath']
   >
 }
+declare module './routes/_auth/login' {
+  const createFileRoute: CreateFileRoute<
+    '/_auth/login',
+    FileRoutesByPath['/_auth/login']['parentRoute'],
+    FileRoutesByPath['/_auth/login']['id'],
+    FileRoutesByPath['/_auth/login']['path'],
+    FileRoutesByPath['/_auth/login']['fullPath']
+  >
+}
+declare module './routes/_auth/register' {
+  const createFileRoute: CreateFileRoute<
+    '/_auth/register',
+    FileRoutesByPath['/_auth/register']['parentRoute'],
+    FileRoutesByPath['/_auth/register']['id'],
+    FileRoutesByPath['/_auth/register']['path'],
+    FileRoutesByPath['/_auth/register']['fullPath']
+  >
+}
 declare module './routes/hotels/$hotelId' {
   const createFileRoute: CreateFileRoute<
     '/hotels/$hotelId',
@@ -206,10 +321,26 @@ declare module './routes/hotels/$hotelId' {
   >
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   BookingRoute: BookingRoute,
+  BookingsuccessRoute: BookingsuccessRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,

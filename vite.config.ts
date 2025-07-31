@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import path from 'path';
+import restart from 'vite-plugin-restart';
+import glsl from 'vite-plugin-glsl';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -14,6 +16,8 @@ export default defineConfig(({ mode }) => {
         verboseFileRoutes: false,
       }),
       react(),
+      restart({ restart: ['./public/**'] }), // Restart server on static file change
+      glsl(), // Handle shader files
     ],
     resolve: {
       alias: {
@@ -46,6 +50,19 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       globals: true,
       setupFiles: ['/src/tests/setup.ts', '/src/tests/vitest.setup.mjs'],
+      exclude: ['node_modules', 'src/routeTree.gen.ts', 'src/**/index.ts'],
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'json', 'html'],
+        include: ['src/**/*.{ts,tsx}', 'src/**/*.int.test.{ts,tsx}'],
+        exclude: [
+          'src/routeTree.gen.ts',
+          'src/**/index.ts',
+          'src/vite-env.d.ts',
+          'src/tests/**',
+          'src/main.tsx',
+        ],
+      },
     },
   };
 });
