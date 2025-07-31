@@ -43,7 +43,11 @@ describe('CarouselCard', () => {
     name: 'Test Hotel',
     address: '123 Test Street',
     rating: 4.2,
-    images: ['a.jpg', 'b.jpg', 'c.jpg'],
+    imageDetails: {
+      prefix: 'https://example.com/images/',
+      count: 3,
+      suffix: '.jpg',
+    },
     price: 250,
     score: 8.7,
     onMouseEnter: vi.fn(),
@@ -59,7 +63,9 @@ describe('CarouselCard', () => {
 
   it('renders ImageCarousel with the provided images', () => {
     render(<CarouselCard {...defaultProps} />);
-    expect(screen.getByTestId('image-carousel')).toHaveTextContent('Images: a.jpg,b.jpg,c.jpg');
+    expect(screen.getByTestId('image-carousel')).toHaveTextContent(
+      'Images: https://example.com/images/0.jpg,https://example.com/images/1.jpg,https://example.com/images/2.jpg'
+    );
   });
 
   it('calls onMouseEnter and onMouseLeave when hovered', async () => {

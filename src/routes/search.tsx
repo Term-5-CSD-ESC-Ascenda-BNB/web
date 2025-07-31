@@ -25,7 +25,7 @@ function RouteComponent() {
   const searchParams = useSearch({ from: '/search' });
 
   // Fetch hotels data
-  const { data, isLoading, error, isError, isFetching } = useHotels();
+  const { data, isLoading, error, isError } = useHotels();
   const hotels = data?.hotels || [];
 
   // Handle marker and card hover events
@@ -85,7 +85,7 @@ function RouteComponent() {
 
             <Text c={'dimmed'}>Sort by:</Text>
             <SortableSelect
-              fields={['Rating', 'Price', 'Name']}
+              fields={['Rating', 'Price', 'Reviews']}
               w={120}
               onSortChange={handleSortChange}
             />
