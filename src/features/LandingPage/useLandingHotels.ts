@@ -22,10 +22,11 @@ export function useLandingHotels() {
     queryFn: () => fetchHotels(parsedParams),
     placeholderData: keepPreviousData,
     retry: (failureCount) => {
+      // console.log('Retrying fetchHotels, failure count:', failureCount);
       return failureCount < 2; // Retry twice
     },
     refetchInterval: (query) => {
-      console.log('Refetching with query:', query);
+      // console.log('Refetching with query:', query);
 
       // if error stop polling
       if (query.state.status === 'error') {
@@ -34,7 +35,7 @@ export function useLandingHotels() {
       }
 
       // If data complete, return false to stop refetching else refetch in 2 sec
-      return query.state.data?.completed ? false : 2000;
+      return query.state.data?.completed ? false : 3000;
     },
 
     select: (data) => {
