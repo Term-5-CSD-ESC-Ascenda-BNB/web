@@ -24,6 +24,15 @@
   margin-top: -5rem;
 }
 
+.booking-history-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  margin-top: 1rem;
+}
+
 .help-link {
   font-size: 0.85rem;
   color: #555;
@@ -91,5 +100,31 @@
 }
 
 .divider-label {
+  font-weight: 600;
+}
+
+.booking-history {
+  text-align: center;
+}
+
+.custom-divider-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+.custom-divider-line {
+  flex: 1;
+  height: 2px;
+  background-color: #808ab1;
+}
+.where-i-been-label {
+  margin: 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #808ab1;
+}
+.booking-history-label {
+  margin: 0 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }

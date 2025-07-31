@@ -1,3 +1,4 @@
+import { useHotels, useMarkerHover } from '@/hooks';
 import styles from './profile.module.css';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { Flex, Stack, Group, Divider } from '@mantine/core';
@@ -5,12 +6,16 @@ import ProfilePicture from '@/components/ProfilePicture/ProfilePicture';
 import { Milestone } from '@/components/Milestone/Milestone';
 import { MilestoneBadge } from '@/components/Milestone/MilestoneBadge';
 import { IconHelp, IconDiamond } from '@tabler/icons-react';
+import { BookingGrid } from '@/components/BookingGrid/BookingGrid';
 
 export const Route = createFileRoute({
   component: Profile,
 });
 
 function Profile() {
+  const { hotels, isLoading } = useHotels();
+  const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
+    useMarkerHover();
   return (
     <>
       <div className={styles['fixed-profile-wrapper']}>
@@ -51,15 +56,13 @@ function Profile() {
             <Milestone milestone={'Trips Embarked'} count={54}></Milestone>
             <Milestone milestone={'Reviews Crafted'} count={10}></Milestone>
           </Group>
-          <Divider
-            label="Where I've Been"
-            labelPosition="center"
-            size="sm"
-            color="#808ab1"
-            mt="sm"
-            mb="sm"
-            className={styles['divider-label']}
-          />
+
+          <div className={styles['custom-divider-wrapper']}>
+            <div className={styles['custom-divider-line']} />
+            <span className={styles['where-i-been-label']}>Where I've Been</span>
+            <div className={styles['custom-divider-line']} />
+          </div>
+
           <Group className={styles['badges-container']} gap="xl">
             <MilestoneBadge
               image={''}
@@ -88,6 +91,28 @@ function Profile() {
             ></MilestoneBadge>
           </Group>
         </Stack>
+      </div>
+      <div className={styles['booking-history-container']}>
+        {/* <Divider
+          label="My Booking History"
+          labelPosition="center"
+          size="sm"
+          color="#808ab1"
+          mt="sm"
+          mb="sm"
+          className={styles['divider-label-2']}
+        /> */}
+        <div className={styles['custom-divider-wrapper']}>
+          <div className={styles['custom-divider-line']} />
+          <span className={styles['booking-history-label']}>My Booking History</span>
+          <div className={styles['custom-divider-line']} />
+        </div>
+        <BookingGrid
+          hotels={hotels}
+          isLoading={isLoading}
+          onHotelMouseEnter={handleMouseEnter}
+          onHotelMouseLeave={handleMouseLeave}
+        />
       </div>
     </>
   );
