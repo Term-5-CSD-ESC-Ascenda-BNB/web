@@ -1,7 +1,7 @@
-import { useHotels, useMarkerHover } from '@/hooks';
+import { useMockHotels, useMarkerHover } from '@/hooks';
 import styles from './profile.module.css';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
-import { Flex, Stack, Group, Divider } from '@mantine/core';
+import { Flex, Stack, Group } from '@mantine/core';
 import ProfilePicture from '@/components/ProfilePicture/ProfilePicture';
 import { Milestone } from '@/components/Milestone/Milestone';
 import { MilestoneBadge } from '@/components/Milestone/MilestoneBadge';
@@ -13,7 +13,7 @@ export const Route = createFileRoute({
 });
 
 function Profile() {
-  const { hotels, isLoading } = useHotels();
+  const { hotels, isLoading } = useMockHotels();
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
   return (
