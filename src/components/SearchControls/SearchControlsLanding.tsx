@@ -5,7 +5,7 @@ import { DestinationSearch } from './DestinationSearch';
 import { SearchButton } from '@/components/buttons';
 import { DatePicker } from './DatePicker';
 import { useNavigate } from '@tanstack/react-router';
-import { SearchParamsSchema } from '@/schemas/SearchParamsSchema';
+import { SearchParamsSchema } from '@/schemas/searchParams';
 
 export function SearchControlsLanding() {
   const navigate = useNavigate({});
