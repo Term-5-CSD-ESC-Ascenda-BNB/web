@@ -1,4 +1,4 @@
-import { useMockHotels, useMarkerHover } from '@/hooks';
+import { useMarkerHover } from '@/hooks';
 import styles from './search.module.css';
 import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group, Skeleton, Stack, Text } from '@mantine/core';
@@ -11,6 +11,9 @@ import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
 import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useHotels } from '@/features/SearchPage/useHotels';
+import { SearchPagination } from '@/features/SearchPage/SearchPagination/SearchPagination';
+import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -18,14 +21,14 @@ export const Route = createFileRoute({
 });
 
 function RouteComponent() {
-  // Mock data
-  const { hotels: mockHotels, isLoading: mockIsLoading } = useMockHotels();
+  const navigate = useNavigate();
+  const searchParams = useSearch({ from: '/search' });
 
-  // Real data (ascenda api is currently returning empty results)
-  // TODO: implement it when the API isnt broken
-  const { data, isLoading, error } = useHotels();
-  console.log('Hotels data:', data);
+  // Fetch hotels data
+  const { data, isLoading, error, isError } = useHotels();
+  const hotels = data?.hotels || [];
 
+  // Handle marker and card hover events
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
 
@@ -39,6 +42,15 @@ function RouteComponent() {
     console.log('Sort changed:', field, order);
   };
 
+  const handleNavigateToHotel = (hotelId: string) => {
+    console.log(`Navigating to hotel ${hotelId}`);
+
+    void navigate({
+      to: `/hotels/${hotelId}`,
+      search: SearchParamsSchema.parse(searchParams),
+    });
+  };
+
   return (
     <>
       <div className={styles['root-container']}>
@@ -50,7 +62,7 @@ function RouteComponent() {
         {/* Left panel - Map view */}
         <div className={styles['map-container']}>
           <HotelMap
-            hotels={mockHotels}
+            hotels={hotels}
             getMarkerRef={makeMarkerRef}
             onPopupOpen={handlePopupOpen}
             onPopupClose={handlePopupClose}
@@ -65,15 +77,15 @@ function RouteComponent() {
           </Group>
 
           <Group justify="flex-start" gap={'xs'}>
-            {mockIsLoading ? (
+            {isLoading || hotels.length === 0 ? (
               <Skeleton h={20} w={80} />
             ) : (
-              <Text mr="xs">{mockHotels.length} results</Text>
+              <Text mr="xs">{hotels.length} results</Text>
             )}
 
             <Text c={'dimmed'}>Sort by:</Text>
             <SortableSelect
-              fields={['Rating', 'Price', 'Name']}
+              fields={['Rating', 'Price', 'Reviews']}
               w={120}
               onSortChange={handleSortChange}
             />
@@ -81,12 +93,20 @@ function RouteComponent() {
           </Group>
 
           {/* Results grid */}
-          <HotelGrid
-            hotels={mockHotels}
-            isLoading={mockIsLoading}
-            onHotelMouseEnter={handleMouseEnter}
-            onHotelMouseLeave={handleMouseLeave}
-          />
+          {isError && <ErrorAlert title={'Error fetching hotels'} message={error.message} />}
+
+          {!isError && (
+            <HotelGrid
+              hotels={hotels}
+              isLoading={isLoading || hotels.length === 0}
+              onHotelMouseEnter={handleMouseEnter}
+              onHotelMouseLeave={handleMouseLeave}
+              onHotelClick={handleNavigateToHotel}
+              flex={1}
+            />
+          )}
+
+          <SearchPagination totalPages={Math.ceil(hotels.length / 18)} mb={'xl'} />
         </Stack>
       </div>
     </>

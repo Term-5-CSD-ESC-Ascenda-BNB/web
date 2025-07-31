@@ -1,6 +1,5 @@
 import styles from './index.module.css';
 import { IconChevronDown } from '@tabler/icons-react';
-import { useMockHotels } from '@/hooks';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
@@ -9,13 +8,16 @@ import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';
 import { CoordsProvider } from '@/context/CoordsProvider';
+import { useLandingHotels } from '@/features/LandingPage/useLandingHotels';
+import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
 
 export const Route = createFileRoute({
   component: Index,
 });
 
 function Index() {
-  const { hotels, isLoading } = useMockHotels();
+  const { data, isLoading, error, isError } = useLandingHotels();
+  const hotels = data?.hotels || [];
 
   const theme = useMantineTheme();
 
@@ -48,23 +50,27 @@ function Index() {
       </CoordsProvider>
 
       <Stack mx={'20vw'} my={'10vw'} gap={'10vw'}>
-        <FeaturedSection
-          title="Featured Hotels"
-          hotels={hotels.slice(0, 3)}
-          isLoading={isLoading}
-        />
+        {isError && <ErrorAlert title={'Error fetching hotels'} message={error.message} />}
 
-        <FeaturedSection
-          title="Recommended for you"
-          hotels={hotels.slice(3, 6)}
-          isLoading={isLoading}
-        />
-
-        <FeaturedSection
-          title="Your saved searches"
-          hotels={hotels.slice(6, 9)}
-          isLoading={isLoading}
-        />
+        {!isError && (
+          <Stack>
+            <FeaturedSection
+              title="Featured Hotels"
+              hotels={hotels.slice(0, 3)}
+              isLoading={isLoading}
+            />
+            <FeaturedSection
+              title="Recommended for you"
+              hotels={hotels.slice(3, 6)}
+              isLoading={isLoading}
+            />
+            <FeaturedSection
+              title="Your saved searches"
+              hotels={hotels.slice(6, 9)}
+              isLoading={isLoading}
+            />
+          </Stack>
+        )}
 
         <ExceptionalSection />
       </Stack>

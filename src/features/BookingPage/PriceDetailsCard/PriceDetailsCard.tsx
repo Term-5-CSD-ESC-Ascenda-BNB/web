@@ -24,9 +24,7 @@ export function PriceDetailsCard({
     const diffDays = diffTime / (1000 * 60 * 60 * 24); // ms to days
     return diffDays;
   }
-
   const nights: number = getNumberOfNights(checkin, checkout);
-
   return (
     <Paper withBorder radius="md" p="md" mt="md">
       <Stack gap={4}>
@@ -46,7 +44,7 @@ export function PriceDetailsCard({
         </Group>
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
-            Add-Ons
+            Add-Ons Add-Ons
           </Text>
           <Text size="sm">{currency}0</Text>
         </Group>

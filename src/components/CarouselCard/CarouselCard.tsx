@@ -1,33 +1,34 @@
 import { Stack } from '@mantine/core';
 import { ImageCarousel } from './ImageCarousel';
 import { CarouselCardDetails } from './CarouselCardDetails/CarouselCardDetails';
+import { useFirstFiveImages } from './hooks/useFirstFiveImages';
+import type { ImageDetails } from '@/types/HotelDetails';
 
 export interface CarouselCardProps {
   id: string;
   name: string;
   address: string;
   rating: number;
-  images: string[];
+  imageDetails: ImageDetails;
   price: number;
-  score: number;
+  score: number | null;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  onClick: () => void;
 }
 
 export function CarouselCard({
-  id,
   name,
   address,
   rating,
-  images,
+  imageDetails,
   price,
   score,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: CarouselCardProps) {
-  const handleCardClick = () => {
-    window.location.href = `/hotels/${id}`;
-  };
+  const { images } = useFirstFiveImages(imageDetails);
 
   return (
     <Stack
@@ -37,7 +38,7 @@ export function CarouselCard({
       data-testid="carousel-card"
     >
       <div style={{ borderRadius: 'var(--mantine-radius-lg)', overflow: 'hidden' }}>
-        <ImageCarousel images={images} onImageClick={handleCardClick} />
+        <ImageCarousel images={images} onImageClick={onClick} />
       </div>
 
       <CarouselCardDetails
@@ -46,7 +47,7 @@ export function CarouselCard({
         rating={rating}
         price={price}
         score={score}
-        onClick={handleCardClick}
+        onClick={onClick}
       />
     </Stack>
   );

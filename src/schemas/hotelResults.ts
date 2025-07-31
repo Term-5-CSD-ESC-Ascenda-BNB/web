@@ -1,12 +1,19 @@
 import { z } from 'zod';
 
+/**
+ * For hotel search results
+ */
+
 export const ImageDetailsSchema = z.object({
   suffix: z.string(),
   count: z.number(),
   prefix: z.string(),
 });
 
-export const HotelSchema = z.object({
+/**
+ * This schema represents a hotel result in the search response.
+ */
+export const HotelResultSchema = z.object({
   id: z.string(),
   searchRank: z.number(),
   price: z.number(),
@@ -15,13 +22,14 @@ export const HotelSchema = z.object({
   name: z.string(),
   address: z.string(),
   rating: z.number(),
-  score: z.number(),
+  score: z.number().nullable(),
   image_details: ImageDetailsSchema,
 });
 
 export const HotelsResponseSchema = z.object({
+  completed: z.boolean(),
   currency: z.string(),
-  hotels: z.array(HotelSchema),
+  hotels: z.array(HotelResultSchema),
 });
 
 export const FetchHotelsParamsSchema = z
@@ -39,6 +47,17 @@ export const FetchHotelsParamsSchema = z
     path: ['checkout'],
   });
 
-export type Hotel = z.infer<typeof HotelSchema>;
+/**
+ * This type represents a single hotel result in the search response.
+ */
+export type HotelResult = z.infer<typeof HotelResultSchema>;
+
+/**
+ * This type represents the entire response from the hotel search API.
+ */
 export type HotelsResponse = z.infer<typeof HotelsResponseSchema>;
+
+/**
+ * This type represents the parameters used to fetch hotels.
+ */
 export type FetchHotelsParams = z.infer<typeof FetchHotelsParamsSchema>;

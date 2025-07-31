@@ -6,6 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import styles from './MenuButton.module.css';
 import { Logo } from '@/components/Logo/Logo';
 import { Text } from '@mantine/core';
+import { Link } from '@tanstack/react-router';
 
 export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -32,9 +33,20 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
           },
         }}
       >
-        {/* //TODO: add Drawer content */}
-
-        <Text>aosjdoiasjd</Text>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1.5rem' }}>
+          <Link to="/" className={styles.menuLink}>
+            Home
+          </Link>
+          <Link to="/search" className={styles.menuLink}>
+            Search
+          </Link>
+          <Link to="/register" className={styles.menuLink}>
+            Register
+          </Link>
+          <Link to="/login" className={styles.menuLink}>
+            Login
+          </Link>
+        </nav>
       </Drawer>
     </>
   );

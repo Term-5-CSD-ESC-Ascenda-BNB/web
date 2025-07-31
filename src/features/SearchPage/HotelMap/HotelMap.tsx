@@ -1,42 +1,74 @@
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import type { MockHotel } from '@/types/MockHotel';
+import { MapContainer, TileLayer, ZoomControl, Marker, Popup } from 'react-leaflet';
 import { useEffect, useMemo, useRef } from 'react';
-import { latLng, LatLngBounds, Map as LeafletMap } from 'leaflet';
+import { latLng, LatLngBounds, Map as LeafletMap, divIcon } from 'leaflet';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { IconPlus, IconMinus } from '@tabler/icons-react';
+import { HotelPinMarker } from './HotelPinMarker';
+
+import mapStyles from './Map.module.css';
 import PriceMarker from './PriceMarker';
 import { HotelPopup } from './HotelPopup';
-import mapStyles from './Map.module.css';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
+import type { HotelResult } from '@/schemas/hotelResults';
 
-interface HotelMapProps {
-  hotels: MockHotel[];
-  getMarkerRef: (id: string) => (marker: L.Marker | null) => void;
-  onPopupOpen: (id: string) => void;
-  onPopupClose: (id: string) => void;
+import { getSurroundingIcon } from '@/utils/getSurroundingIcon';
+import { getCategory, getCategoryColor } from '@/utils/getSurroundingCategory';
+
+interface Surrounding {
+  type: string;
+  name: string;
+  distance: string;
+  latitude: number;
+  longitude: number;
 }
 
-export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: HotelMapProps) {
+type MarkerRefHandler = (id: string) => (marker: L.Marker | null) => void;
+type PopupHandler = (id: string) => void;
+
+interface HotelMapProps {
+  hotels?: HotelResult[];
+  surroundings?: Surrounding[];
+  getMarkerRef?: MarkerRefHandler;
+  onPopupOpen?: PopupHandler;
+  onPopupClose?: PopupHandler;
+  center?: [number, number];
+  zoom?: number;
+  interactive?: boolean;
+}
+
+export function HotelMap({
+  hotels = [],
+  surroundings = [],
+  getMarkerRef,
+  onPopupOpen,
+  onPopupClose,
+  center: providedCenter,
+  zoom: providedZoom = 13,
+  interactive = true,
+}: HotelMapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
-  const center = latLng(1.3521, 103.8198);
+  const center = providedCenter ?? latLng(1.3521, 103.8198);
 
-  // Calculate bounds for all hotels
   const bounds = useMemo(() => {
-    if (hotels.length === 0) return null;
+    const b = new LatLngBounds([]);
 
-    const bounds = new LatLngBounds([]);
     hotels.forEach((hotel) => {
       if (hotel.latitude && hotel.longitude) {
-        bounds.extend([hotel.latitude, hotel.longitude]);
+        b.extend([hotel.latitude, hotel.longitude]);
       }
     });
-    return bounds;
-  }, [hotels]);
 
-  // Fit map to bounds when hotels change
+    surroundings.forEach((poi) => {
+      if (poi.latitude && poi.longitude) {
+        b.extend([poi.latitude, poi.longitude]);
+      }
+    });
+
+    return b;
+  }, [hotels, surroundings]);
+
   useEffect(() => {
-    if (mapRef.current && bounds && bounds.isValid()) {
-      const map = mapRef.current;
-      map.fitBounds(bounds, { padding: [20, 20] });
+    if (mapRef.current && bounds.isValid()) {
+      mapRef.current.fitBounds(bounds, { padding: [20, 20] });
     }
   }, [bounds]);
 
@@ -44,9 +76,11 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
     <MapContainer
       ref={mapRef}
       center={center}
-      zoom={13}
-      scrollWheelZoom={true}
-      wheelPxPerZoomLevel={120}
+      zoom={providedZoom}
+      scrollWheelZoom={interactive ?? true}
+      dragging={interactive ?? true}
+      doubleClickZoom={interactive ?? true}
+      touchZoom={interactive ?? true}
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
       zoomControl={false}
@@ -61,24 +95,74 @@ export function HotelMap({ hotels, getMarkerRef, onPopupOpen, onPopupClose }: Ho
           <IconMinus size={20} stroke={2} color="var(--mantine-color-primary-8)" />
         )}
       />
+
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {hotels.map((hotel) => (
-        <PriceMarker
-          key={hotel.id}
-          position={[hotel.latitude, hotel.longitude]}
-          price={hotel.price}
-          markerRef={getMarkerRef(hotel.id)}
-          onPopupOpen={() => onPopupOpen(hotel.id)}
-          onPopupClose={() => onPopupClose(hotel.id)}
-        >
-          <HotelPopup
-            hotel={hotel}
-            onClick={(hotelId) => {
-              console.log(`Clicked on hotel: ${hotelId}`);
+
+      {hotels.map((hotel) => {
+        const position: [number, number] = [hotel.latitude, hotel.longitude];
+
+        // Use pin marker for mini map (interactive=false)
+        if (!interactive) {
+          return <HotelPinMarker key={hotel.id} position={position} />;
+        }
+
+        return (
+          <PriceMarker
+            key={hotel.id}
+            position={position}
+            price={hotel.price}
+            markerRef={getMarkerRef ? getMarkerRef(hotel.id) : undefined}
+            onPopupOpen={() => onPopupOpen?.(hotel.id)}
+            onPopupClose={() => onPopupClose?.(hotel.id)}
+          >
+            <HotelPopup
+              hotel={hotel}
+              onClick={() => console.log(`Clicked on hotel: ${hotel.id}`)}
+            />
+          </PriceMarker>
+        );
+      })}
+
+      {surroundings.map((poi, idx) => {
+        const category = getCategory(poi.type);
+        const color = getCategoryColor(category);
+        const icon = getSurroundingIcon(poi.type);
+
+        const html = renderToStaticMarkup(
+          <div
+            style={{
+              backgroundColor: color,
+              borderRadius: '50%',
+              width: 28,
+              height: 28,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
-          />
-        </PriceMarker>
-      ))}
+          >
+            {icon}
+          </div>
+        );
+
+        return (
+          <Marker
+            key={`poi-${idx}`}
+            position={[poi.latitude, poi.longitude]}
+            icon={divIcon({
+              className: 'custom-icon',
+              html,
+              iconSize: [28, 28],
+              iconAnchor: [14, 28],
+            })}
+          >
+            <Popup>
+              <strong>{poi.type}</strong>: {poi.name}
+              <br />
+              {poi.distance}
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 }
