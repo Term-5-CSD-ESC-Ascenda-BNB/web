@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconDots } from '@tabler/icons-react';
-import { Drawer } from '@mantine/core';
+import { Drawer, Stack } from '@mantine/core';
 import { IconButton } from '@/components/IconButton/IconButton';
 import { useDisclosure } from '@mantine/hooks';
 import styles from './MenuButton.module.css';
@@ -25,28 +25,28 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
         opened={opened}
         onClose={close}
         position="right"
-        title={<Logo fz={'1.5rem'} />}
+        title={<Logo fz={'2rem'} />}
         overlayProps={{ blur: 4 }}
         styles={{
+          header: {
+            padding: '1rem 1rem 1rem 2rem',
+          },
           body: {
             padding: '0',
           },
         }}
       >
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1.5rem' }}>
+        <Stack component={'nav'} gap={0} className={styles.menuStack}>
           <Link to="/" className={styles.menuLink}>
             Home
           </Link>
           <Link to="/search" className={styles.menuLink}>
             Search
           </Link>
-          <Link to="/register" className={styles.menuLink}>
-            Register
-          </Link>
           <Link to="/login" className={styles.menuLink}>
             Login
           </Link>
-        </nav>
+        </Stack>
       </Drawer>
     </>
   );

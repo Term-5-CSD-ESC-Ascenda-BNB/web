@@ -28,3 +28,24 @@
 .menuButton:hover svg path:nth-child(3) {
   animation-delay: 0.1s;
 }
+
+.menuLink {
+  text-decoration: none;
+  color: inherit;
+  padding: 1.5rem 2rem;
+  display: block;
+  font-size: larger;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.menuStack:hover {
+  & > .menuLink {
+    opacity: 0.3;
+  }
+
+  & > .menuLink:hover {
+    opacity: 1;
+    background-color: var(--mantine-color-gray-0);
+  }
+}
