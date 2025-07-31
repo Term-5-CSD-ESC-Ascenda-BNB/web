@@ -1,12 +1,11 @@
 import React from 'react';
-import { IconDots } from '@tabler/icons-react';
+import { IconDots, IconHomeFilled, IconLogin, IconSearch } from '@tabler/icons-react';
 import { Drawer, Stack } from '@mantine/core';
 import { IconButton } from '@/components/IconButton/IconButton';
 import { useDisclosure } from '@mantine/hooks';
-import styles from './MenuButton.module.css';
 import { Logo } from '@/components/Logo/Logo';
-import { Text } from '@mantine/core';
-import { Link } from '@tanstack/react-router';
+import { MenuNavLink } from '@/components/menu/MenuLink/MenuLink';
+import styles from './MenuButton.module.css';
 
 export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -37,15 +36,9 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
         }}
       >
         <Stack component={'nav'} gap={0} className={styles.menuStack}>
-          <Link to="/" className={styles.menuLink}>
-            Home
-          </Link>
-          <Link to="/search" className={styles.menuLink}>
-            Search
-          </Link>
-          <Link to="/login" className={styles.menuLink}>
-            Login
-          </Link>
+          <MenuNavLink to="/" icon={IconHomeFilled} label="Home" className={styles.menuLink} />
+          <MenuNavLink to="/search" icon={IconSearch} label="Search" className={styles.menuLink} />
+          <MenuNavLink to="/login" icon={IconLogin} label="Login" className={styles.menuLink} />
         </Stack>
       </Drawer>
     </>

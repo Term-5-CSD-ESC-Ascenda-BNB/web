@@ -4,7 +4,7 @@ import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group, Skeleton, Stack, Text } from '@mantine/core';
 import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
-import { MenuButton } from '@/components/buttons/MenuButton/MenuButton';
+import { MenuButton } from '@/components/menu/MenuButton/MenuButton';
 import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';

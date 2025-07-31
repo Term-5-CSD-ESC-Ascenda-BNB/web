@@ -35,6 +35,7 @@
   padding: 1.5rem 2rem;
   display: block;
   font-size: larger;
+  align-items: center;
 
   transition: all 0.2s ease-in-out;
 }
