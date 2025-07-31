@@ -1,4 +1,5 @@
 import { Box, Text, TextInput, Group, Select, Textarea, Stack, Paper, Title } from '@mantine/core';
+import { type UseFormReturnType } from '@mantine/form';
 
 const countryCodes = [
   { value: 'us', label: 'USA +1' },
@@ -7,7 +8,27 @@ const countryCodes = [
   // Add more as needed
 ];
 
-function GuestInfoForm() {
+export interface GuestInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  countryCode: string;
+  phone: string;
+  specialRequests: string;
+}
+
+interface GuestInfoFormProps {
+  guestInfo: UseFormReturnType<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    countryCode: string;
+    phone: string;
+    specialRequests: string;
+  }>;
+}
+
+function GuestInfoForm({ guestInfo }: GuestInfoFormProps) {
   return (
     <Paper withBorder radius="md" p="xl">
       <Stack gap="md">
@@ -20,14 +41,14 @@ function GuestInfoForm() {
           </Text>
         </Box>
         <Group grow gap="sm">
-          <TextInput placeholder="First Name" />
-          <TextInput placeholder="Last Name" />
+          <TextInput placeholder="First Name" {...guestInfo.getInputProps('firstName')} />
+          <TextInput placeholder="Last Name" {...guestInfo.getInputProps('lastName')} />
         </Group>
-        <TextInput placeholder="Email" />
+        <TextInput placeholder="Email" {...guestInfo.getInputProps('email')} />
         <Group gap={0} align="flex-start" style={{ flexWrap: 'nowrap' }}>
           <Select
             data={countryCodes}
-            defaultValue="us"
+            {...guestInfo.getInputProps('countryCode')}
             w={160}
             styles={{
               input: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
@@ -36,6 +57,7 @@ function GuestInfoForm() {
           <TextInput
             placeholder="Phone Number"
             style={{ flex: 1 }}
+            {...guestInfo.getInputProps('phone')}
             styles={{
               input: {
                 borderTopLeftRadius: 0,
@@ -53,6 +75,7 @@ function GuestInfoForm() {
             placeholder="Special requests can't be guaranteed, but the property will do its best to meet your needs."
             autosize
             minRows={3}
+            {...guestInfo.getInputProps('specialRequests')}
           />
         </Box>
       </Stack>

@@ -12,6 +12,7 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as BookingsuccessRouteImport } from './routes/bookingsuccess'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
@@ -23,6 +24,11 @@ import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsuccessRoute = BookingsuccessRouteImport.update({
+  id: '/bookingsuccess',
+  path: '/bookingsuccess',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingRoute = BookingRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/search': typeof SearchRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/search': typeof SearchRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/bookingsuccess': typeof BookingsuccessRoute
   '/search': typeof SearchRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/search'
     | '/login'
     | '/register'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/search'
     | '/login'
     | '/register'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/about'
     | '/booking'
+    | '/bookingsuccess'
     | '/search'
     | '/_auth/login'
     | '/_auth/register'
@@ -125,6 +137,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   BookingRoute: typeof BookingRoute
+  BookingsuccessRoute: typeof BookingsuccessRoute
   SearchRoute: typeof SearchRoute
   HotelsHotelIdRoute: typeof HotelsHotelIdRoute
 }
@@ -157,6 +170,13 @@ declare module '@tanstack/react-router' {
       path: '/booking'
       fullPath: '/booking'
       preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookingsuccess': {
+      id: '/bookingsuccess'
+      path: '/bookingsuccess'
+      fullPath: '/bookingsuccess'
+      preLoaderRoute: typeof BookingsuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -226,6 +246,15 @@ declare module './routes/booking' {
     FileRoutesByPath['/booking']['fullPath']
   >
 }
+declare module './routes/bookingsuccess' {
+  const createFileRoute: CreateFileRoute<
+    '/bookingsuccess',
+    FileRoutesByPath['/bookingsuccess']['parentRoute'],
+    FileRoutesByPath['/bookingsuccess']['id'],
+    FileRoutesByPath['/bookingsuccess']['path'],
+    FileRoutesByPath['/bookingsuccess']['fullPath']
+  >
+}
 declare module './routes/search' {
   const createFileRoute: CreateFileRoute<
     '/search',
@@ -282,6 +311,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   BookingRoute: BookingRoute,
+  BookingsuccessRoute: BookingsuccessRoute,
   SearchRoute: SearchRoute,
   HotelsHotelIdRoute: HotelsHotelIdRoute,
 }
