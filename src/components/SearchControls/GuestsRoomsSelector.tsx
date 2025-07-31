@@ -17,6 +17,10 @@ export function GuestsRoomsSelector({
 }: GuestsRoomsSelectorProps) {
   const handleGuestsChange = (delta: number) => {
     setGuests(guests + delta);
+    // Ensure rooms do not exceed guests
+    if (rooms > guests + delta) {
+      setRooms(guests + delta);
+    }
   };
   const handleRoomsChange = (delta: number) => {
     setRooms(rooms + delta);
@@ -64,7 +68,7 @@ export function GuestsRoomsSelector({
             value={rooms}
             onValueChange={handleRoomsChange}
             minValue={1}
-            maxValue={10}
+            maxValue={guests}
           />
         </Stack>
       </Popover.Dropdown>
