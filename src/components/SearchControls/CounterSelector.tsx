@@ -33,6 +33,7 @@ export function CounterSelector({
           size="sm"
           onClick={() => onValueChange(-1)}
           disabled={value <= minValue}
+          data-testid={`${label.toLowerCase()}-decrement`}
         >
           <IconMinus size={12} />
         </ActionIcon>
@@ -44,6 +45,7 @@ export function CounterSelector({
           size="sm"
           onClick={() => onValueChange(1)}
           disabled={value >= maxValue}
+          data-testid={`${label.toLowerCase()}-increment`}
         >
           <IconPlus size={12} />
         </ActionIcon>
