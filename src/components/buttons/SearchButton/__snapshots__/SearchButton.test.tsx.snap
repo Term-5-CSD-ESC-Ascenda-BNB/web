@@ -19,6 +19,7 @@ exports[`SearchButton > accepts custom iconSize prop 1`] = `
     <button
       aria-label="Search"
       class="mantine-focus-auto _iconButton_57bad1 _searchButton_fc2286 m_87cf2631 mantine-UnstyledButton-root"
+      data-testid="search-button"
       style="width: calc(2.625rem * var(--mantine-scale));"
       type="button"
     >
@@ -65,6 +66,7 @@ exports[`SearchButton > renders without crashing and matches snapshot 1`] = `
     <button
       aria-label="Search"
       class="mantine-focus-auto _iconButton_57bad1 _searchButton_fc2286 m_87cf2631 mantine-UnstyledButton-root"
+      data-testid="search-button"
       style="width: calc(2.625rem * var(--mantine-scale));"
       type="button"
     >
