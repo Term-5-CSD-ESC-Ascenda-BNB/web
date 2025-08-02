@@ -1,21 +1,52 @@
 import { useMockHotels, useMarkerHover } from '@/hooks';
 import styles from './profile.module.css';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
-import { Flex, Stack, Group } from '@mantine/core';
+import { Flex, Stack, Group, Loader } from '@mantine/core';
 import ProfilePicture from '@/components/ProfilePicture/ProfilePicture';
 import { Milestone } from '@/components/Milestone/Milestone';
 import { MilestoneBadge } from '@/components/Milestone/MilestoneBadge';
 import { IconHelp, IconDiamond } from '@tabler/icons-react';
 import { BookingGrid } from '@/components/BookingGrid/BookingGrid';
+import { useProfile } from '@/hooks/useProfile';
+import { redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute({
   component: Profile,
 });
 
+const getYearsOnWayfare = (createdAt: string): number => {
+  const createdDate = new Date(createdAt);
+  const now = new Date();
+  const years = now.getFullYear() - createdDate.getFullYear();
+
+  // // Optional: adjust for whether the anniversary has passed this year
+  // const hasHadAnniversaryThisYear =
+  //   now.getMonth() > createdDate.getMonth() ||
+  //   (now.getMonth() === createdDate.getMonth() && now.getDate() >= createdDate.getDate());
+
+  return years;
+  // hasHadAnniversaryThisYear ? years : years - 1;
+};
+
 function Profile() {
-  const { hotels, isLoading } = useMockHotels();
+  const { hotels, isLoading: hotelsLoading } = useMockHotels();
+  const { profile, isLoading: profileLoading, isUnauthenticated } = useProfile();
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
+
+  if (profileLoading) {
+    return (
+      <Flex justify="center" align="center" style={{ height: '100vh' }}>
+        <Loader size="lg" />
+      </Flex>
+    );
+  }
+
+  if (isUnauthenticated || !profile) {
+    window.location.href = '/login';
+    return null;
+  }
+
   return (
     <>
       <div className={styles['fixed-profile-wrapper']}>
@@ -39,22 +70,33 @@ function Profile() {
 
               <Stack gap={0} className={styles['details-container']}>
                 <Group gap="xs" align="center">
-                  <h2 className={styles['name-container']}>Ronald McDonald</h2>
+                  <h2 className={styles['name-container']}>
+                    {profile.firstName} {profile.lastName}
+                  </h2>
                   <IconDiamond size="1.1rem" color="#8bd7f3" />
                 </Group>
-                <p className={styles['country-container']}>Singapore</p>
+                {/* <p className={styles['country-container']}>
+                  {profile.bookings?.[0]?.country || 'No bookings yet'}
+                </p> */}
               </Stack>
             </Group>
           </Flex>
         </div>
       </div>
+
       <div className={styles['achievements-container']}>
         <Stack gap="m">
           <Group className={styles['milestones-container']} gap="xl">
-            <Milestone milestone={'Years on Wayfare'} count={5}></Milestone>
-            <Milestone milestone={'Countries Visited'} count={22}></Milestone>
-            <Milestone milestone={'Trips Embarked'} count={54}></Milestone>
-            <Milestone milestone={'Reviews Crafted'} count={10}></Milestone>
+            <Milestone
+              milestone={'Years on Wayfare'}
+              count={getYearsOnWayfare(profile.createdAt)}
+            ></Milestone>
+            <Milestone milestone={'Countries Visited'} count={profile.bookings.length}></Milestone>
+            <Milestone
+              milestone={'Trips Embarked'}
+              count={profile.bookings.reduce((sum, b) => sum + b.count, 0)}
+            ></Milestone>
+            {/* <Milestone milestone={'Reviews Crafted'} count={10}></Milestone> */}
           </Group>
 
           <div className={styles['custom-divider-wrapper']}>
@@ -109,7 +151,7 @@ function Profile() {
         </div>
         <BookingGrid
           hotels={hotels}
-          isLoading={isLoading}
+          isLoading={hotelsLoading}
           onHotelMouseEnter={handleMouseEnter}
           onHotelMouseLeave={handleMouseLeave}
         />
