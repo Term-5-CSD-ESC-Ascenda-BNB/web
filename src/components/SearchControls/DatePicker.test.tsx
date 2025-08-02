@@ -52,7 +52,6 @@ describe('DatePicker', () => {
   it('calls setDate when a full date range is selected', () => {
     const { setDate } = setup();
 
-    // simulate selecting a full date range manually
     const input = screen.getByPlaceholderText('Choose dates');
 
     fireEvent.change(input, {
@@ -61,9 +60,6 @@ describe('DatePicker', () => {
       },
     });
 
-    // Note: This won’t trigger the `onChange` inside Mantine’s component directly
-    // So we must manually call the handler if we're testing it in isolation or mock the component
-    // Instead, let's simulate it via props for test purposes:
     const fakeRange: [string, string] = ['2025-07-29', '2025-07-31'];
     render(<DatePicker date={fakeRange} setDate={setDate} />);
     expect(screen.getByRole('button', { name: '29 Jul – 31 Jul' })).toBeInTheDocument();
@@ -84,10 +80,7 @@ describe('DatePicker', () => {
       date: ['2025-07-29', '2025-07-30'],
     });
 
-    // Simulate clearing the selection (both null)
     render(<DatePicker date={[null, null]} setDate={setDate} />);
-
-    // Internal logic would restore last valid range (though this requires interaction/mocking to fully assert)
     expect(setDate).not.toHaveBeenCalled();
   });
 });
