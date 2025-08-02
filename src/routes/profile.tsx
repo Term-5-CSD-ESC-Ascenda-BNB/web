@@ -8,7 +8,6 @@ import { MilestoneBadge } from '@/components/Milestone/MilestoneBadge';
 import { IconHelp, IconDiamond } from '@tabler/icons-react';
 import { BookingGrid } from '@/components/BookingGrid/BookingGrid';
 import { useProfile } from '@/hooks/useProfile';
-import { redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute({
   component: Profile,
@@ -31,8 +30,9 @@ const getYearsOnWayfare = (createdAt: string): number => {
 function Profile() {
   const { hotels, isLoading: hotelsLoading } = useMockHotels();
   const { profile, isLoading: profileLoading, isUnauthenticated } = useProfile();
-  const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
-    useMarkerHover();
+  const { handleMouseEnter, handleMouseLeave } = useMarkerHover();
+
+  console.log(hotels[0]);
 
   if (profileLoading) {
     return (

@@ -1,4 +1,4 @@
-import { Text, Stack, Image, useMantineTheme } from '@mantine/core';
+import { Text, Stack, Image } from '@mantine/core';
 import styles from './Milestone.module.css';
 
 interface MilestoneBadgeProps {

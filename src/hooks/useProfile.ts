@@ -27,7 +27,7 @@ export interface UseProfileResult {
   isLoading: boolean;
   isError: boolean;
   isUnauthenticated: boolean;
-  error: unknown;
+  error: AxiosError | null;
 }
 
 const USE_MOCK = true;
@@ -67,18 +67,21 @@ export function useProfile(): UseProfileResult {
     staleTime: 60 * 1000,
     gcTime: 5 * 60 * 1000,
     retry: (failureCount, error) => {
-      // Avoid retrying on 401
-      return error?.response?.status !== 401 && failureCount < 3;
+      // Type guard to ensure error is AxiosError
+      if (axios.isAxiosError(error)) {
+        return error.response?.status !== 401 && failureCount < 3;
+      }
+      return failureCount < 3;
     },
   });
 
-  const isUnauthenticated = (error as AxiosError | undefined)?.response?.status === 401;
+  const isUnauthenticated = error?.response?.status === 401;
 
   return {
     profile: data ?? null,
     isLoading,
     isError,
     isUnauthenticated,
-    error,
+    error: error ?? null,
   };
 }

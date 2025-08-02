@@ -1,10 +1,10 @@
 import { SimpleGrid } from '@mantine/core';
 import { BookingDetailsCard } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCard';
 import { BookingDetailsCardSkeleton } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCardSkeleton';
-import type { Hotel } from '@/types/Hotel';
+import type { MockHotel } from '@/types/MockHotel';
 
 interface BookingGridProps {
-  hotels: Hotel[];
+  hotels: MockHotel[];
   isLoading: boolean;
   onHotelMouseEnter?: (hotelId: string) => void;
   onHotelMouseLeave?: (hotelId: string) => void;

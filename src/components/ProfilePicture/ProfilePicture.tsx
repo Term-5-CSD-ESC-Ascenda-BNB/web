@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Avatar, ActionIcon, Box, rem, Tooltip } from '@mantine/core';
+import { Avatar, ActionIcon, Box } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
 
 export default function ProfilePicture() {
@@ -62,6 +62,7 @@ export default function ProfilePicture() {
         accept="image/*"
         onChange={handleFileChange}
         style={{ display: 'none' }}
+        data-testid="file-input"
       />
     </Box>
   );
