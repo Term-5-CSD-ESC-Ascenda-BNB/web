@@ -10,8 +10,8 @@ const createBookingDto = {
   destinationId: 'RsBU',
   hotelId: 'jOZC',
   bookingInfo: {
-    startDate: '2025-09-10',
-    endDate: '2025-09-15',
+    startDate: '2026-11-20',
+    endDate: '2026-11-25',
     numberOfNights: 6,
     adults: 1,
     children: 1,
@@ -33,12 +33,15 @@ export interface PaymentMethodFormValues {
 
 interface PaymentMethodFormProps {
   guestInfo: UseFormReturnType<{
+    salutation: string;
     firstName: string;
     lastName: string;
     email: string;
     countryCode: string;
     phone: string;
     specialRequests: string;
+    adults: number;
+    children: number;
   }>;
 }
 
@@ -103,7 +106,7 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
           startDate: createBookingDto.bookingInfo.startDate,
           endDate: createBookingDto.bookingInfo.endDate,
           roomTypes: createBookingDto.bookingInfo.roomTypes,
-          roomDescription: 'Deluxe Double or Twin Room 1 Double Bed',
+          roomDescription: 'Superior Double or Twin Room 1 King Bed',
         },
         { withCredentials: true }
       );
@@ -141,7 +144,7 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
           },
           price: createBookingDto.price,
           guest: {
-            salutation: createBookingDto.guest.salutation,
+            salutation: guestInfo.values.salutation,
             firstName: guestInfo.values.firstName,
             lastName: guestInfo.values.lastName,
           },
