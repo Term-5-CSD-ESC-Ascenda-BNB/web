@@ -16,10 +16,7 @@ import { getRoomFeatureIcon } from '@/utils/getRoomFeatureIcon';
 interface RoomOption {
   title: string;
   refundable: boolean;
-  refundableUntil?: string;
-  reschedulable: boolean;
   breakfast: string;
-  prepay: boolean;
   price: number;
   totalPrice: number;
 }
@@ -76,17 +73,14 @@ export function RoomCard({
         height: '100%',
       }}
     >
-      {/* Top Image */}
       <Card.Section>
         <Image src={images?.[0]} height={180} alt={name} />
       </Card.Section>
 
-      {/* Room Info and Features */}
       <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Stack gap="xs" mt="xs">
           <Text fw={600}>{name}</Text>
 
-          {/* Features Icons */}
           <Group gap="xs" wrap="wrap" mt="xs">
             {featureList.map(({ label }, idx) => (
               <Tooltip key={idx} label={label}>
@@ -101,7 +95,6 @@ export function RoomCard({
 
         <Divider my="sm" />
 
-        {/* Room Option Selector */}
         <Radio.Group
           value={String(selectedIndex)}
           onChange={(value) => setSelectedIndex(parseInt(value))}
@@ -122,9 +115,7 @@ export function RoomCard({
                 <Radio value={String(idx)} label={opt.title} />
                 <Stack gap={2} mt="xs">
                   <Text fz="xs" c="dimmed">
-                    {opt.refundable
-                      ? `Fully refundable before ${opt.refundableUntil}`
-                      : 'Non-refundable'}
+                    {opt.refundable ? 'Fully refundable' : 'Non-refundable'}
                   </Text>
                   <Text fz="xs">
                     {opt.breakfast === 'Included' ? 'Breakfast included' : 'No breakfast'}
@@ -141,7 +132,6 @@ export function RoomCard({
         <Box mt="auto" />
       </Box>
 
-      {/* Select Button */}
       <Button fullWidth mt="md" color="#514D8A">
         Select
       </Button>

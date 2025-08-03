@@ -1,31 +1,13 @@
-import { Box, Text } from '@mantine/core';
+import { Box, Text, Center, Loader } from '@mantine/core';
 import { RoomCard } from '@/components/Room/RoomCard';
-import roomData from '@/.mock_data/price.json';
+import { useRooms } from '@/features/HotelPage/useRooms';
 import { parseRoomFeatures } from '@/utils/parseRoomFeatures';
-
-interface RoomRaw {
-  key: string;
-  description: string;
-  roomDescription: string;
-  roomNormalizedDescription: string;
-  type: string;
-  free_cancellation: boolean;
-  long_description: string;
-  amenities: string[];
-  images: { url: string }[];
-  price: number;
-  roomAdditionalInfo?: {
-    breakfastInfo?: string;
-  };
-}
+import type { RoomRaw } from '@/schemas/roomResult';
 
 interface RoomOption {
   title: string;
   refundable: boolean;
-  refundableUntil?: string;
-  reschedulable: boolean;
   breakfast: string;
-  prepay: boolean;
   price: number;
   totalPrice: number;
 }
@@ -43,7 +25,34 @@ function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
 }
 
 export function HotelRoomsSection() {
-  const rooms: RoomRaw[] = roomData.rooms || [];
+  const { data, isLoading, error } = useRooms();
+
+  if (isLoading) {
+    return (
+      <Center py="xl">
+        <Loader />
+      </Center>
+    );
+  }
+
+  if (error) {
+    return (
+      <Center py="xl">
+        <Text c="red">Failed to load rooms. Please try again later.</Text>
+      </Center>
+    );
+  }
+
+  const rooms: RoomRaw[] = data?.rooms || [];
+
+  if (rooms.length === 0) {
+    return (
+      <Center py="xl">
+        <Text>No rooms available for the selected dates.</Text>
+      </Center>
+    );
+  }
+
   const groupedRooms = groupByRoomType(rooms);
 
   return (
@@ -61,7 +70,10 @@ export function HotelRoomsSection() {
       >
         {Object.entries(groupedRooms).map(([roomName, variations]) => {
           const firstRoom = variations[0];
-          const images = firstRoom.images.map((img) => img.url);
+          const images = firstRoom.images.length
+            ? firstRoom.images.map((img) => img.url)
+            : ['/fallback-room.jpg'];
+
           const features = parseRoomFeatures(firstRoom.long_description, firstRoom.amenities);
 
           const options: RoomOption[] = variations.map((room) => {
@@ -71,10 +83,7 @@ export function HotelRoomsSection() {
             return {
               title: room.description,
               refundable: room.free_cancellation,
-              refundableUntil: room.free_cancellation ? 'Sep 26' : undefined,
-              reschedulable: true,
               breakfast: hasBreakfast ? 'Included' : 'Not included',
-              prepay: true,
               price: room.price,
               totalPrice: room.price,
             };
