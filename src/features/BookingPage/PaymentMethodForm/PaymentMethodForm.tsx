@@ -5,10 +5,14 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
 import type { StringValidation } from 'zod';
+import { useRouter } from '@tanstack/react-router';
 
 const createBookingDto = {
   destinationId: 'RsBU',
   hotelId: 'jOZC',
+  hotelName: 'ST Residences Novena',
+  hotelImage: 'https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg',
+  address: '145A Moulmein Road',
   bookingInfo: {
     startDate: '2026-11-20',
     endDate: '2026-11-25',
@@ -16,9 +20,10 @@ const createBookingDto = {
     adults: 1,
     children: 1,
     messageToHotel: 'Late check-in please',
-    roomTypes: ['standard-room'],
+    roomTypes: ['Superior Double or Twin Room 1 King Bed'],
   },
   price: 499.99,
+  currency: 'S$',
   bookingReference: 'BNKG-123456',
   guest: {
     salutation: 'Mr.',
@@ -45,9 +50,33 @@ interface PaymentMethodFormProps {
   }>;
 }
 
+interface BookingResponse {
+  adults: number;
+  bookingReference: string;
+  children: number;
+  createdAt: string;
+  destinationId: string;
+  endDate: string;
+  firstName: string;
+  hotelId: string;
+  id: number;
+  lastName: string;
+  messageToHotel: string;
+  numberOfNights: number;
+  payeeId: string;
+  paymentId: string;
+  price: string;
+  roomTypes: string[];
+  salutation: string;
+  startDate: string;
+  updatedAt: string;
+  userId: number;
+}
+
 function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
+  const router = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -106,7 +135,7 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
           startDate: createBookingDto.bookingInfo.startDate,
           endDate: createBookingDto.bookingInfo.endDate,
           roomTypes: createBookingDto.bookingInfo.roomTypes,
-          roomDescription: 'Superior Double or Twin Room 1 King Bed',
+          roomDescription: createBookingDto.bookingInfo.roomTypes[0],
         },
         { withCredentials: true }
       );
@@ -154,12 +183,28 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
           },
         };
         try {
-          const bookingRes = await axios.post(
+          const bookingRes = await axios.post<BookingResponse>(
             'https://api-production-46df.up.railway.app/bookings',
             bookingPayload,
             { withCredentials: true }
           );
           console.log('✅ Booking successful:', bookingRes.data);
+
+          void router.navigate({
+            to: '/bookingsuccess',
+            search: {
+              bookingId: bookingRes.data.bookingReference,
+              startDate: createBookingDto.bookingInfo.startDate,
+              endDate: createBookingDto.bookingInfo.endDate,
+              nights: createBookingDto.bookingInfo.numberOfNights,
+              roomDescription: createBookingDto.bookingInfo.roomTypes[0],
+              price: Number(createBookingDto.price), // ensure it's a number
+              currency: createBookingDto.currency,
+              hotelName: createBookingDto.hotelName,
+              hotelImage: createBookingDto.hotelImage,
+              address: createBookingDto.address,
+            },
+          });
         } catch (bookingError) {
           console.error('❌ Booking failed:', bookingError);
         }

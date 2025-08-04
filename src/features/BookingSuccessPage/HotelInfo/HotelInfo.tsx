@@ -1,7 +1,13 @@
 import { Paper, Stack, Text, Title, Divider, Group, Image, Box, Button, Grid } from '@mantine/core';
 import React from 'react';
 
-const HotelInfo = () => {
+interface HotelInfoProps {
+  hotelName: string;
+  hotelImage: string;
+  address: string;
+}
+
+const HotelInfo = ({ hotelName, hotelImage, address }: HotelInfoProps) => {
   return (
     <Paper withBorder p="md" radius="md">
       <Group justify="center">
