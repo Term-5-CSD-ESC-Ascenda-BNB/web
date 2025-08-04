@@ -30,11 +30,12 @@ export const HotelsResponseSchema = z.object({
   completed: z.boolean(),
   currency: z.string(),
   hotels: z.array(HotelResultSchema),
+  hotelsTotalLength: z.number(),
 });
 
 export const FetchHotelsParamsSchema = z
   .object({
-    destination_id: z.string().min(1, 'destination_id is required'),
+    destination_id: z.string().catch(''),
     checkin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     checkout: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     country_code: z.string().length(2, 'must be ISO country code'),

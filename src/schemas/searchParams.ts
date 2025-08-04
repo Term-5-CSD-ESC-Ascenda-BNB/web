@@ -7,8 +7,8 @@ function defaultDate() {
 }
 
 export const SearchParamsSchema = z.object({
-  uid: z.string().catch(''),
-  term: z.string().catch(''),
+  uid: z.string().catch('RsBU'),
+  term: z.string().catch('Singapore, Singapore'),
   date: z
     .tuple([z.string().nullable(), z.string().nullable()])
     .catch([defaultDate()[0], defaultDate()[1]]),

@@ -4,7 +4,7 @@ import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group, Skeleton, Stack, Text } from '@mantine/core';
 import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
-import { MenuButton } from '@/components/buttons/MenuButton/MenuButton';
+import { MenuButton } from '@/components/menu/MenuButton/MenuButton';
 import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
@@ -20,6 +20,8 @@ export const Route = createFileRoute({
   validateSearch: SearchParamsSchema,
 });
 
+const RESULTS_PER_PAGE = 18;
+
 function RouteComponent() {
   const navigate = useNavigate();
   const searchParams = useSearch({ from: '/search' });
@@ -27,6 +29,7 @@ function RouteComponent() {
   // Fetch hotels data
   const { data, isLoading, error, isError } = useHotels();
   const hotels = data?.hotels || [];
+  const hotelsLength = data?.hotelsTotalLength || 0;
 
   // Handle marker and card hover events
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
@@ -38,7 +41,6 @@ function RouteComponent() {
   };
 
   const handleSortChange = (field: string, order: 'asc' | 'desc') => {
-    // TODO
     console.log('Sort changed:', field, order);
   };
 
@@ -106,7 +108,7 @@ function RouteComponent() {
             />
           )}
 
-          <SearchPagination totalPages={Math.ceil(hotels.length / 18)} mb={'xl'} />
+          <SearchPagination totalPages={Math.ceil(hotelsLength / RESULTS_PER_PAGE)} mb={'xl'} />
         </Stack>
       </div>
     </>
