@@ -30,6 +30,7 @@ export const HotelsResponseSchema = z.object({
   completed: z.boolean(),
   currency: z.string(),
   hotels: z.array(HotelResultSchema),
+  hotelsTotalLength: z.number(),
 });
 
 export const FetchHotelsParamsSchema = z

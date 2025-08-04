@@ -14,7 +14,7 @@ export function useHotels() {
     checkin: search.date[0],
     checkout: search.date[1],
     country_code: 'SG',
-    lang: 'en',
+    lang: 'en_US',
     currency: 'SGD',
     guests: stringifyGuestsRooms(search.guests, search.rooms),
   };
@@ -38,7 +38,7 @@ export function useHotels() {
       }
 
       // If data complete, return false to stop refetching else refetch in 2 sec
-      return query.state.data?.completed ? false : 3000;
+      return query.state.data?.completed ? false : 5000;
     },
 
     select: (data) => {
