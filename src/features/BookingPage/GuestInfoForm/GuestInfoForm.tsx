@@ -49,6 +49,19 @@ interface GuestInfoFormProps {
 }
 
 function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
+  const { adults, children } = guestInfo.values;
+
+  const updateAdults = (val: number) => {
+    const newAdults = Math.max(0, Math.min(val, guests));
+    const newChildren = guests - newAdults;
+    guestInfo.setValues({ adults: newAdults, children: newChildren });
+  };
+
+  const updateChildren = (val: number) => {
+    const newChildren = Math.max(0, Math.min(val, guests));
+    const newAdults = guests - newChildren;
+    guestInfo.setValues({ adults: newAdults, children: newChildren });
+  };
   return (
     <Paper withBorder radius="md" p="xl">
       <Stack gap="md">
@@ -111,13 +124,10 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
               Adults:
             </Text>
             <CounterField
-              value={guestInfo.values.adults}
-              onChange={(val) => {
-                const newVal = Math.max(0, Math.min(val, guests));
-                guestInfo.setFieldValue('adults', newVal);
-              }}
-              disabledDecrement={guestInfo.values.adults <= 0}
-              disabledIncrement={guestInfo.values.adults >= guests}
+              value={adults}
+              onChange={updateAdults}
+              disabledDecrement={adults <= 1}
+              disabledIncrement={adults >= guests}
             />
           </Group>
           <Group>
@@ -125,13 +135,10 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
               Children:
             </Text>
             <CounterField
-              value={guests - guestInfo.values.adults}
-              onChange={(val) => {
-                const newVal = Math.max(0, Math.min(val, guests));
-                guestInfo.setFieldValue('adults', guests - newVal);
-              }}
-              disabledDecrement={guests - guestInfo.values.adults <= 0}
-              disabledIncrement={guests - guestInfo.values.adults >= guests}
+              value={children}
+              onChange={updateChildren}
+              disabledDecrement={children <= 0}
+              disabledIncrement={children >= guests - 1}
             />
           </Group>
         </Group>

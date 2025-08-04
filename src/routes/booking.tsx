@@ -54,7 +54,7 @@ function Booking() {
   });
 
   return (
-    <Container size="lg" py="md">
+    <Container size="lg" py="md" mt={20}>
       <Grid gutter="xl">
         <Grid.Col span={7}>
           <GuestInfoForm guestInfo={guestInfo} guests={HotelProps.bookingInfo.guests} />

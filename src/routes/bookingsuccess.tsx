@@ -57,7 +57,7 @@ function BookingSuccess() {
           <Title order={2}>Thank You! Payment Successful</Title>
         </Stack>
       </Paper>
-      <Container size="lg" py="md">
+      <Container size="lg" py="md" mt={16} mb={90}>
         <Grid gutter="xl">
           <Grid.Col span={7}>
             <PriceBreakdown
