@@ -42,7 +42,23 @@ function Booking() {
       <Grid gutter="xl">
         <Grid.Col span={7}>
           <GuestInfoForm guestInfo={guestInfo} guests={search.guests} />
-          <PaymentMethodForm guestInfo={guestInfo} />
+          <PaymentMethodForm
+            guestInfo={guestInfo}
+            hotelId={search.hotelId}
+            destinationId={search.destination_id}
+            startDate={search.startDate}
+            endDate={search.endDate}
+            guests={search.guests}
+            roomDescription={search.roomDescription}
+            currency={search.currency}
+            nights={search.numberOfNights}
+            price={search.price}
+            country_code={search.country_code}
+            lang={search.lang}
+            hotelName={search.hotelName}
+            hotelAddress={search.hotelAddress}
+            hotelImage={search.hotelImage}
+          />
         </Grid.Col>
 
         <Grid.Col span={5}>

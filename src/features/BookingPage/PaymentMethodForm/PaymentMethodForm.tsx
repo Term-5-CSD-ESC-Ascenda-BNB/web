@@ -48,6 +48,20 @@ interface PaymentMethodFormProps {
     adults: number;
     children: number;
   }>;
+  hotelId: string;
+  destinationId: string;
+  startDate: string;
+  endDate: string;
+  guests: number;
+  roomDescription: string;
+  currency: string;
+  nights: number;
+  price: number;
+  country_code: string;
+  lang: string;
+  hotelName: string;
+  hotelImage: string;
+  hotelAddress: string;
 }
 
 interface BookingResponse {
@@ -73,7 +87,23 @@ interface BookingResponse {
   userId: number;
 }
 
-function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
+function PaymentMethodForm({
+  guestInfo,
+  hotelId,
+  destinationId,
+  startDate,
+  endDate,
+  guests,
+  roomDescription,
+  currency,
+  nights,
+  price,
+  country_code,
+  lang,
+  hotelName,
+  hotelImage,
+  hotelAddress,
+}: PaymentMethodFormProps) {
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
   const router = useRouter();
@@ -126,16 +156,16 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
       const res = await axios.post<CreatePaymentResponse>(
         'https://api-production-46df.up.railway.app/bookings/pay',
         {
-          hotelId: createBookingDto.hotelId,
-          destination_id: createBookingDto.destinationId,
-          country_code: 'SG', // example values — replace with real ones
-          lang: 'en_US',
-          currency: 'SGD',
-          guests: createBookingDto.bookingInfo.adults + createBookingDto.bookingInfo.children,
-          startDate: createBookingDto.bookingInfo.startDate,
-          endDate: createBookingDto.bookingInfo.endDate,
-          roomTypes: createBookingDto.bookingInfo.roomTypes,
-          roomDescription: createBookingDto.bookingInfo.roomTypes[0],
+          hotelId: hotelId,
+          destination_id: destinationId,
+          country_code: country_code, // example values — replace with real ones
+          lang: lang,
+          currency: currency,
+          guests: guests,
+          startDate: startDate,
+          endDate: endDate,
+          roomTypes: [roomDescription],
+          roomDescription: roomDescription,
         },
         { withCredentials: true }
       );
@@ -159,17 +189,17 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         console.log('✅ Payment successful:', paymentIntent);
         const bookingPayload = {
-          hotelId: createBookingDto.hotelId,
-          destinationId: createBookingDto.destinationId,
+          hotelId: hotelId,
+          destinationId: destinationId,
 
           bookingInfo: {
-            startDate: createBookingDto.bookingInfo.startDate,
-            endDate: createBookingDto.bookingInfo.endDate,
-            numberOfNights: createBookingDto.bookingInfo.numberOfNights,
+            startDate: startDate,
+            endDate: endDate,
+            numberOfNights: nights,
             adults: guestInfo.values.adults,
             children: guestInfo.values.children,
-            roomTypes: createBookingDto.bookingInfo.roomTypes,
-            messageToHotel: createBookingDto.bookingInfo.messageToHotel,
+            roomTypes: [roomDescription],
+            messageToHotel: guestInfo.values.specialRequests,
           },
           price: createBookingDto.price,
           guest: {
@@ -194,15 +224,15 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
             to: '/bookingsuccess',
             search: {
               bookingId: bookingRes.data.bookingReference,
-              startDate: createBookingDto.bookingInfo.startDate,
-              endDate: createBookingDto.bookingInfo.endDate,
-              nights: createBookingDto.bookingInfo.numberOfNights,
-              roomDescription: createBookingDto.bookingInfo.roomTypes[0],
-              price: Number(createBookingDto.price), // ensure it's a number
-              currency: createBookingDto.currency,
-              hotelName: createBookingDto.hotelName,
-              hotelImage: createBookingDto.hotelImage,
-              address: createBookingDto.address,
+              startDate: startDate,
+              endDate: endDate,
+              nights: nights,
+              roomDescription: roomDescription,
+              price: Number(price), // ensure it's a number
+              currency: currency,
+              hotelName: hotelName,
+              hotelImage: hotelImage,
+              address: hotelAddress,
             },
           });
         } catch (bookingError) {
