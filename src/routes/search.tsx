@@ -82,7 +82,7 @@ function RouteComponent() {
             {isLoading || hotels.length === 0 ? (
               <Skeleton h={20} w={80} />
             ) : (
-              <Text mr="xs">{hotels.length} results</Text>
+              <Text mr="xs">{hotelsLength} results</Text>
             )}
 
             <Text c={'dimmed'}>Sort by:</Text>
