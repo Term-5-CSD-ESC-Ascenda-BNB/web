@@ -11,6 +11,7 @@ import {
   Divider,
   Tooltip,
 } from '@mantine/core';
+import { useNavigate } from '@tanstack/react-router';
 import { getRoomFeatureIcon } from '@/utils/getRoomFeatureIcon';
 
 interface RoomOption {
@@ -33,6 +34,19 @@ interface RoomCardProps {
   view: string;
   tv?: string;
   bath?: string;
+
+  hotelId: string;
+  destinationId: string;
+  hotelName: string;
+  hotelAddress: string;
+  hotelImage: string;
+  starRating: number;
+  trustYouScore: number;
+  checkin: string;
+  checkout: string;
+  guests: number;
+  nights: number;
+  currency: string;
 }
 
 export function RoomCard({
@@ -46,8 +60,47 @@ export function RoomCard({
   view,
   tv,
   bath,
+  hotelId,
+  destinationId,
+  hotelName,
+  hotelAddress,
+  hotelImage,
+  starRating,
+  trustYouScore,
+  checkin,
+  checkout,
+  guests,
+  nights,
+  currency,
 }: RoomCardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const navigate = useNavigate();
+
+  const handleSelect = () => {
+    const selected = options[selectedIndex];
+
+    void navigate({
+      to: '/booking',
+      search: {
+        destination_id: destinationId,
+        hotelId,
+        hotelName,
+        hotelAddress,
+        hotelImage,
+        roomDescription: selected.title,
+        starRating,
+        trustYouScore,
+        country_code: 'SG',
+        lang: 'en_US',
+        currency,
+        guests,
+        startDate: checkin,
+        endDate: checkout,
+        numberOfNights: nights,
+        price: selected.totalPrice,
+      },
+    });
+  };
 
   const featureList = [
     { label: size },
@@ -132,7 +185,7 @@ export function RoomCard({
         <Box mt="auto" />
       </Box>
 
-      <Button fullWidth mt="md" color="#514D8A">
+      <Button fullWidth mt="md" color="#514D8A" onClick={handleSelect}>
         Select
       </Button>
     </Card>

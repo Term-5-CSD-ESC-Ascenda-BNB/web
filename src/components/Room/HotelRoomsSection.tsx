@@ -1,6 +1,8 @@
 import { Box, Text, Center, Loader } from '@mantine/core';
 import { RoomCard } from '@/components/Room/RoomCard';
 import { useRooms } from '@/features/HotelPage/useRooms';
+import { useHotel } from '@/features/HotelPage/useHotel';
+import { useSearch } from '@tanstack/react-router';
 import { parseRoomFeatures } from '@/utils/parseRoomFeatures';
 import type { RoomRaw } from '@/schemas/roomResult';
 
@@ -24,10 +26,19 @@ function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
   );
 }
 
-export function HotelRoomsSection() {
-  const { data, isLoading, error } = useRooms();
+function getNumberOfNights(checkin: string, checkout: string): number {
+  const inDate = new Date(checkin);
+  const outDate = new Date(checkout);
+  return Math.round((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
+}
 
-  if (isLoading) {
+export function HotelRoomsSection() {
+  const { data: hotel, isLoading: hotelLoading } = useHotel();
+  const { data: roomData, isLoading, error } = useRooms();
+  const { date, guests } = useSearch({ from: '/hotels/$hotelId' });
+  const [checkin, checkout] = date;
+
+  if (isLoading || hotelLoading) {
     return (
       <Center py="xl">
         <Loader />
@@ -35,7 +46,7 @@ export function HotelRoomsSection() {
     );
   }
 
-  if (error) {
+  if (error || !roomData || !hotel) {
     return (
       <Center py="xl">
         <Text c="red">Failed to load rooms. Please try again later.</Text>
@@ -43,7 +54,7 @@ export function HotelRoomsSection() {
     );
   }
 
-  const rooms: RoomRaw[] = data?.rooms || [];
+  const rooms: RoomRaw[] = roomData.rooms || [];
 
   if (rooms.length === 0) {
     return (
@@ -54,6 +65,10 @@ export function HotelRoomsSection() {
   }
 
   const groupedRooms = groupByRoomType(rooms);
+
+  const safeCheckin = checkin ?? '';
+  const safeCheckout = checkout ?? '';
+  const nights = getNumberOfNights(safeCheckin, safeCheckout);
 
   return (
     <Box mt="xl">
@@ -107,6 +122,19 @@ export function HotelRoomsSection() {
               view={features.view}
               tv={features.tv}
               bath={features.bath}
+              // Booking
+              hotelId={hotel.id}
+              destinationId={'RsBU'}
+              hotelName={hotel.name}
+              hotelAddress={hotel.address}
+              hotelImage={images[0]}
+              starRating={hotel.rating}
+              trustYouScore={hotel.trustyou?.score?.overall || 0}
+              checkin={safeCheckin}
+              checkout={safeCheckout}
+              guests={guests}
+              nights={nights}
+              currency={'SGD'}
             />
           );
         })}

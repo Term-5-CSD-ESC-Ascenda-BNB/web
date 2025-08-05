@@ -1,31 +1,22 @@
 import { CancellationPolicyCard } from '@/features/BookingPage/CancellationPolicyCard/CancellationPolicyCard';
-import GuestInfoForm, { type GuestInfo } from '@/features/BookingPage/GuestInfoForm/GuestInfoForm';
+import GuestInfoForm from '@/features/BookingPage/GuestInfoForm/GuestInfoForm';
 import PaymentMethodForm from '@/features/BookingPage/PaymentMethodForm/PaymentMethodForm';
 import { PriceDetailsCard } from '@/features/BookingPage/PriceDetailsCard/PriceDetailsCard';
 import { BookingDetailsCard } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCard';
+
 import { Container, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useSearch } from '@tanstack/react-router';
+import { BookingParamsSchema } from '@/schemas/bookingParams';
 
 export const Route = createFileRoute({
   component: Booking,
+  validateSearch: BookingParamsSchema,
 });
 
-const HotelProps = {
-  name: 'ST Residences Novena',
-  image: 'https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg',
-  address: '145A Moulmein Road',
-  roomType: 'Deluxe King Room',
-  roomPrice: 1200,
-  rooms: 2,
-  currency: 'S$',
-  starRating: 3,
-  reviewScore: 3,
-  checkin: '2025-10-01',
-  checkout: '2025-10-10',
-  guests: 2,
-};
-
 function Booking() {
+  const search = useSearch({ from: '/booking' });
+
   const guestInfo = useForm({
     initialValues: {
       firstName: '',
@@ -50,27 +41,30 @@ function Booking() {
           <GuestInfoForm guestInfo={guestInfo} />
           <PaymentMethodForm guestInfo={guestInfo} />
         </Grid.Col>
+
         <Grid.Col span={5}>
           <BookingDetailsCard
-            name={HotelProps.name}
-            image={HotelProps.image}
-            address={HotelProps.address}
-            roomType={HotelProps.roomType}
-            starRating={HotelProps.starRating}
-            reviewScore={HotelProps.reviewScore}
-            checkin={HotelProps.checkin}
-            checkout={HotelProps.checkout}
-            guests={HotelProps.guests}
+            name={search.hotelName}
+            image={search.hotelImage}
+            address={search.hotelAddress}
+            roomType={search.roomDescription}
+            starRating={search.starRating}
+            reviewScore={search.trustYouScore / 10}
+            checkin={search.startDate}
+            checkout={search.endDate}
+            guests={search.guests}
           />
+
           <PriceDetailsCard
-            roomType={HotelProps.roomType}
-            rooms={HotelProps.rooms}
-            roomPrice={HotelProps.roomPrice}
-            checkin={HotelProps.checkin}
-            checkout={HotelProps.checkout}
-            currency={HotelProps.currency}
+            roomType={search.roomDescription}
+            rooms={1} // make this dynamic later
+            roomPrice={search.price}
+            checkin={search.startDate}
+            checkout={search.endDate}
+            currency={search.currency}
           />
-          <CancellationPolicyCard currency="S$" fee={2123} />
+
+          <CancellationPolicyCard currency={search.currency} fee={Math.floor(search.price * 0.4)} />
         </Grid.Col>
       </Grid>
     </Container>
