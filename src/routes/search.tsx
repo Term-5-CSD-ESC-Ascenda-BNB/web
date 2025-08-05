@@ -9,11 +9,18 @@ import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
 import type { FilterState } from '@/components/buttons/FilterButton/FilterPanel';
-import { SearchParamsSchema } from '@/schemas/searchParams';
+import {
+  SearchParamsSchema,
+  SORT_BY_FIELDS,
+  type SearchParams,
+  type SortBy,
+} from '@/schemas/searchParams';
 import { useHotels } from '@/features/SearchPage/useHotels';
 import { SearchPagination } from '@/features/SearchPage/SearchPagination/SearchPagination';
 import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
 import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearchState } from '@/features/SearchPage/useSearchState';
+import { defaultFilters } from '@/components/buttons/FilterButton/hooks/useFilterState';
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -23,10 +30,7 @@ export const Route = createFileRoute({
 const RESULTS_PER_PAGE = 18;
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const searchParams = useSearch({ from: '/search' });
-
-  // Fetch hotels data
+  // On mount, fetch hotels based on search parameters
   const { data, isLoading, error, isError } = useHotels();
   const hotels = data?.hotels || [];
   const hotelsLength = data?.hotelsTotalLength || 0;
@@ -35,14 +39,54 @@ function RouteComponent() {
   const { makeMarkerRef, handleMouseEnter, handleMouseLeave, handlePopupOpen, handlePopupClose } =
     useMarkerHover();
 
+  /**
+   *  Update search parameters
+   */
+
+  const { updateSearchParams } = useSearchState();
+
+  // Handle filter changes
   const handleFiltersChange = (filters: FilterState) => {
-    // TODO
-    console.log('Filters changed:', filters);
+    const updatedSearchParams: Partial<SearchParams> = {};
+    const MAX_PRICE = defaultFilters.priceRange[1];
+
+    // Only add price range if it's not the default/full range
+    if (filters.priceRange[0] > 0) {
+      updatedSearchParams.minPrice = filters.priceRange[0];
+    }
+    if (filters.priceRange[1] < MAX_PRICE) {
+      updatedSearchParams.maxPrice = filters.priceRange[1];
+    }
+
+    // Only add rating if it's set (assuming 0 or undefined means no filter)
+    if (filters.minRating && filters.minRating > 0) {
+      updatedSearchParams.minRating = filters.minRating;
+    }
+
+    // Only add review score if it's set
+    if (filters.minReviewScore && filters.minReviewScore > 0) {
+      updatedSearchParams.minScore = filters.minReviewScore;
+    }
+
+    updateSearchParams(updatedSearchParams);
   };
 
-  const handleSortChange = (field: string, order: 'asc' | 'desc') => {
-    console.log('Sort changed:', field, order);
+  // Handle sorting changes
+  const handleSortChange = (field: SortBy, order: 'asc' | 'desc') => {
+    const updatedSearchParams: Partial<SearchParams> = {
+      sortBy: field,
+      sortOrder: order,
+    };
+
+    updateSearchParams(updatedSearchParams);
   };
+
+  /**
+   * Navigate to hotel details page
+   */
+
+  const searchParams = useSearch({ from: '/search' });
+  const navigate = useNavigate();
 
   const handleNavigateToHotel = (hotelId: string) => {
     console.log(`Navigating to hotel ${hotelId}`);
@@ -86,11 +130,7 @@ function RouteComponent() {
             )}
 
             <Text c={'dimmed'}>Sort by:</Text>
-            <SortableSelect
-              fields={['Rating', 'Price', 'Reviews']}
-              w={120}
-              onSortChange={handleSortChange}
-            />
+            <SortableSelect fields={[...SORT_BY_FIELDS]} w={120} onSortChange={handleSortChange} />
             <FilterButton onFiltersChange={handleFiltersChange} />
           </Group>
 
