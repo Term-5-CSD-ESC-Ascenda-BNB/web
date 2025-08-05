@@ -1,38 +1,22 @@
 import { CancellationPolicyCard } from '@/features/BookingPage/CancellationPolicyCard/CancellationPolicyCard';
-import GuestInfoForm, { type GuestInfo } from '@/features/BookingPage/GuestInfoForm/GuestInfoForm';
+import GuestInfoForm from '@/features/BookingPage/GuestInfoForm/GuestInfoForm';
 import PaymentMethodForm from '@/features/BookingPage/PaymentMethodForm/PaymentMethodForm';
 import { PriceDetailsCard } from '@/features/BookingPage/PriceDetailsCard/PriceDetailsCard';
 import { BookingDetailsCard } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCard';
+
 import { Container, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useSearch } from '@tanstack/react-router';
+import { BookingParamsSchema } from '@/schemas/bookingParams';
 
 export const Route = createFileRoute({
   component: Booking,
+  validateSearch: BookingParamsSchema,
 });
 
-const HotelProps = {
-  destinationId: 'RsBU',
-  hotelId: 'jOZC',
-  name: 'ST Residences Novena',
-  image: 'https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg',
-  address: '145A Moulmein Road',
-  rooms: 2,
-  currency: 'S$',
-  starRating: 3,
-  reviewScore: 3,
-  bookingInfo: {
-    startDate: '2025-11-15',
-    endDate: '2025-11-20',
-    numberOfNights: 6,
-    guests: 4,
-    messageToHotel: 'Late check-in please',
-    roomTypes: ['standard-room'],
-  },
-  roomDescription: 'Deluxe Double or Twin Room 2 Twin Beds',
-  price: 499.99,
-};
-
 function Booking() {
+  const search = useSearch({ from: '/booking' });
+
   const guestInfo = useForm({
     initialValues: {
       salutation: '',
@@ -42,7 +26,7 @@ function Booking() {
       countryCode: 'us',
       phone: '',
       specialRequests: '',
-      adults: HotelProps.bookingInfo.guests,
+      adults: search.guests,
       children: 0,
     },
     validate: {
@@ -57,30 +41,33 @@ function Booking() {
     <Container size="lg" py="md" mt={20}>
       <Grid gutter="xl">
         <Grid.Col span={7}>
-          <GuestInfoForm guestInfo={guestInfo} guests={HotelProps.bookingInfo.guests} />
+          <GuestInfoForm guestInfo={guestInfo} guests={search.guests} />
           <PaymentMethodForm guestInfo={guestInfo} />
         </Grid.Col>
+
         <Grid.Col span={5}>
           <BookingDetailsCard
-            name={HotelProps.name}
-            image={HotelProps.image}
-            address={HotelProps.address}
-            roomType={HotelProps.roomDescription}
-            starRating={HotelProps.starRating}
-            reviewScore={HotelProps.reviewScore}
-            checkin={HotelProps.bookingInfo.startDate}
-            checkout={HotelProps.bookingInfo.endDate}
-            guests={HotelProps.bookingInfo.guests}
+            name={search.hotelName}
+            image={search.hotelImage}
+            address={search.hotelAddress}
+            roomType={search.roomDescription}
+            starRating={search.starRating}
+            reviewScore={search.trustYouScore / 10}
+            checkin={search.startDate}
+            checkout={search.endDate}
+            guests={search.guests}
           />
+
           <PriceDetailsCard
-            roomType={HotelProps.roomDescription}
-            rooms={HotelProps.rooms}
-            roomPrice={HotelProps.price}
-            checkin={HotelProps.bookingInfo.startDate}
-            checkout={HotelProps.bookingInfo.endDate}
-            currency={HotelProps.currency}
+            roomType={search.roomDescription}
+            rooms={1} // make this dynamic later
+            roomPrice={search.price}
+            checkin={search.startDate}
+            checkout={search.endDate}
+            currency={search.currency}
           />
-          <CancellationPolicyCard currency="S$" fee={2123} />
+
+          <CancellationPolicyCard currency={search.currency} fee={Math.floor(search.price * 0.4)} />
         </Grid.Col>
       </Grid>
     </Container>

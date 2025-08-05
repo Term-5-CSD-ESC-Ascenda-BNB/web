@@ -1,6 +1,5 @@
 import { SimpleGrid, type SimpleGridProps } from '@mantine/core';
 import { CarouselCard, CarouselCardSkeleton } from '@/components/CarouselCard';
-import { getFirstFiveImages } from '@/utils/getFirstFiveImages';
 import type { HotelResult } from '@/schemas/hotelResults';
 
 interface HotelGridProps extends SimpleGridProps {
@@ -35,9 +34,9 @@ export function HotelGrid({
         <CarouselCard
           id={hotel.id}
           name={hotel.name}
-          address={hotel.address ?? ''}
+          address={hotel.address}
           rating={hotel.rating}
-          images={getFirstFiveImages(hotel.image_details)}
+          imageDetails={hotel.image_details}
           price={hotel.price}
           score={hotel.score}
           onMouseEnter={() => onHotelMouseEnter?.(hotel.id)}

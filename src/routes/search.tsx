@@ -4,7 +4,7 @@ import { SearchControls } from '@/components/SearchControls/SearchControls';
 import { Group, Skeleton, Stack, Text } from '@mantine/core';
 import { HotelMap } from '@/features/SearchPage/HotelMap/HotelMap';
 import { HotelGrid } from '@/components/HotelGrid/HotelGrid';
-import { MenuButton } from '@/components/buttons/MenuButton/MenuButton';
+import { MenuButton } from '@/components/menu/MenuButton/MenuButton';
 import { Logo } from '@/components/Logo/Logo';
 import { SortableSelect } from '@/components/SortableSelect/SortableSelect';
 import { FilterButton } from '@/components/buttons/FilterButton/FilterButton';
@@ -25,7 +25,7 @@ function RouteComponent() {
   const searchParams = useSearch({ from: '/search' });
 
   // Fetch hotels data
-  const { data, isLoading, error, isError, isFetching } = useHotels();
+  const { data, isLoading, error, isError } = useHotels();
   const hotels = data?.hotels || [];
 
   // Handle marker and card hover events
@@ -85,7 +85,7 @@ function RouteComponent() {
 
             <Text c={'dimmed'}>Sort by:</Text>
             <SortableSelect
-              fields={['Rating', 'Price', 'Name']}
+              fields={['Rating', 'Price', 'Reviews']}
               w={120}
               onSortChange={handleSortChange}
             />

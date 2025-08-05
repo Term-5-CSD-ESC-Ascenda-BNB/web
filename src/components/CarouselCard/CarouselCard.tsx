@@ -1,13 +1,15 @@
 import { Stack } from '@mantine/core';
 import { ImageCarousel } from './ImageCarousel';
 import { CarouselCardDetails } from './CarouselCardDetails/CarouselCardDetails';
+import { useFirstFiveImages } from './hooks/useFirstFiveImages';
+import type { ImageDetails } from '@/types/HotelDetails';
 
 export interface CarouselCardProps {
   id: string;
   name: string;
   address: string;
   rating: number;
-  images: string[];
+  imageDetails: ImageDetails;
   price: number;
   score: number | null;
   onMouseEnter: () => void;
@@ -19,13 +21,15 @@ export function CarouselCard({
   name,
   address,
   rating,
-  images,
+  imageDetails,
   price,
   score,
   onMouseEnter,
   onMouseLeave,
   onClick,
 }: CarouselCardProps) {
+  const { images } = useFirstFiveImages(imageDetails);
+
   return (
     <Stack
       gap="xs"

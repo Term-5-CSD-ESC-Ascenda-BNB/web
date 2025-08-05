@@ -11,11 +11,11 @@ const api = axios.create({
 
 export async function fetchHotels(params: FetchHotelsParams) {
   // Log the full URL for debugging
-  // const fullUrl = api.getUri({
-  //   url: '/hotels/prices',
-  //   params: payload,
-  // });
-  // console.log('Full API URL:', fullUrl);
+  const fullUrl = api.getUri({
+    url: '/hotels/prices',
+    params,
+  });
+  console.log('Full API URL:', fullUrl);
 
   const response = await api.get('/hotels/prices', { params });
 

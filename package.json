@@ -14,10 +14,13 @@
     "prepare": "husky || true",
     "lint-staged": "lint-staged",
     "test": "vitest",
+    "test:update": "vitest --update",
     "test:run": "vitest --run",
     "test:coverage": "vitest run --coverage",
     "test:unit": "vitest --include 'src/**/*.test.{ts,tsx}'",
-    "test:integration": "vitest --include 'src/**/*.int.test.{ts,tsx}'"
+    "test:integration": "vitest --include 'src/**/*.int.test.{ts,tsx}'",
+    "test:e2e": "playwright test --config=playwright.config.ts",
+    "test:e2e:ui": "playwright test --config=playwright.config.ts --ui"
   },
   "dependencies": {
     "@mantine/carousel": "^8.1.1",
@@ -28,8 +31,8 @@
     "@mantine/modals": "^8.1.1",
     "@mantine/notifications": "^8.1.1",
     "@mantine/nprogress": "^8.1.1",
-    "@react-spring/web": "^10.0.1",
     "@react-spring/three": "^10.0.1",
+    "@react-spring/web": "^10.0.1",
     "@react-three/drei": "^10.5.1",
     "@react-three/fiber": "^9.2.0",
     "@stripe/react-stripe-js": "^3.8.0",
@@ -43,8 +46,8 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "leaflet": "^1.9.4",
-    "mantine-form-zod-resolver": "^1.3.0",
     "leva": "^0.10.0",
+    "mantine-form-zod-resolver": "^1.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-leaflet": "^5.0.0",
@@ -54,6 +57,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@playwright/test": "^1.54.1",
     "@tanstack/router-cli": "^1.128.0",
     "@tanstack/router-plugin": "^1.121.4",
     "@testing-library/jest-dom": "^6.6.3",
