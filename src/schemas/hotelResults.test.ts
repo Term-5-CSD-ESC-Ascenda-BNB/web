@@ -117,5 +117,38 @@ describe('hotelResults schemas', () => {
         expect(result.error.errors[0].path).toEqual(['checkin']);
       }
     });
+
+    it('rejects when minPrice > maxPrice', () => {
+      const result = FetchHotelsParamsSchema.safeParse({
+        ...base,
+        minPrice: 200,
+        maxPrice: 100,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.errors[0].path).toEqual(['minPrice', 'maxPrice']);
+        expect(result.error.errors[0].message).toBe(
+          'minPrice must be less than or equal to maxPrice'
+        );
+      }
+    });
+
+    it('accepts when minPrice <= maxPrice', () => {
+      const result = FetchHotelsParamsSchema.safeParse({
+        ...base,
+        minPrice: 100,
+        maxPrice: 200,
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts when minPrice equals maxPrice', () => {
+      const result = FetchHotelsParamsSchema.safeParse({
+        ...base,
+        minPrice: 150,
+        maxPrice: 150,
+      });
+      expect(result.success).toBe(true);
+    });
   });
 });
