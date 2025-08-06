@@ -49,6 +49,8 @@ const createWrapper = () => {
 
 describe('useHotels', () => {
   let wrapper: ReturnType<typeof createWrapper>;
+  let _consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+  let _consoleWarnSpy: ReturnType<typeof vi.spyOn>;
 
   const mockSearchParams: SearchParams = {
     uid: 'test-destination-id',
@@ -109,10 +111,17 @@ describe('useHotels', () => {
     mockedUseSearch.mockReturnValue(mockSearchParams);
     mockedStringifyGuestsRooms.mockReturnValue('2');
     mockedFetchHotels.mockResolvedValue(mockHotelsResponse);
+
+    // Suppress console output for cleaner test output
+    _consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    _consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    // Restore console methods
+    _consoleErrorSpy?.mockRestore();
+    _consoleWarnSpy?.mockRestore();
   });
 
   describe('successful data fetching', () => {
