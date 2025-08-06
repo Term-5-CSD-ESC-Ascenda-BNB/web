@@ -6,7 +6,7 @@ import { IconPlus, IconMinus } from '@tabler/icons-react';
 import { HotelPinMarker } from './HotelPinMarker';
 
 import mapStyles from './Map.module.css';
-import PriceMarker from './PriceMarker';
+import PriceMarker from './PriceMarker/PriceMarker';
 import { HotelPopup } from './HotelPopup';
 import type { HotelResult } from '@/schemas/hotelResults';
 
