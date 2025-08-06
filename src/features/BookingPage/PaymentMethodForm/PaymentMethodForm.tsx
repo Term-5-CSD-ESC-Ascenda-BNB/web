@@ -110,6 +110,9 @@ function PaymentMethodForm({
 }: PaymentMethodFormProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const [pendingValues, setPendingValues] = useState<PaymentMethodFormValues | null>(null);
+  const [failureModalOpen, { open: openFailureModal, close: closeFailureModal }] =
+    useDisclosure(false);
+  const [failureMessage, setFailureMessage] = useState<string>('An unknown error occurred.');
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
   const router = useRouter();
@@ -194,6 +197,8 @@ function PaymentMethodForm({
       });
       if (stripeError) {
         console.error('❌ Payment failed:', stripeError.message);
+        setFailureMessage(stripeError.message || 'Payment failed');
+        openFailureModal();
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         console.log('✅ Payment successful:', paymentIntent);
         const bookingPayload = {
@@ -245,6 +250,8 @@ function PaymentMethodForm({
           });
         } catch (bookingError) {
           console.error('❌ Booking failed:', bookingError);
+          setFailureMessage('Booking failed. Please try again.');
+          openFailureModal();
         }
       }
     } catch (error) {
@@ -257,6 +264,17 @@ function PaymentMethodForm({
   return (
     <Paper withBorder radius="md" p="xl" mt="md">
       <Stack gap="md">
+        <Modal
+          opened={failureModalOpen}
+          onClose={closeFailureModal}
+          title="Something went wrong"
+          centered
+        >
+          <p>{failureMessage}</p>
+          <Group justify="flex-end" mt="md">
+            <Button onClick={closeFailureModal}>Close</Button>
+          </Group>
+        </Modal>
         <Modal opened={opened} onClose={close} title="Confirm your booking" centered>
           <p>Are you sure you want to proceed with the booking and payment?</p>
           <Group justify="flex-end" mt="md">

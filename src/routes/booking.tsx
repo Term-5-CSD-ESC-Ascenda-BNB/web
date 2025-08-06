@@ -44,6 +44,7 @@ function Booking() {
       size="lg"
       py="md"
       mt={20}
+      mb={50}
       style={{ pointerEvents: loading ? 'none' : 'auto', opacity: loading ? 0.6 : 1 }}
     >
       <Modal
