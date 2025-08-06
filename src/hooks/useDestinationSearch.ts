@@ -30,6 +30,7 @@ export interface DestinationSearchResult {
 }
 
 const fetchDestinations = async (searchValue: string): Promise<ApiResponse[]> => {
+  // TODO test this if block
   if (!searchValue.trim() || searchValue.trim().length < SEARCH_CONFIG.minSearchLength) {
     return [];
   }
