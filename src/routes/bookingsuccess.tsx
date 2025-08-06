@@ -31,7 +31,7 @@ function BookingSuccess() {
 
     void confetti({
       particleCount: 150,
-      spread: 80,
+      spread: 160,
       origin: { y: 0.6 },
     });
   }, []);
