@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@/tests/utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useFirstFiveImages } from './useFirstFiveImages';
 import type { ImageDetails } from '@/types/HotelDetails';

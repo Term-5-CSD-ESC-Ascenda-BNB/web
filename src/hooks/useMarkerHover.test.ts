@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook } from '@/tests/utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useMarkerHover } from './useMarkerHover';
 
