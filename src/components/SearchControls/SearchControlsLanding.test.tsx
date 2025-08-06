@@ -1,0 +1,413 @@
+import { render, screen } from '@/tests/utils';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { SearchControlsLanding } from './SearchControlsLanding';
+import React from 'react';
+
+interface DestinationSearchProps {
+  onDestinationChange: (uid: string, term: string) => void;
+  error?: boolean;
+}
+
+interface DatePickerProps {
+  date: [string | null, string | null];
+  setDate: (date: [string | null, string | null]) => void;
+  error?: boolean;
+}
+
+interface GuestsRoomsSelectorProps {
+  guests: number;
+  rooms: number;
+  setGuests: (guests: number) => void;
+  setRooms: (rooms: number) => void;
+}
+
+interface SearchButtonProps {
+  onClick: () => void;
+}
+
+// Mock the router hook using vi.hoisted
+const mockNavigate = vi.hoisted(() => vi.fn());
+
+vi.mock('@tanstack/react-router', () => ({
+  useNavigate: vi.fn(() => mockNavigate),
+}));
+
+// Mock the DestinationSearch component
+vi.mock('./DestinationSearch', () => ({
+  DestinationSearch: ({ onDestinationChange, error }: DestinationSearchProps) => (
+    <div data-testid="destination-search">
+      <input
+        onChange={(e) => onDestinationChange('test-uid', e.target.value)}
+        placeholder="Enter destination"
+        data-testid="destination-input"
+        style={{ borderColor: error ? 'red' : 'initial' }}
+      />
+    </div>
+  ),
+}));
+
+// Mock the DatePicker component
+vi.mock('./DatePicker', () => ({
+  DatePicker: ({ date, setDate, error }: DatePickerProps) => {
+    const [internalValue, setInternalValue] = React.useState(
+      date[0] && date[1] ? `${date[0]} - ${date[1]}` : ''
+    );
+
+    return (
+      <div data-testid="date-picker">
+        <input
+          value={internalValue}
+          onChange={(e) => {
+            setInternalValue(e.target.value);
+            const [start, end] = e.target.value.split(' - ');
+            setDate([start || null, end || null]);
+          }}
+          placeholder="Select dates"
+          data-testid="date-input"
+          style={{ borderColor: error ? 'red' : 'initial' }}
+        />
+      </div>
+    );
+  },
+}));
+
+// Mock the GuestsRoomsSelector component
+vi.mock('./GuestsRoomsSelector', () => ({
+  GuestsRoomsSelector: ({ guests, rooms, setGuests, setRooms }: GuestsRoomsSelectorProps) => (
+    <div data-testid="guests-rooms-selector">
+      <button onClick={() => setGuests(guests + 1)} data-testid="increase-guests">
+        Guests: {guests}
+      </button>
+      <button onClick={() => setRooms(rooms + 1)} data-testid="increase-rooms">
+        Rooms: {rooms}
+      </button>
+    </div>
+  ),
+}));
+
+// Mock the SearchButton component
+vi.mock('@/components/buttons', () => ({
+  SearchButton: ({ onClick }: SearchButtonProps) => (
+    <button onClick={onClick} data-testid="search-button">
+      Search
+    </button>
+  ),
+}));
+
+describe('SearchControlsLanding', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Suppress console.error for validation tests
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  describe('rendering', () => {
+    it('renders all child components', () => {
+      render(<SearchControlsLanding />);
+
+      expect(screen.getByTestId('destination-search')).toBeInTheDocument();
+      expect(screen.getByTestId('date-picker')).toBeInTheDocument();
+      expect(screen.getByTestId('guests-rooms-selector')).toBeInTheDocument();
+      expect(screen.getByTestId('search-button')).toBeInTheDocument();
+    });
+
+    it('initializes form with default values', () => {
+      render(<SearchControlsLanding />);
+
+      // Check that empty destination placeholder is shown
+      expect(screen.getByPlaceholderText('Enter destination')).toBeInTheDocument();
+
+      // Check that empty date placeholder is shown
+      expect(screen.getByPlaceholderText('Select dates')).toBeInTheDocument();
+
+      // Check default guests and rooms values
+      expect(screen.getByText('Guests: 1')).toBeInTheDocument();
+      expect(screen.getByText('Rooms: 1')).toBeInTheDocument();
+    });
+  });
+
+  describe('form interactions', () => {
+    it('updates destination when DestinationSearch changes', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Tokyo, Japan');
+
+      expect(destinationInput).toHaveValue('Tokyo, Japan');
+    });
+
+    it('updates date when DatePicker changes', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-09-01 - 2025-09-03');
+
+      expect(dateInput).toHaveValue('2025-09-01 - 2025-09-03');
+    });
+
+    it('updates guests when GuestsRoomsSelector changes', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      const increaseGuestsButton = screen.getByTestId('increase-guests');
+      await user.click(increaseGuestsButton);
+
+      expect(screen.getByText('Guests: 2')).toBeInTheDocument();
+    });
+
+    it('updates rooms when GuestsRoomsSelector changes', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      const increaseRoomsButton = screen.getByTestId('increase-rooms');
+      await user.click(increaseRoomsButton);
+
+      expect(screen.getByText('Rooms: 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('navigation functionality', () => {
+    it('navigates to search page with correct data when search button is clicked with valid form', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Fill in required fields
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Singapore');
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-08-10 - 2025-08-11');
+
+      // Click search
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: '/search',
+        search: expect.objectContaining({
+          uid: 'test-uid',
+          term: 'Singapore',
+          date: ['2025-08-10', '2025-08-11'],
+          guests: 1,
+          rooms: 1,
+        }) as unknown,
+      });
+    });
+
+    it('navigates with modified values', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Fill in required fields
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Tokyo');
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-09-01 - 2025-09-03');
+
+      // Modify guests and rooms
+      const increaseGuestsButton = screen.getByTestId('increase-guests');
+      await user.click(increaseGuestsButton);
+      await user.click(increaseGuestsButton); // guests = 3
+
+      const increaseRoomsButton = screen.getByTestId('increase-rooms');
+      await user.click(increaseRoomsButton); // rooms = 2
+
+      // Click search
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: '/search',
+        search: expect.objectContaining({
+          uid: 'test-uid',
+          term: 'Tokyo',
+          date: ['2025-09-01', '2025-09-03'],
+          guests: 3,
+          rooms: 2,
+        }) as unknown,
+      });
+    });
+  });
+
+  describe('form validation', () => {
+    it('prevents navigation when destination is empty', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Only fill in date, leave destination empty
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-08-10 - 2025-08-11');
+
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith(
+        'Validation failed:',
+        expect.objectContaining({
+          uid: 'Destination is required',
+        })
+      );
+    });
+
+    it('prevents navigation when date range is incomplete', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Only fill in destination, leave date empty
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Singapore');
+
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith(
+        'Validation failed:',
+        expect.objectContaining({
+          date: 'Date range is required',
+        })
+      );
+    });
+
+    it('prevents navigation when both required fields are missing', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith(
+        'Validation failed:',
+        expect.objectContaining({
+          uid: 'Destination is required',
+          date: 'Date range is required',
+        })
+      );
+    });
+
+    it('allows navigation when all required fields are valid', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Fill in all required fields
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Singapore');
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-08-10 - 2025-08-11');
+
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      expect(mockNavigate).toHaveBeenCalled();
+      expect(console.error).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('error states', () => {
+    it('shows error state for destination when validation fails', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Try to search without destination
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      // Check if the destination input has error styling
+      const destinationInput = screen.getByTestId('destination-input');
+      expect(destinationInput).toHaveStyle({ borderColor: 'red' });
+    });
+
+    it('shows error state for date when validation fails', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Try to search without date
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      // Check if the date input has error styling
+      const dateInput = screen.getByTestId('date-input');
+      expect(dateInput).toHaveStyle({ borderColor: 'red' });
+    });
+  });
+
+  describe('component integration', () => {
+    it('passes correct props to DestinationSearch', () => {
+      render(<SearchControlsLanding />);
+
+      const destinationSearch = screen.getByTestId('destination-search');
+      expect(destinationSearch).toBeInTheDocument();
+
+      // Check that the destination input is present
+      expect(screen.getByPlaceholderText('Enter destination')).toBeInTheDocument();
+    });
+
+    it('passes correct props to DatePicker', () => {
+      render(<SearchControlsLanding />);
+
+      const datePicker = screen.getByTestId('date-picker');
+      expect(datePicker).toBeInTheDocument();
+
+      // Check that the date input is present
+      expect(screen.getByPlaceholderText('Select dates')).toBeInTheDocument();
+    });
+
+    it('passes correct props to GuestsRoomsSelector', () => {
+      render(<SearchControlsLanding />);
+
+      const guestsRoomsSelector = screen.getByTestId('guests-rooms-selector');
+      expect(guestsRoomsSelector).toBeInTheDocument();
+
+      // Check that the default values are shown
+      expect(screen.getByText('Guests: 1')).toBeInTheDocument();
+      expect(screen.getByText('Rooms: 1')).toBeInTheDocument();
+    });
+  });
+
+  describe('edge cases', () => {
+    it('handles partial date selection gracefully', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Singapore');
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-09-01 - ');
+
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      // Should not navigate due to validation
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    it('handles SearchParamsSchema parsing correctly', async () => {
+      const user = userEvent.setup();
+      render(<SearchControlsLanding />);
+
+      // Fill in valid data
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.type(destinationInput, 'Singapore');
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.type(dateInput, '2025-08-10 - 2025-08-11');
+
+      const searchButton = screen.getByTestId('search-button');
+      await user.click(searchButton);
+
+      // Verify that navigate was called with parsed search params
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: '/search',
+        search: expect.any(Object) as unknown,
+      });
+    });
+  });
+});
