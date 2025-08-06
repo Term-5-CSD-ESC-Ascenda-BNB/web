@@ -1,4 +1,4 @@
-import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image } from '@mantine/core';
+import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image, Modal } from '@mantine/core';
 import { useForm, type UseFormReturnType } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -6,6 +6,8 @@ import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
 import type { StringValidation } from 'zod';
 import { useRouter } from '@tanstack/react-router';
+import { useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
 
 const createBookingDto = {
   destinationId: 'RsBU',
@@ -62,6 +64,7 @@ interface PaymentMethodFormProps {
   hotelName: string;
   hotelImage: string;
   hotelAddress: string;
+  setLoading: (val: boolean) => void;
 }
 
 interface BookingResponse {
@@ -103,7 +106,10 @@ function PaymentMethodForm({
   hotelName,
   hotelImage,
   hotelAddress,
+  setLoading,
 }: PaymentMethodFormProps) {
+  const [opened, { open, close }] = useDisclosure(false);
+  const [pendingValues, setPendingValues] = useState<PaymentMethodFormValues | null>(null);
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
   const router = useRouter();
@@ -130,6 +136,8 @@ function PaymentMethodForm({
   }
 
   const handleSubmit = async (values: PaymentMethodFormValues) => {
+    setLoading(true);
+
     if (guestInfo.validate().hasErrors) {
       return;
     }
@@ -241,12 +249,33 @@ function PaymentMethodForm({
       }
     } catch (error) {
       console.error('❌ Error submitting payment:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Paper withBorder radius="md" p="xl" mt="md">
       <Stack gap="md">
+        <Modal opened={opened} onClose={close} title="Confirm your booking" centered>
+          <p>Are you sure you want to proceed with the booking and payment?</p>
+          <Group justify="flex-end" mt="md">
+            <Button variant="default" onClick={close}>
+              Cancel
+            </Button>
+            <Button
+              color="blue"
+              onClick={() => {
+                if (pendingValues) {
+                  void handleSubmit(pendingValues);
+                }
+                close();
+              }}
+            >
+              Confirm
+            </Button>
+          </Group>
+        </Modal>
         <Title order={3} size="h4" mb={4}>
           Payment Method
         </Title>
@@ -320,7 +349,12 @@ function PaymentMethodForm({
                 alt="JCB"
               />
             </Group>
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            <form
+              onSubmit={form.onSubmit((values) => {
+                setPendingValues(values);
+                open(); // show confirmation modal
+              })}
+            >
               <Stack gap="sm" mt="sm">
                 <TextInput
                   placeholder="Cardholder's name"

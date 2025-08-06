@@ -4,10 +4,11 @@ import PaymentMethodForm from '@/features/BookingPage/PaymentMethodForm/PaymentM
 import { PriceDetailsCard } from '@/features/BookingPage/PriceDetailsCard/PriceDetailsCard';
 import { BookingDetailsCard } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCard';
 
-import { Container, Grid } from '@mantine/core';
+import { Container, Grid, Loader, Modal, Stack, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useSearch } from '@tanstack/react-router';
 import { BookingParamsSchema } from '@/schemas/bookingParams';
+import { useState } from 'react';
 
 export const Route = createFileRoute({
   component: Booking,
@@ -15,6 +16,7 @@ export const Route = createFileRoute({
 });
 
 function Booking() {
+  const [loading, setLoading] = useState(false);
   const search = useSearch({ from: '/booking' });
 
   const guestInfo = useForm({
@@ -38,7 +40,27 @@ function Booking() {
   });
 
   return (
-    <Container size="lg" py="md" mt={20}>
+    <Container
+      size="lg"
+      py="md"
+      mt={20}
+      style={{ pointerEvents: loading ? 'none' : 'auto', opacity: loading ? 0.6 : 1 }}
+    >
+      <Modal
+        opened={loading}
+        onClose={() => {}}
+        withCloseButton={false}
+        centered
+        overlayProps={{
+          blur: 3,
+          backgroundOpacity: 0.6,
+        }}
+      >
+        <Stack align="center" gap="md">
+          <Title order={4}>Processing your booking...</Title>
+          <Loader color="blue" size="lg" />
+        </Stack>
+      </Modal>
       <Grid gutter="xl">
         <Grid.Col span={7}>
           <GuestInfoForm guestInfo={guestInfo} guests={search.guests} />
@@ -58,6 +80,7 @@ function Booking() {
             hotelName={search.hotelName}
             hotelAddress={search.hotelAddress}
             hotelImage={search.hotelImage}
+            setLoading={setLoading}
           />
         </Grid.Col>
 

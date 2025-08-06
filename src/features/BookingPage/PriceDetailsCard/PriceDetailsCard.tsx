@@ -44,7 +44,7 @@ export function PriceDetailsCard({
         </Group>
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
-            Add-Ons Add-Ons
+            Add-Ons
           </Text>
           <Text size="sm">{currency}0</Text>
         </Group>
@@ -54,7 +54,7 @@ export function PriceDetailsCard({
           <Text fw={600}>Total</Text>
           <Text fw={600}>
             {currency}
-            {roomPrice * nights}
+            {(roomPrice * nights).toFixed(2)}
           </Text>
         </Group>
       </Stack>
