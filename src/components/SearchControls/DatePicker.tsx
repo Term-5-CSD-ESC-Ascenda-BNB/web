@@ -41,10 +41,16 @@ export function DatePicker({ date, setDate, error }: DatePickerProps) {
         excludeDate={(dateStr) => {
           // checkin has to be at least 3 days in the future
           // so anything 2 days or less from now is excluded
-          const twoDaysFromNow = new Date();
-          twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // normalize to start of day
+
+          const threeDaysFromNow = new Date(today);
+          threeDaysFromNow.setDate(today.getDate() + 3);
+
           const selectedDate = new Date(dateStr);
-          return selectedDate < twoDaysFromNow;
+          selectedDate.setHours(0, 0, 0, 0); // normalize to start of day
+
+          return selectedDate < threeDaysFromNow;
         }}
         leftSection={<IconCalendar size={16} />}
         style={{ width: 165 }}
