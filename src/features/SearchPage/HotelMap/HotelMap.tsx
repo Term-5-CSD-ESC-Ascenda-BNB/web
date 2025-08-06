@@ -22,14 +22,14 @@ interface Surrounding {
 }
 
 type MarkerRefHandler = (id: string) => (marker: L.Marker | null) => void;
-type PopupHandler = (id: string) => void;
 
 interface HotelMapProps {
   hotels?: HotelResult[];
   surroundings?: Surrounding[];
   getMarkerRef?: MarkerRefHandler;
-  onPopupOpen?: PopupHandler;
-  onPopupClose?: PopupHandler;
+  onPopupOpen?: (id: string) => void;
+  onPopupClose?: (id: string) => void;
+  onPopupClick?: (id: string) => void;
   center?: [number, number];
   zoom?: number;
   interactive?: boolean;
@@ -41,6 +41,7 @@ export function HotelMap({
   getMarkerRef,
   onPopupOpen,
   onPopupClose,
+  onPopupClick,
   center: providedCenter,
   zoom: providedZoom = 13,
   interactive = true,
@@ -115,10 +116,7 @@ export function HotelMap({
             onPopupOpen={() => onPopupOpen?.(hotel.id)}
             onPopupClose={() => onPopupClose?.(hotel.id)}
           >
-            <HotelPopup
-              hotel={hotel}
-              onClick={() => console.log(`Clicked on hotel: ${hotel.id}`)}
-            />
+            <HotelPopup hotel={hotel} onClick={() => onPopupClick?.(hotel.id)} />
           </PriceMarker>
         );
       })}
