@@ -17,7 +17,6 @@ export function GuestsRoomsSelector({
 }: GuestsRoomsSelectorProps) {
   const handleGuestsChange = (delta: number) => {
     setGuests(guests + delta);
-    // TODO test this section
     if (rooms > guests + delta) {
       setRooms(guests + delta);
     }
