@@ -16,9 +16,9 @@ export const SearchParamsSchema = z.object({
   date: z
     .tuple([z.string().nullable(), z.string().nullable()])
     .catch([defaultDate()[0], defaultDate()[1]]),
-  guests: z.coerce.number().catch(1),
-  rooms: z.coerce.number().catch(1),
-  page: z.coerce.number().catch(1),
+  guests: z.coerce.number().min(1).catch(1),
+  rooms: z.coerce.number().min(1).catch(1),
+  page: z.coerce.number().min(1).catch(1),
 
   // filtering and sorting
   sortBy: z.enum(SORT_BY_FIELDS).catch('rating'),

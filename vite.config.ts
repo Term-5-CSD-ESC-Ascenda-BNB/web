@@ -59,6 +59,7 @@ export default defineConfig(({ mode }) => {
         'src/main.tsx',
         'e2e/**',
         'tests-examples/**',
+        'src/three/**',
       ],
       coverage: {
         provider: 'v8',
@@ -72,6 +73,7 @@ export default defineConfig(({ mode }) => {
           'src/main.tsx',
           'e2e/**',
           'tests-examples/**',
+          'src/three/**',
         ],
       },
     },

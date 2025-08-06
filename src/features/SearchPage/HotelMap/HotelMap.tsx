@@ -6,7 +6,7 @@ import { IconPlus, IconMinus } from '@tabler/icons-react';
 import { HotelPinMarker } from './HotelPinMarker';
 
 import mapStyles from './Map.module.css';
-import PriceMarker from './PriceMarker';
+import PriceMarker from './PriceMarker/PriceMarker';
 import { HotelPopup } from './HotelPopup';
 import type { HotelResult } from '@/schemas/hotelResults';
 
@@ -77,10 +77,10 @@ export function HotelMap({
       ref={mapRef}
       center={center}
       zoom={providedZoom}
-      scrollWheelZoom={interactive ?? true}
-      dragging={interactive ?? true}
-      doubleClickZoom={interactive ?? true}
-      touchZoom={interactive ?? true}
+      scrollWheelZoom={interactive}
+      dragging={interactive}
+      doubleClickZoom={interactive}
+      touchZoom={interactive}
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
       zoomControl={false}

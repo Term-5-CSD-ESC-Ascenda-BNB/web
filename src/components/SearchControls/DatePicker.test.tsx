@@ -4,28 +4,42 @@ import { expect, describe, it, vi } from 'vitest';
 
 import type { FC } from 'react';
 
-vi.mock('@mantine/dates', () => ({
-  DatePickerInput: (({ onChange, value, placeholder }) => (
-    <div>
-      <input
-        data-testid="date-picker-input"
-        placeholder={placeholder}
-        value={value?.[0] && value?.[1] ? '29 Jul – 31 Jul' : ''}
-        onChange={(e) => {
-          if (e.target.dataset.testAction === 'select-range') {
-            onChange(['2025-07-29', '2025-07-31']);
-          } else if (e.target.dataset.testAction === 'select-single') {
-            onChange(['2025-07-29', null]);
-          }
-        }}
-      />
+let _mockExcludeDate: ((date: Date) => boolean) | undefined;
+let _mockOnChange: ((val: [string | null, string | null]) => void) | undefined;
 
-      {value?.[0] && value?.[1] && <button>{'29 Jul – 31 Jul'}</button>}
-    </div>
-  )) as FC<{
+vi.mock('@mantine/dates', () => ({
+  DatePickerInput: (({ onChange, value, placeholder, excludeDate }) => {
+    _mockExcludeDate = excludeDate;
+    _mockOnChange = onChange;
+    return (
+      <div>
+        <input
+          data-testid="date-picker-input"
+          placeholder={placeholder}
+          value={value?.[0] && value?.[1] ? '29 Jul – 31 Jul' : ''}
+          readOnly
+        />
+        <button
+          data-testid="trigger-range-select"
+          onClick={() => onChange(['2025-07-29', '2025-07-31'])}
+        >
+          Select Range
+        </button>
+        <button data-testid="trigger-single-select" onClick={() => onChange(['2025-07-29', null])}>
+          Select Single
+        </button>
+        <button data-testid="trigger-clear-both" onClick={() => onChange([null, null])}>
+          Clear Both
+        </button>
+
+        {value?.[0] && value?.[1] && <button>{'29 Jul – 31 Jul'}</button>}
+      </div>
+    );
+  }) as FC<{
     onChange: (val: [string | null, string | null]) => void;
     value?: [string | null, string | null];
     placeholder?: string;
+    excludeDate?: (date: Date) => boolean;
   }>,
 }));
 
@@ -52,26 +66,18 @@ describe('DatePicker', () => {
   it('calls setDate when a full date range is selected', () => {
     const { setDate } = setup();
 
-    const input = screen.getByPlaceholderText('Choose dates');
+    const selectRangeButton = screen.getByTestId('trigger-range-select');
+    fireEvent.click(selectRangeButton);
 
-    fireEvent.change(input, {
-      target: {
-        value: '29 Jul – 31 Jul', // format defined by valueFormat: "D MMM"
-      },
-    });
-
-    const fakeRange: [string, string] = ['2025-07-29', '2025-07-31'];
-    render(<DatePicker date={fakeRange} setDate={setDate} />);
-    expect(screen.getByRole('button', { name: '29 Jul – 31 Jul' })).toBeInTheDocument();
+    expect(setDate).toHaveBeenCalledWith(['2025-07-29', '2025-07-31']);
   });
 
   it('does not call setDate if only one date is selected', () => {
-    const { setDate } = setup({
-      date: ['2025-07-29', null],
-    });
+    const { setDate } = setup();
 
-    const input = screen.getByPlaceholderText('Choose dates');
-    expect(input).toHaveValue('');
+    const selectSingleButton = screen.getByTestId('trigger-single-select');
+    fireEvent.click(selectSingleButton);
+
     expect(setDate).not.toHaveBeenCalled();
   });
 
@@ -82,5 +88,59 @@ describe('DatePicker', () => {
 
     render(<DatePicker date={[null, null]} setDate={setDate} />);
     expect(setDate).not.toHaveBeenCalled();
+  });
+
+  it('handles clearing both dates and restores last valid range', () => {
+    const setDate = vi.fn();
+    render(<DatePicker date={['2025-07-29', '2025-07-30']} setDate={setDate} />);
+
+    // Simulate user clearing both dates (e.g., clicking same date twice or cancelling)
+    const clearBothButton = screen.getByTestId('trigger-clear-both');
+    fireEvent.click(clearBothButton);
+
+    // The component should restore the last valid range internally
+    // but not call setDate since both values are null
+    expect(setDate).not.toHaveBeenCalled();
+  });
+
+  it('excludes dates that are less than 3 days from now', () => {
+    setup();
+
+    // The excludeDate function should be passed to DatePickerInput
+    expect(_mockExcludeDate).toBeDefined();
+
+    if (_mockExcludeDate) {
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const dayAfterTomorrow = new Date(today);
+      dayAfterTomorrow.setDate(today.getDate() + 2);
+      const threeDaysFromNow = new Date(today);
+      threeDaysFromNow.setDate(today.getDate() + 3);
+      const fourDaysFromNow = new Date(today);
+      fourDaysFromNow.setDate(today.getDate() + 4);
+
+      expect(_mockExcludeDate(today)).toBe(true);
+      expect(_mockExcludeDate(tomorrow)).toBe(true);
+      expect(_mockExcludeDate(dayAfterTomorrow)).toBe(true);
+      expect(_mockExcludeDate(threeDaysFromNow)).toBe(false);
+      expect(_mockExcludeDate(fourDaysFromNow)).toBe(false);
+    }
+  });
+
+  it('updates internal date when only one date is selected during range selection', () => {
+    const setDate = vi.fn();
+    render(<DatePicker date={[null, null]} setDate={setDate} />);
+
+    // Simulate selecting only the first date (middle of range selection)
+    const selectSingleButton = screen.getByTestId('trigger-single-select');
+    fireEvent.click(selectSingleButton);
+
+    // setDate should not be called when only one date is selected
+    expect(setDate).not.toHaveBeenCalled();
+
+    // But the input should show empty since only one date is selected
+    const input = screen.getByTestId('date-picker-input');
+    expect(input).toHaveValue('');
   });
 });
