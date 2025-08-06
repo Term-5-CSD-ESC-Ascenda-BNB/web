@@ -26,6 +26,9 @@ export const HotelResultSchema = z.object({
   image_details: ImageDetailsSchema,
 });
 
+/**
+ * This schema represents the entire response from the hotel search API.
+ */
 export const HotelsResponseSchema = z.object({
   completed: z.boolean(),
   currency: z.string(),
@@ -33,6 +36,9 @@ export const HotelsResponseSchema = z.object({
   hotelsTotalLength: z.number(),
 });
 
+/**
+ * This schema represents the search parameters that will be submitted to the backend.
+ */
 export const FetchHotelsParamsSchema = z
   .object({
     destination_id: z.string().catch(''),
@@ -42,11 +48,30 @@ export const FetchHotelsParamsSchema = z
     lang: z.string().min(2, 'lang is required'),
     currency: z.string().length(3, 'must be ISO currency code'),
     guests: z.string().regex(/^\d+(\|\d+)*$/, 'guests must be like `2` or `2|2|2`'),
+    page: z.number().int().min(1, 'page must be a positive integer').catch(1),
+    sort: z.enum(['rating', 'price', 'score', 'name']).catch('rating'),
+    order: z.enum(['asc', 'desc']).catch('desc'),
+    minPrice: z.number().min(0, 'minPrice must be a non-negative number').optional(),
+    maxPrice: z.number().min(0, 'maxPrice must be a non-negative number').optional(),
+    minRating: z.number().min(0, 'minRating must be a non-negative number').optional(),
+    minReviewScore: z.number().min(0, 'minReviewScore must be a non-negative number').optional(),
   })
   .refine((obj) => obj.checkout > obj.checkin, {
     message: 'checkout date must be after checkin',
     path: ['checkout'],
-  });
+  })
+  .refine(
+    (data) => {
+      if (data.minPrice !== undefined && data.maxPrice !== undefined) {
+        return data.minPrice <= data.maxPrice;
+      }
+      return true;
+    },
+    {
+      message: 'minPrice must be less than or equal to maxPrice',
+      path: ['minPrice', 'maxPrice'],
+    }
+  );
 
 /**
  * This type represents a single hotel result in the search response.

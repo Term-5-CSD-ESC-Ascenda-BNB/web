@@ -17,6 +17,13 @@ export function useHotels() {
     lang: 'en_US',
     currency: 'SGD',
     guests: stringifyGuestsRooms(search.guests, search.rooms),
+    sort: search.sortBy,
+    order: search.sortOrder,
+    // minPrice: search.minPrice,
+    // maxPrice: search.maxPrice,
+    // minRating: search.minRating,
+    // minReviewScore: search.minScore,
+    page: search.page || 1,
   };
 
   const parsedParams = FetchHotelsParamsSchema.parse(params);
