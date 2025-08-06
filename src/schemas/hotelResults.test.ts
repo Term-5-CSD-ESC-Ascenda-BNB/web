@@ -64,6 +64,9 @@ describe('hotelResults schemas', () => {
       lang: 'en',
       currency: 'SGD',
       guests: '2|2',
+      page: 1,
+      sort: 'rating',
+      order: 'desc',
     };
 
     it('accepts valid params', () => {

@@ -18,9 +18,9 @@ describe('SortableSelect', () => {
       // Should render a textbox (select input)
       expect(screen.getByRole('textbox')).toBeInTheDocument();
 
-      // Should show first field as default
+      // Should show first field as default (capitalised)
       const selectInput = screen.getByRole('textbox');
-      expect(selectInput).toHaveValue('name');
+      expect(selectInput).toHaveValue('Name');
 
       // Should show descending icon by default
       const descendingIcon = document.querySelector('svg');
@@ -31,7 +31,7 @@ describe('SortableSelect', () => {
       render(<SortableSelect fields={mockFields} defaultField="price" />);
 
       const selectInput = screen.getByRole('textbox');
-      expect(selectInput).toHaveValue('price');
+      expect(selectInput).toHaveValue('Price');
     });
 
     it('renders with custom default order', () => {
@@ -66,11 +66,11 @@ describe('SortableSelect', () => {
       await user.click(select);
 
       // Select 'price' option
-      const priceOption = screen.getByText('price');
+      const priceOption = screen.getByText('Price');
       await user.click(priceOption);
 
       const selectInput = screen.getByRole('textbox');
-      expect(selectInput).toHaveValue('price');
+      expect(selectInput).toHaveValue('Price');
       expect(mockOnSortChange).toHaveBeenCalledWith('price', 'desc');
     });
 
@@ -83,7 +83,7 @@ describe('SortableSelect', () => {
       const select = screen.getByRole('textbox');
       await user.click(select);
 
-      const ratingOption = screen.getByText('rating');
+      const ratingOption = screen.getByText('Rating');
       await user.click(ratingOption);
 
       expect(mockOnSortChange).toHaveBeenCalledWith('rating', 'asc');
@@ -94,7 +94,7 @@ describe('SortableSelect', () => {
 
       // The current field should remain 'name'
       const selectInput = screen.getByRole('textbox');
-      expect(selectInput).toHaveValue('name');
+      expect(selectInput).toHaveValue('Name');
     });
 
     it('prevents deselection of field', () => {
@@ -172,10 +172,10 @@ describe('SortableSelect', () => {
       // Then change field - should maintain ascending order
       const select = screen.getByRole('textbox');
       await user.click(select);
-      const dateOption = screen.getByText('date');
+      const dateOption = screen.getByText('Price');
       await user.click(dateOption);
 
-      expect(mockOnSortChange).toHaveBeenCalledWith('date', 'asc');
+      expect(mockOnSortChange).toHaveBeenCalledWith('price', 'asc');
     });
 
     it('handles multiple field and order changes', async () => {
@@ -185,15 +185,15 @@ describe('SortableSelect', () => {
       // Change field to 'rating'
       const select = screen.getByRole('textbox');
       await user.click(select);
-      await user.click(screen.getByText('rating'));
+      await user.click(screen.getByText('Rating'));
 
       // Toggle order to ascending
       const sortButton = screen.getByRole('button');
       await user.click(sortButton);
 
-      // Change field to 'date' (should maintain asc order)
+      // Change field to 'price' (should maintain asc order)
       await user.click(select);
-      await user.click(screen.getByText('date'));
+      await user.click(screen.getByText('Price'));
 
       // Toggle order back to descending
       await user.click(sortButton);
@@ -201,8 +201,8 @@ describe('SortableSelect', () => {
       expect(mockOnSortChange).toHaveBeenCalledTimes(4);
       expect(mockOnSortChange).toHaveBeenNthCalledWith(1, 'rating', 'desc');
       expect(mockOnSortChange).toHaveBeenNthCalledWith(2, 'rating', 'asc');
-      expect(mockOnSortChange).toHaveBeenNthCalledWith(3, 'date', 'asc');
-      expect(mockOnSortChange).toHaveBeenNthCalledWith(4, 'date', 'desc');
+      expect(mockOnSortChange).toHaveBeenNthCalledWith(3, 'price', 'asc');
+      expect(mockOnSortChange).toHaveBeenNthCalledWith(4, 'price', 'desc');
     });
   });
 
@@ -238,7 +238,7 @@ describe('SortableSelect', () => {
       await user.click(select);
 
       // Navigate to an option and select it
-      const priceOption = screen.getByText('price');
+      const priceOption = screen.getByText('Price');
       await user.click(priceOption);
 
       // Should trigger the callback
@@ -258,7 +258,7 @@ describe('SortableSelect', () => {
       render(<SortableSelect fields={['name']} />);
 
       const selectInput = screen.getByRole('textbox');
-      expect(selectInput).toHaveValue('name');
+      expect(selectInput).toHaveValue('Name');
     });
 
     it('works without onSortChange callback', async () => {
@@ -296,7 +296,7 @@ describe('SortableSelect', () => {
       );
 
       const selectInput = screen.getByRole('textbox');
-      expect(selectInput).toHaveValue('email');
+      expect(selectInput).toHaveValue('Email');
     });
   });
 
