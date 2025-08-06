@@ -110,21 +110,21 @@ describe('DatePicker', () => {
     expect(_mockExcludeDate).toBeDefined();
 
     if (_mockExcludeDate) {
-      // Create fixed dates to understand the logic better
-      const today = new Date('2025-08-06'); // Current date from context
-      const tomorrow = new Date('2025-08-07');
-      const dayAfterTomorrow = new Date('2025-08-08'); // This should be excluded (only 2 days away)
-      const threeDaysFromNow = new Date('2025-08-09'); // This should be allowed (3 days away)
-      const fourDaysFromNow = new Date('2025-08-10');
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const dayAfterTomorrow = new Date(today);
+      dayAfterTomorrow.setDate(today.getDate() + 2);
+      const threeDaysFromNow = new Date(today);
+      threeDaysFromNow.setDate(today.getDate() + 3);
+      const fourDaysFromNow = new Date(today);
+      fourDaysFromNow.setDate(today.getDate() + 4);
 
-      // According to the corrected implementation, dates before "threeDaysFromNow" should be excluded
-      // threeDaysFromNow = Aug 6 + 3 = Aug 9
-      // So dates < Aug 9 should be excluded, dates >= Aug 9 should be allowed
-      expect(_mockExcludeDate(today)).toBe(true); // Aug 6 < Aug 9 = true (excluded)
-      expect(_mockExcludeDate(tomorrow)).toBe(true); // Aug 7 < Aug 9 = true (excluded)
-      expect(_mockExcludeDate(dayAfterTomorrow)).toBe(true); // Aug 8 < Aug 9 = true (excluded)
-      expect(_mockExcludeDate(threeDaysFromNow)).toBe(false); // Aug 9 < Aug 9 = false (allowed)
-      expect(_mockExcludeDate(fourDaysFromNow)).toBe(false); // Aug 10 < Aug 9 = false (allowed)
+      expect(_mockExcludeDate(today)).toBe(true);
+      expect(_mockExcludeDate(tomorrow)).toBe(true);
+      expect(_mockExcludeDate(dayAfterTomorrow)).toBe(true);
+      expect(_mockExcludeDate(threeDaysFromNow)).toBe(false);
+      expect(_mockExcludeDate(fourDaysFromNow)).toBe(false);
     }
   });
 
