@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act } from '@/tests/utils';
 import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useSearchState } from './useSearchState';
 

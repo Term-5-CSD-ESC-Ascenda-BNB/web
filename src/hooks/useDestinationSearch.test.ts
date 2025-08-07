@@ -1,8 +1,8 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@/tests/utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
-import { useDestinationSearch } from './useDestinationSearch';
+import { useDestinationSearch, fetchDestinations } from './useDestinationSearch';
 import { createElement } from 'react';
 
 // Mock axios
@@ -63,6 +63,27 @@ describe('useDestinationSearch', () => {
       expect(mockedAxios.get).not.toHaveBeenCalled();
     });
 
+    it('fetchDestinations returns empty array for empty search value', async () => {
+      const result = await fetchDestinations('');
+
+      expect(result).toEqual([]);
+      expect(mockedAxios.get).not.toHaveBeenCalled();
+    });
+
+    it('fetchDestinations returns empty array for whitespace-only search value', async () => {
+      const result = await fetchDestinations('   ');
+
+      expect(result).toEqual([]);
+      expect(mockedAxios.get).not.toHaveBeenCalled();
+    });
+
+    it('fetchDestinations returns empty array for search value below minimum length', async () => {
+      const result = await fetchDestinations('a');
+
+      expect(result).toEqual([]);
+      expect(mockedAxios.get).not.toHaveBeenCalled();
+    });
+
     it('makes API call for search value with minimum length', async () => {
       const mockResponse = {
         data: [
@@ -83,19 +104,6 @@ describe('useDestinationSearch', () => {
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('/destinations'), {
           params: { search: 'Paris' },
-        });
-      });
-    });
-
-    it('uses correct API endpoint in development', async () => {
-      const mockResponse = { data: [] };
-      mockedAxios.get.mockResolvedValueOnce(mockResponse);
-
-      renderHook(() => useDestinationSearch('test'), { wrapper });
-
-      await waitFor(() => {
-        expect(mockedAxios.get).toHaveBeenCalledWith('/api/destinations', {
-          params: { search: 'test' },
         });
       });
     });

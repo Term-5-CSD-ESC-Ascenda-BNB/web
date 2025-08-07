@@ -71,7 +71,6 @@ export function HotelSurroundings({ hotel, surroundings, dimmed }: HotelSurround
               onClick={() => !dimmed && setModalOpen(true)}
             >
               <HotelMap
-                // TODO adapt data to match expected format
                 hotels={[]}
                 surroundings={surroundings.slice(0, 5)}
                 center={[hotel.latitude, hotel.longitude]}

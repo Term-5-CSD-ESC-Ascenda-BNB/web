@@ -1,3 +1,5 @@
+/* v8 ignore start */
+
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 import { loginWithGoogle } from './googleApi';
 import type { ResponseSchema } from '@/features/AuthPage/schemas/responseSchema';

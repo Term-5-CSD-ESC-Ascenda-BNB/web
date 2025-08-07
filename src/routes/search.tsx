@@ -112,6 +112,7 @@ function RouteComponent() {
             getMarkerRef={makeMarkerRef}
             onPopupOpen={handlePopupOpen}
             onPopupClose={handlePopupClose}
+            onPopupClick={handleNavigateToHotel}
           />
         </div>
 

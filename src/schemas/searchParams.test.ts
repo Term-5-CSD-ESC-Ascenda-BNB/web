@@ -1,18 +1,7 @@
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { SearchParamsSchema } from './searchParams';
 
 describe('SearchParamsSchema', () => {
-  // Freeze time so defaultDate() is predictable
-  beforeAll(() => {
-    vi.useFakeTimers();
-    // 2025-08-06 12:00:00 UTC → defaultDate → ['2025-08-09','2025-08-10']
-    vi.setSystemTime(Date.UTC(2025, 7, 6, 12, 0, 0));
-  });
-
-  afterAll(() => {
-    vi.useRealTimers();
-  });
-
   it('applies defaults when no input is provided', () => {
     const parsed = SearchParamsSchema.parse({});
     expect(parsed.uid).toBe('RsBU');
@@ -20,8 +9,18 @@ describe('SearchParamsSchema', () => {
     expect(parsed.guests).toBe(1);
     expect(parsed.rooms).toBe(1);
     expect(parsed.page).toBe(1);
-    // 3 and 4 days ahead of 2025-08-06
-    expect(parsed.date).toEqual(['2025-08-09', '2025-08-10']);
+
+    // Check that date is 3 and 4 days from today
+    const today = new Date();
+    const checkIn = new Date(today);
+    checkIn.setDate(today.getDate() + 3);
+    const checkOut = new Date(today);
+    checkOut.setDate(today.getDate() + 4);
+
+    const expectedCheckIn = checkIn.toISOString().split('T')[0];
+    const expectedCheckOut = checkOut.toISOString().split('T')[0];
+
+    expect(parsed.date).toEqual([expectedCheckIn, expectedCheckOut]);
   });
 
   it('uses provided valid values', () => {
@@ -44,7 +43,18 @@ describe('SearchParamsSchema', () => {
 
   it('falls back to defaults on invalid date shape', () => {
     const parsed = SearchParamsSchema.parse({ date: 'not-a-tuple' });
-    expect(parsed.date).toEqual(['2025-08-09', '2025-08-10']);
+
+    // Should fall back to default dates (3 and 4 days from today)
+    const today = new Date();
+    const checkIn = new Date(today);
+    checkIn.setDate(today.getDate() + 3);
+    const checkOut = new Date(today);
+    checkOut.setDate(today.getDate() + 4);
+
+    const expectedCheckIn = checkIn.toISOString().split('T')[0];
+    const expectedCheckOut = checkOut.toISOString().split('T')[0];
+
+    expect(parsed.date).toEqual([expectedCheckIn, expectedCheckOut]);
   });
 
   it('coerces numeric strings and yields NaN for unparsable values', () => {

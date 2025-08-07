@@ -62,7 +62,7 @@ function checkImageUrl(url: string): Promise<{ ok: boolean }> {
     img.onerror = () => resolve({ ok: false });
 
     // cache-busting is often helpful to avoid a previously cached error
-    /* v8 ignore */
+    /* v8 ignore next */
     img.src = `${url}${url.includes('?') ? '&' : '?'}_cb=${Date.now()}`;
   });
 }

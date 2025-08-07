@@ -459,6 +459,85 @@ describe('HotelMap', () => {
       expect(mockGetMarkerRef).toHaveBeenCalledWith('hotel-1');
       expect(mockGetMarkerRef).toHaveBeenCalledWith('hotel-2');
     });
+
+    it('calls onPopupOpen and onPopupClose when price marker is clicked', () => {
+      const mockOnPopupOpen = vi.fn();
+      const mockOnPopupClose = vi.fn();
+
+      render(
+        <HotelMap
+          hotels={mockHotels}
+          onPopupOpen={mockOnPopupOpen}
+          onPopupClose={mockOnPopupClose}
+        />
+      );
+
+      const priceMarkers = screen.getAllByTestId('price-marker');
+
+      // Click the first price marker to trigger popup events
+      priceMarkers[0].click();
+
+      expect(mockOnPopupOpen).toHaveBeenCalledWith('hotel-1');
+      expect(mockOnPopupClose).toHaveBeenCalledWith('hotel-1');
+    });
+
+    it('calls onPopupClick when hotel popup is clicked', () => {
+      const mockOnPopupClick = vi.fn();
+
+      render(<HotelMap hotels={mockHotels} onPopupClick={mockOnPopupClick} />);
+
+      const hotelPopups = screen.getAllByTestId('hotel-popup');
+
+      // Click the first hotel popup
+      hotelPopups[0].click();
+
+      expect(mockOnPopupClick).toHaveBeenCalledWith('hotel-1');
+    });
+
+    it('calls all event handlers together when provided', () => {
+      const mockGetMarkerRef = vi.fn(() => vi.fn());
+      const mockOnPopupOpen = vi.fn();
+      const mockOnPopupClose = vi.fn();
+      const mockOnPopupClick = vi.fn();
+
+      render(
+        <HotelMap
+          hotels={[mockHotels[0]]} // Use just one hotel for clearer testing
+          getMarkerRef={mockGetMarkerRef}
+          onPopupOpen={mockOnPopupOpen}
+          onPopupClose={mockOnPopupClose}
+          onPopupClick={mockOnPopupClick}
+        />
+      );
+
+      // Test price marker click (should trigger popup open/close)
+      const priceMarker = screen.getByTestId('price-marker');
+      priceMarker.click();
+
+      expect(mockOnPopupOpen).toHaveBeenCalledWith('hotel-1');
+      expect(mockOnPopupClose).toHaveBeenCalledWith('hotel-1');
+
+      // Test hotel popup click
+      const hotelPopup = screen.getByTestId('hotel-popup');
+      hotelPopup.click();
+
+      expect(mockOnPopupClick).toHaveBeenCalledWith('hotel-1');
+      expect(mockGetMarkerRef).toHaveBeenCalledWith('hotel-1');
+    });
+
+    it('handles missing event handlers gracefully', () => {
+      // This should not throw errors when event handlers are not provided
+      render(<HotelMap hotels={mockHotels} />);
+
+      const priceMarkers = screen.getAllByTestId('price-marker');
+      const hotelPopups = screen.getAllByTestId('hotel-popup');
+
+      // These clicks should not throw errors
+      expect(() => {
+        priceMarkers[0].click();
+        hotelPopups[0].click();
+      }).not.toThrow();
+    });
   });
 
   describe('Edge Cases', () => {
