@@ -1,11 +1,5 @@
 import { Box, Button, Group, Stack, Text, NumberInput } from '@mantine/core';
-import {
-  IconToolsKitchen2,
-  IconCreditCard,
-  IconCalendarCancel,
-  IconCalendarCheck,
-  IconX,
-} from '@tabler/icons-react';
+import { IconToolsKitchen2, IconCreditCard, IconCalendarCancel, IconX } from '@tabler/icons-react';
 
 import type { RoomOption } from '@/types/Room';
 
