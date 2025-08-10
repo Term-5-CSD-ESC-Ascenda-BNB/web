@@ -3,21 +3,22 @@ import { IconCalendar } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 
 interface DatePickerProps {
-  date: [string | null, string | null];
-  setDate: (date: [string | null, string | null]) => void;
+  date: [string, string];
+  setDate: (date: [string, string]) => void;
   error?: boolean;
 }
 
 export function DatePicker({ date, setDate, error }: DatePickerProps) {
-  const [internalDate, setInternalDate] = useState(date);
+  const [internalDate, setInternalDate] = useState<[string | null, string | null]>(date);
   const lastValidDateRange = useRef<[string | null, string | null]>(date);
 
   const handleDateChange = (value: [string | null, string | null]) => {
     // If we have a valid date range
-    if (value[0] && value[1]) {
-      setDate(value);
-      setInternalDate(value);
-      lastValidDateRange.current = value;
+    if (value[0] !== null && value[1] !== null) {
+      const validValue = value as [string, string];
+      setDate(validValue);
+      setInternalDate(validValue);
+      lastValidDateRange.current = validValue;
     }
     // If both dates are null (user cancelled selection or clicked same date twice)
     else if (value[0] === null && value[1] === null) {

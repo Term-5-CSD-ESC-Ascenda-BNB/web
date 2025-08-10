@@ -1,7 +1,49 @@
 import { describe, it, expect } from 'vitest';
-import { SearchParamsSchema } from './searchParams';
+import { SearchParamsSchema, SORT_BY_FIELDS } from './searchParams';
+import fc from 'fast-check';
 
 describe('SearchParamsSchema', () => {
+  describe('SearchParamsSchema - Robustness', () => {
+    it('never crashes on garbage input (FUZZ TEST)', () => {
+      const garbageInputs = fc.record({
+        uid: fc.anything(),
+        term: fc.anything(),
+        date: fc.anything(), // Could be a number, object, null, whatever
+        guests: fc.anything(), // Could be {}, [], "abc", null
+        rooms: fc.anything(),
+        page: fc.anything(),
+        sortBy: fc.anything(),
+        sortOrder: fc.anything(),
+        minPrice: fc.anything(),
+        maxPrice: fc.anything(),
+        minRating: fc.anything(),
+        minScore: fc.anything(),
+      });
+
+      fc.assert(
+        fc.property(garbageInputs, (raw) => {
+          const parsed = SearchParamsSchema.parse(raw);
+
+          // If it succeeds, the output should always be valid
+          expect(parsed.guests).toBeGreaterThanOrEqual(1);
+          expect(parsed.guests).toBeLessThanOrEqual(10);
+          expect(parsed.rooms).toBeGreaterThanOrEqual(1);
+          expect(parsed.rooms).toBeLessThanOrEqual(10);
+          expect(parsed.page).toBeGreaterThanOrEqual(1);
+          expect(SORT_BY_FIELDS.includes(parsed.sortBy)).toBe(true);
+          expect(['asc', 'desc']).toContain(parsed.sortOrder);
+
+          // Validate date constraints
+          const [checkin, checkout] = parsed.date;
+          if (checkin !== null && checkout !== null) {
+            expect(checkin < checkout).toBe(true);
+          }
+        }),
+        { numRuns: 500, verbose: 1 }
+      );
+    });
+  });
+
   it('applies defaults when no input is provided', () => {
     const parsed = SearchParamsSchema.parse({});
     expect(parsed.uid).toBe('RsBU');

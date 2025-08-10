@@ -53,9 +53,14 @@ function RouteComponent() {
     // Only add price range if it's not the default/full range
     if (filters.priceRange[0] > 0) {
       updatedSearchParams.minPrice = filters.priceRange[0];
+    } else {
+      updatedSearchParams.minPrice = undefined; // Reset if default
     }
+
     if (filters.priceRange[1] < MAX_PRICE) {
       updatedSearchParams.maxPrice = filters.priceRange[1];
+    } else {
+      updatedSearchParams.maxPrice = undefined; // Reset if default
     }
 
     // Only add rating if it's set (assuming 0 or undefined means no filter)
