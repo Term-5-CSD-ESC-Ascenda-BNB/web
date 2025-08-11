@@ -10,6 +10,7 @@ interface PriceBreakdownProps {
   roomDescription: string;
   price: number;
   currency: string;
+  rooms: number;
 }
 
 function formatDateInfo(dateStr: string) {
@@ -47,6 +48,7 @@ const PriceBreakdown = ({
   roomDescription,
   price,
   currency,
+  rooms,
 }: PriceBreakdownProps) => {
   const { day: sDay, date: sDate, month: sMonth, year: sYear } = formatDateInfo(startDate);
   const { day: eDay, date: eDate, month: eMonth, year: eYear } = formatDateInfo(endDate);
@@ -101,7 +103,7 @@ const PriceBreakdown = ({
             <Stack>
               <Text c={'dimmed'}>Room Price</Text>
               <Text>
-                {price} * {nights}
+                {price} * {rooms} * {nights}
               </Text>
             </Stack>
             <Stack>

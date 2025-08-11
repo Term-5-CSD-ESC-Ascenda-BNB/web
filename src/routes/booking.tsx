@@ -106,6 +106,7 @@ function Booking() {
             checkin={search.startDate}
             checkout={search.endDate}
             currency={search.currency}
+            nights={2}
           />
 
           <CancellationPolicyCard currency={search.currency} fee={Math.floor(search.price * 0.4)} />

@@ -9,31 +9,6 @@ import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 
-const createBookingDto = {
-  destinationId: 'RsBU',
-  hotelId: 'jOZC',
-  hotelName: 'ST Residences Novena',
-  hotelImage: 'https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg',
-  address: '145A Moulmein Road',
-  bookingInfo: {
-    startDate: '2026-11-20',
-    endDate: '2026-11-25',
-    numberOfNights: 6,
-    adults: 1,
-    children: 1,
-    messageToHotel: 'Late check-in please',
-    roomTypes: ['Superior Double or Twin Room 1 King Bed'],
-  },
-  price: 499.99,
-  currency: 'S$',
-  bookingReference: 'BNKG-123456',
-  guest: {
-    salutation: 'Mr.',
-    firstName: 'John',
-    lastName: 'Doe',
-  },
-};
-
 export interface PaymentMethodFormValues {
   cardholderName: string;
 }
@@ -185,8 +160,12 @@ function PaymentMethodForm({
       'roomDescription:',
       roomDescription,
       'roomNum:',
-      rooms
+      rooms,
+      'price:',
+      price
     );
+
+    const guestsPerRoom: number = Math.ceil(guests / rooms);
     try {
       const res = await axios.post<CreatePaymentResponse>(
         'https://api-production-46df.up.railway.app/bookings/pay',
@@ -196,7 +175,7 @@ function PaymentMethodForm({
           country_code: country_code, // example values — replace with real ones
           lang: lang,
           currency: currency,
-          guests: guests,
+          guests: guestsPerRoom,
           startDate: startDate,
           endDate: endDate,
           roomTypes: [roomDescription],
@@ -239,7 +218,7 @@ function PaymentMethodForm({
             roomTypes: [roomDescription],
             messageToHotel: guestInfo.values.specialRequests,
           },
-          price: createBookingDto.price,
+          price: price,
           guest: {
             salutation: guestInfo.values.salutation,
             firstName: guestInfo.values.firstName,

@@ -69,6 +69,7 @@ function BookingSuccess() {
               roomDescription={roomDescription}
               price={price}
               currency={currency}
+              rooms={2}
             ></PriceBreakdown>
           </Grid.Col>
           <Grid.Col span={5}>

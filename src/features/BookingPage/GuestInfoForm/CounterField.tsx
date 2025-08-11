@@ -29,6 +29,7 @@ export const CounterField = ({
       }}
     >
       <UnstyledButton
+        aria-label="decrement"
         display={'flex'}
         onClick={() => onChange(value - 1)}
         disabled={disabledDecrement}
@@ -39,6 +40,7 @@ export const CounterField = ({
         {value}
       </Text>
       <UnstyledButton
+        aria-label="increment"
         display={'flex'}
         onClick={() => onChange(value + 1)}
         disabled={disabledIncrement}
