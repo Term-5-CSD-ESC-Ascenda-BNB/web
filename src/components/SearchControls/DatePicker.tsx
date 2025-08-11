@@ -33,6 +33,7 @@ export function DatePicker({ date, setDate, error }: DatePickerProps) {
   return (
     <>
       <DatePickerInput
+        data-testid="date-picker-input"
         size="sm"
         type="range"
         placeholder="Choose dates"
