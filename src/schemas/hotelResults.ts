@@ -53,8 +53,8 @@ export const FetchHotelsParamsSchema = z
     order: z.enum(['asc', 'desc']).catch('desc'),
     minPrice: z.number().min(0, 'minPrice must be a non-negative number').optional(),
     maxPrice: z.number().min(0, 'maxPrice must be a non-negative number').optional(),
-    minRatings: z.number().min(0, 'minRatings must be a non-negative number').optional(),
-    minScore: z.number().min(0, 'minScore must be a non-negative number').optional(),
+    minRating: z.number().min(0, 'minRating must be a non-negative number').optional(),
+    minReviewScore: z.number().min(0, 'minReviewScore must be a non-negative number').optional(),
   })
   .refine((obj) => obj.checkout > obj.checkin, {
     message: 'checkout date must be after checkin',
