@@ -8,8 +8,8 @@ describe('SearchParamsSchema', () => {
       const garbageInputs = fc.record({
         uid: fc.anything(),
         term: fc.anything(),
-        date: fc.anything(), // Could be a number, object, null, whatever
-        guests: fc.anything(), // Could be {}, [], "abc", null
+        date: fc.anything(),
+        guests: fc.anything(),
         rooms: fc.anything(),
         page: fc.anything(),
         sortBy: fc.anything(),
