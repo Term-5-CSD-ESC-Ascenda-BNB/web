@@ -1,7 +1,8 @@
 import { ImagePanel } from '@/features/AuthPage/components/ImagePanel/ImagePanel';
 import { Box } from '@mantine/core';
 import { useLocation } from '@tanstack/react-router';
-import { animated, useSpringValue } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
+import { useEffect } from 'react';
 import { LoginPanel } from '@/features/AuthPage/login/LoginPanel';
 import { RegisterPanel } from '@/features/AuthPage/register/RegisterPanel';
 
@@ -12,20 +13,17 @@ export const Route = createFileRoute({
 function RouteComponent() {
   const { pathname } = useLocation();
 
-  const isLogin = pathname === '/login';
-
-  const leftValue = useSpringValue(isLogin ? '0%' : '-50%', {
+  const [styles, api] = useSpring(() => ({
+    left: pathname === '/login' ? '0%' : '-50%',
     config: { tension: 300, friction: 30 },
-  });
+  }));
 
-  const handleButtonClick = () => {
-    console.log('Button clicked');
-    if (isLogin) {
-      void leftValue.start('-50%');
-    } else {
-      void leftValue.start('0%');
+  useEffect(() => {
+    if (pathname === '/login' || pathname === '/register') {
+      const isLogin = pathname === '/login';
+      void api.start({ to: { left: isLogin ? '0%' : '-50%' } });
     }
-  };
+  }, [pathname, api]);
 
   return (
     <Box h="100vh" w="100%" pos="relative" style={{ overflow: 'hidden' }}>
@@ -35,14 +33,14 @@ function RouteComponent() {
           display: 'flex',
           width: '150%',
           height: '100%',
-          left: leftValue,
+          ...styles,
         }}
       >
         <Box w={'50%'} h={'100%'} pos={'relative'}>
           <LoginPanel />
         </Box>
         <Box w={'50%'} h={'100%'} pos={'relative'}>
-          <ImagePanel handleButtonClick={handleButtonClick} />
+          <ImagePanel />
         </Box>
         <Box w={'50%'} h={'100%'} pos={'relative'}>
           <RegisterPanel />

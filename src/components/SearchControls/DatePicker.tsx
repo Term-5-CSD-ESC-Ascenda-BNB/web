@@ -3,22 +3,21 @@ import { IconCalendar } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 
 interface DatePickerProps {
-  date: [string, string];
-  setDate: (date: [string, string]) => void;
+  date: [string | null, string | null];
+  setDate: (date: [string | null, string | null]) => void;
   error?: boolean;
 }
 
 export function DatePicker({ date, setDate, error }: DatePickerProps) {
-  const [internalDate, setInternalDate] = useState<[string | null, string | null]>(date);
+  const [internalDate, setInternalDate] = useState(date);
   const lastValidDateRange = useRef<[string | null, string | null]>(date);
 
   const handleDateChange = (value: [string | null, string | null]) => {
     // If we have a valid date range
-    if (value[0] !== null && value[1] !== null) {
-      const validValue = value as [string, string];
-      setDate(validValue);
-      setInternalDate(validValue);
-      lastValidDateRange.current = validValue;
+    if (value[0] && value[1]) {
+      setDate(value);
+      setInternalDate(value);
+      lastValidDateRange.current = value;
     }
     // If both dates are null (user cancelled selection or clicked same date twice)
     else if (value[0] === null && value[1] === null) {
@@ -42,16 +41,10 @@ export function DatePicker({ date, setDate, error }: DatePickerProps) {
         excludeDate={(dateStr) => {
           // checkin has to be at least 3 days in the future
           // so anything 2 days or less from now is excluded
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // normalize to start of day
-
-          const threeDaysFromNow = new Date(today);
-          threeDaysFromNow.setDate(today.getDate() + 3);
-
+          const twoDaysFromNow = new Date();
+          twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
           const selectedDate = new Date(dateStr);
-          selectedDate.setHours(0, 0, 0, 0); // normalize to start of day
-
-          return selectedDate < threeDaysFromNow;
+          return selectedDate < twoDaysFromNow;
         }}
         leftSection={<IconCalendar size={16} />}
         style={{ width: 165 }}

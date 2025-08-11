@@ -1,24 +1,26 @@
 import { Paper, Stack, Text, Title, Divider, Group, Image, Box, Button, Grid } from '@mantine/core';
 import React from 'react';
 
-const HotelInfo = () => {
+interface HotelInfoProps {
+  hotelName: string;
+  hotelImage: string;
+  address: string;
+}
+
+const HotelInfo = ({ hotelName, hotelImage, address }: HotelInfoProps) => {
   return (
     <Paper withBorder p="md" radius="md">
       <Group justify="center">
-        <Image
-          src="https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg"
-          radius="md"
-          w={400}
-          h={370}
-          fit="cover"
-        />
+        <Box style={{ aspectRatio: '4 / 3', width: '100%' }}>
+          <Image src={hotelImage} radius="md" w="100%" h="100%" fit="cover" />
+        </Box>
       </Group>
       <Divider my="sm" />
       <Stack gap={4}>
         <Text size={'xl'} fw={700}>
-          ST Residences Novena
+          {hotelName}
         </Text>
-        <Text c="dimmed">145A Moulmein Road</Text>
+        <Text c="dimmed">{address}</Text>
       </Stack>
     </Paper>
   );

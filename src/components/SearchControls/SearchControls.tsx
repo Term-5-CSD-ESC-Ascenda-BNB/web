@@ -2,17 +2,16 @@ import { Group } from '@mantine/core';
 import { GuestsRoomsSelector } from './GuestsRoomsSelector';
 import { DatePicker } from './DatePicker';
 import { DestinationSearch } from './DestinationSearch';
-import { getRouteApi } from '@tanstack/react-router';
-import { type SearchParams } from '@/schemas/searchParams';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
+import { SearchParamsSchema } from '@/schemas/searchParams';
 import { SearchButton } from '../buttons';
 import { useForm } from '@mantine/form';
-import { useSearchState } from '@/features/SearchPage/useSearchState';
 
 const routeApi = getRouteApi('/search');
 
 export function SearchControls() {
   const searchParams = routeApi.useSearch();
-  const { updateSearchParams } = useSearchState();
+  const navigate = useNavigate({});
 
   const form = useForm({
     initialValues: {
@@ -36,16 +35,10 @@ export function SearchControls() {
       return;
     }
 
-    const updatedSearchParams: Partial<SearchParams> = {
-      uid: form.values.uid,
-      term: form.values.term,
-      date: form.values.date,
-      guests: form.values.guests,
-      rooms: form.values.rooms,
-      page: 1,
-    };
-
-    updateSearchParams(updatedSearchParams);
+    void navigate({
+      to: '/search',
+      search: SearchParamsSchema.parse(form.values),
+    });
   };
 
   return (

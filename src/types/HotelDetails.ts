@@ -17,6 +17,7 @@ export interface TrustYouScore {
   };
 }
 
+// Optional: used for props in HotelSurroundings
 export interface Surrounding {
   type: string;
   name: string;
