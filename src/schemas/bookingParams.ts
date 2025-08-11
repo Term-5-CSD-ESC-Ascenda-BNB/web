@@ -7,15 +7,16 @@ export const BookingParamsSchema = z.object({
   hotelAddress: z.string(),
   hotelImage: z.string().url(),
   roomDescription: z.string(),
-  starRating: z.coerce.number(),
-  trustYouScore: z.coerce.number(),
+  starRating: z.number(),
+  trustYouScore: z.number(),
   country_code: z.string(),
   lang: z.string(),
   currency: z.string(),
-  guests: z.coerce.number(),
+  guests: z.number(),
   startDate: z.string(),
   endDate: z.string(),
-  numberOfNights: z.coerce.number(),
-  price: z.coerce.number(),
+  numberOfNights: z.number(),
+  price: z.number(),
 });
+
 export type BookingParams = z.infer<typeof BookingParamsSchema>;
