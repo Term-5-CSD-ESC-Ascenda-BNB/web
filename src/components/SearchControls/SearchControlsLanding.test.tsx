@@ -2,6 +2,7 @@ import { render, screen } from '@/tests/utils';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SearchControlsLanding } from './SearchControlsLanding';
+import { defaultDate } from '@/schemas/searchParams';
 import React from 'react';
 
 interface DestinationSearchProps {
@@ -10,8 +11,8 @@ interface DestinationSearchProps {
 }
 
 interface DatePickerProps {
-  date: [string | null, string | null];
-  setDate: (date: [string | null, string | null]) => void;
+  date: [string, string];
+  setDate: (date: [string, string]) => void;
   error?: boolean;
 }
 
@@ -51,7 +52,7 @@ vi.mock('./DestinationSearch', () => ({
 vi.mock('./DatePicker', () => ({
   DatePicker: ({ date, setDate, error }: DatePickerProps) => {
     const [internalValue, setInternalValue] = React.useState(
-      date[0] && date[1] ? `${date[0]} - ${date[1]}` : ''
+      `${date[0]} - ${date[1]}` // Always has values now since date is [string, string]
     );
 
     return (
@@ -61,7 +62,10 @@ vi.mock('./DatePicker', () => ({
           onChange={(e) => {
             setInternalValue(e.target.value);
             const [start, end] = e.target.value.split(' - ');
-            setDate([start || null, end || null]);
+            // Only update if both parts exist, otherwise keep current values
+            if (start && end) {
+              setDate([start, end]);
+            }
           }}
           placeholder="Select dates"
           data-testid="date-input"
@@ -115,11 +119,14 @@ describe('SearchControlsLanding', () => {
     it('initializes form with default values', () => {
       render(<SearchControlsLanding />);
 
-      // Check that empty destination placeholder is shown
+      // Check that default destination is shown (from schema)
       expect(screen.getByPlaceholderText('Enter destination')).toBeInTheDocument();
 
-      // Check that empty date placeholder is shown
-      expect(screen.getByPlaceholderText('Select dates')).toBeInTheDocument();
+      // Check that default dates are shown (generated dynamically)
+      const [defaultCheckin, defaultCheckout] = defaultDate();
+      expect(
+        screen.getByDisplayValue(`${defaultCheckin} - ${defaultCheckout}`)
+      ).toBeInTheDocument();
 
       // Check default guests and rooms values
       expect(screen.getByText('Guests: 1')).toBeInTheDocument();
@@ -142,10 +149,21 @@ describe('SearchControlsLanding', () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
-      const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-09-01 - 2025-09-03');
+      // Generate dates dynamically
+      const today = new Date();
+      const checkin = new Date(today);
+      checkin.setDate(today.getDate() + 5);
+      const checkout = new Date(today);
+      checkout.setDate(today.getDate() + 7);
 
-      expect(dateInput).toHaveValue('2025-09-01 - 2025-09-03');
+      const checkinStr = checkin.toISOString().split('T')[0];
+      const checkoutStr = checkout.toISOString().split('T')[0];
+
+      const dateInput = screen.getByTestId('date-input');
+      await user.clear(dateInput);
+      await user.type(dateInput, `${checkinStr} - ${checkoutStr}`);
+
+      expect(dateInput).toHaveValue(`${checkinStr} - ${checkoutStr}`);
     });
 
     it('updates guests when GuestsRoomsSelector changes', async () => {
@@ -174,12 +192,23 @@ describe('SearchControlsLanding', () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
-      // Fill in required fields
+      // Fill in required fields with dynamic dates
       const destinationInput = screen.getByTestId('destination-input');
+      await user.clear(destinationInput);
       await user.type(destinationInput, 'Singapore');
 
+      const today = new Date();
+      const checkin = new Date(today);
+      checkin.setDate(today.getDate() + 5);
+      const checkout = new Date(today);
+      checkout.setDate(today.getDate() + 7);
+
+      const checkinStr = checkin.toISOString().split('T')[0];
+      const checkoutStr = checkout.toISOString().split('T')[0];
+
       const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-08-10 - 2025-08-11');
+      await user.clear(dateInput);
+      await user.type(dateInput, `${checkinStr} - ${checkoutStr}`);
 
       // Click search
       const searchButton = screen.getByTestId('search-button');
@@ -190,7 +219,7 @@ describe('SearchControlsLanding', () => {
         search: expect.objectContaining({
           uid: 'test-uid',
           term: 'Singapore',
-          date: ['2025-08-10', '2025-08-11'],
+          date: [checkinStr, checkoutStr],
           guests: 1,
           rooms: 1,
         }) as unknown,
@@ -201,12 +230,24 @@ describe('SearchControlsLanding', () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
+      // Generate dynamic dates
+      const today = new Date();
+      const checkin = new Date(today);
+      checkin.setDate(today.getDate() + 10);
+      const checkout = new Date(today);
+      checkout.setDate(today.getDate() + 12);
+
+      const checkinStr = checkin.toISOString().split('T')[0];
+      const checkoutStr = checkout.toISOString().split('T')[0];
+
       // Fill in required fields
       const destinationInput = screen.getByTestId('destination-input');
+      await user.clear(destinationInput);
       await user.type(destinationInput, 'Tokyo');
 
       const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-09-01 - 2025-09-03');
+      await user.clear(dateInput);
+      await user.type(dateInput, `${checkinStr} - ${checkoutStr}`);
 
       // Modify guests and rooms
       const increaseGuestsButton = screen.getByTestId('increase-guests');
@@ -225,7 +266,7 @@ describe('SearchControlsLanding', () => {
         search: expect.objectContaining({
           uid: 'test-uid',
           term: 'Tokyo',
-          date: ['2025-09-01', '2025-09-03'],
+          date: [checkinStr, checkoutStr],
           guests: 3,
           rooms: 2,
         }) as unknown,
@@ -238,45 +279,9 @@ describe('SearchControlsLanding', () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
-      // Only fill in date, leave destination empty
-      const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-08-10 - 2025-08-11');
-
-      const searchButton = screen.getByTestId('search-button');
-      await user.click(searchButton);
-
-      expect(mockNavigate).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalledWith(
-        'Validation failed:',
-        expect.objectContaining({
-          uid: 'Destination is required',
-        })
-      );
-    });
-
-    it('prevents navigation when date range is incomplete', async () => {
-      const user = userEvent.setup();
-      render(<SearchControlsLanding />);
-
-      // Only fill in destination, leave date empty
+      // Clear destination, keep default dates
       const destinationInput = screen.getByTestId('destination-input');
-      await user.type(destinationInput, 'Singapore');
-
-      const searchButton = screen.getByTestId('search-button');
-      await user.click(searchButton);
-
-      expect(mockNavigate).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalledWith(
-        'Validation failed:',
-        expect.objectContaining({
-          date: 'Date range is required',
-        })
-      );
-    });
-
-    it('prevents navigation when both required fields are missing', async () => {
-      const user = userEvent.setup();
-      render(<SearchControlsLanding />);
+      await user.clear(destinationInput);
 
       const searchButton = screen.getByTestId('search-button');
       await user.click(searchButton);
@@ -286,7 +291,6 @@ describe('SearchControlsLanding', () => {
         'Validation failed:',
         expect.objectContaining({
           uid: 'Destination is required',
-          date: 'Date range is required',
         })
       );
     });
@@ -295,12 +299,10 @@ describe('SearchControlsLanding', () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
-      // Fill in all required fields
+      // Fill in destination (dates are already valid by default)
       const destinationInput = screen.getByTestId('destination-input');
+      await user.clear(destinationInput);
       await user.type(destinationInput, 'Singapore');
-
-      const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-08-10 - 2025-08-11');
 
       const searchButton = screen.getByTestId('search-button');
       await user.click(searchButton);
@@ -315,26 +317,16 @@ describe('SearchControlsLanding', () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
+      // Clear destination
+      const destinationInput = screen.getByTestId('destination-input');
+      await user.clear(destinationInput);
+
       // Try to search without destination
       const searchButton = screen.getByTestId('search-button');
       await user.click(searchButton);
 
       // Check if the destination input has error styling
-      const destinationInput = screen.getByTestId('destination-input');
       expect(destinationInput).toHaveStyle({ borderColor: 'red' });
-    });
-
-    it('shows error state for date when validation fails', async () => {
-      const user = userEvent.setup();
-      render(<SearchControlsLanding />);
-
-      // Try to search without date
-      const searchButton = screen.getByTestId('search-button');
-      await user.click(searchButton);
-
-      // Check if the date input has error styling
-      const dateInput = screen.getByTestId('date-input');
-      expect(dateInput).toHaveStyle({ borderColor: 'red' });
     });
   });
 
@@ -372,33 +364,46 @@ describe('SearchControlsLanding', () => {
   });
 
   describe('edge cases', () => {
-    it('handles partial date selection gracefully', async () => {
+    it('handles invalid date format gracefully', async () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
       const destinationInput = screen.getByTestId('destination-input');
+      await user.clear(destinationInput);
       await user.type(destinationInput, 'Singapore');
 
       const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-09-01 - ');
+      await user.clear(dateInput);
+      await user.type(dateInput, 'invalid-date');
 
       const searchButton = screen.getByTestId('search-button');
       await user.click(searchButton);
 
-      // Should not navigate due to validation
-      expect(mockNavigate).not.toHaveBeenCalled();
+      // Should still navigate because schema will provide default dates
+      expect(mockNavigate).toHaveBeenCalled();
     });
 
     it('handles SearchParamsSchema parsing correctly', async () => {
       const user = userEvent.setup();
       render(<SearchControlsLanding />);
 
-      // Fill in valid data
+      // Fill in valid data with dynamic dates
       const destinationInput = screen.getByTestId('destination-input');
+      await user.clear(destinationInput);
       await user.type(destinationInput, 'Singapore');
 
+      const today = new Date();
+      const checkin = new Date(today);
+      checkin.setDate(today.getDate() + 5);
+      const checkout = new Date(today);
+      checkout.setDate(today.getDate() + 7);
+
+      const checkinStr = checkin.toISOString().split('T')[0];
+      const checkoutStr = checkout.toISOString().split('T')[0];
+
       const dateInput = screen.getByTestId('date-input');
-      await user.type(dateInput, '2025-08-10 - 2025-08-11');
+      await user.clear(dateInput);
+      await user.type(dateInput, `${checkinStr} - ${checkoutStr}`);
 
       const searchButton = screen.getByTestId('search-button');
       await user.click(searchButton);
