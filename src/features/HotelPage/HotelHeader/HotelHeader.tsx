@@ -1,7 +1,7 @@
 import { Group, Stack, Text, Tooltip } from '@mantine/core';
 import { LocationDisplay } from '@/components/LocationDisplay/LocationDisplay';
 import { RatingStars } from '@/components/RatingStars/RatingStars';
-import { SaveButton } from '@/components/SaveButton/SaveButton';
+// import { SaveButton } from '@/components/SaveButton/SaveButton';
 import { ShareButton } from '@/components/ShareButton/ShareButton';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
 import { HotelReviews } from '@/features/HotelPage/HotelReviews/HotelReviews';
@@ -37,7 +37,7 @@ export function HotelHeader({
           <LocationDisplay address={address} fontSize="md" />
           <Group gap="xs">
             <ShareButton width={120} />
-            <SaveButton width={120} />
+            {/* <SaveButton width={120} /> */}
           </Group>
         </Stack>
 
