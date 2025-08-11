@@ -32,14 +32,14 @@ describe('LoginForm', () => {
 
     expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Log in/i })).toBeInTheDocument();
   });
 
   it('disables submit button when mutation is pending', () => {
     mockIsPending = true;
     render(<LoginForm />);
 
-    const button = screen.getByRole('button', { name: /sign in/i });
+    const button = screen.getByRole('button', { name: /Log in/i });
     expect(button).toBeDisabled();
   });
 
@@ -48,7 +48,7 @@ describe('LoginForm', () => {
     render(<LoginForm />);
 
     const emailInput = screen.getByPlaceholderText(/email/i);
-    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    const submitButton = screen.getByRole('button', { name: /Log in/i });
 
     await user.type(emailInput, 'invalid-email');
     await user.click(submitButton);
@@ -63,7 +63,7 @@ describe('LoginForm', () => {
     render(<LoginForm />);
 
     const passwordInput = screen.getByPlaceholderText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    const submitButton = screen.getByRole('button', { name: /Log in/i });
 
     await user.type(passwordInput, 'weak');
     await user.click(submitButton);
@@ -80,7 +80,7 @@ describe('LoginForm', () => {
 
     const emailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    const submitButton = screen.getByRole('button', { name: /Log in/i });
 
     await user.type(emailInput, 'invalid-email');
     await user.type(passwordInput, 'weak');
@@ -111,7 +111,7 @@ describe('LoginForm', () => {
     render(<LoginForm />);
 
     const emailInput = screen.getByPlaceholderText(/email/i);
-    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    const submitButton = screen.getByRole('button', { name: /Log in/i });
 
     await user.type(emailInput, 'invalid-email');
     await user.click(submitButton);
@@ -136,7 +136,7 @@ describe('LoginForm', () => {
     await user.type(screen.getByPlaceholderText(/email/i), 'john.doe@example.com');
     await user.type(screen.getByPlaceholderText(/password/i), 'StrongP@ss1');
 
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
+    await user.click(screen.getByRole('button', { name: /Log in/i }));
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
