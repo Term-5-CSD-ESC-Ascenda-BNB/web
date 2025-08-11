@@ -25,9 +25,6 @@ export function getSurroundingIcon(type: string): React.ReactElement {
 
   if (t.includes('train') || t.includes('metro') || t.includes('station'))
     return <IconTrain size={18} />;
-  if (t.includes('hotel') || t.includes('lodging') || t.includes('inn'))
-    return <IconBed size={18} />;
-  if (t.includes('book') || t.includes('library')) return <IconBook size={18} />;
   if (t.includes('airport') || t.includes('plane')) return <IconPlane size={18} />;
   if (t.includes('shopping') || t.includes('store') || t.includes('mall'))
     return <IconShoppingBag size={18} />;
@@ -36,6 +33,9 @@ export function getSurroundingIcon(type: string): React.ReactElement {
   if (t.includes('attraction') || t.includes('sight') || t.includes('tour'))
     return <IconStar size={18} />;
   if (t.includes('cafe') || t.includes('coffee')) return <IconCoffee size={18} />;
+  if (t.includes('hotel') || t.includes('lodging') || t.includes('inn'))
+    return <IconBed size={18} />;
+  if (t.includes('book') || t.includes('library')) return <IconBook size={18} />;
   if (t.includes('office') || t.includes('business')) return <IconBriefcase size={18} />;
   if (t.includes('school') || t.includes('university')) return <IconSchool size={18} />;
   if (t.includes('gallery') || t.includes('museum')) return <IconBuildingStore size={18} />;

@@ -43,16 +43,10 @@ export function SortableSelect<T extends string>({
     onSortChange?.(field, newOrder);
   };
 
-  // Capitalise the first letter for display only (not affecting the actual field names)
-  const data = fields.map((f) => ({
-    value: f,
-    label: f.charAt(0).toUpperCase() + f.slice(1),
-  }));
-
   return (
     <Select
       {...selectProps}
-      data={data}
+      data={fields}
       value={field}
       placeholder="Select field"
       onChange={handleFieldChange}
