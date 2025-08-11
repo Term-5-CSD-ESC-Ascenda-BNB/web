@@ -65,6 +65,7 @@ interface PaymentMethodFormProps {
   hotelImage: string;
   hotelAddress: string;
   setLoading: (val: boolean) => void;
+  rooms: number;
 }
 
 interface BookingResponse {
@@ -107,6 +108,7 @@ function PaymentMethodForm({
   hotelImage,
   hotelAddress,
   setLoading,
+  rooms,
 }: PaymentMethodFormProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const [pendingValues, setPendingValues] = useState<PaymentMethodFormValues | null>(null);
@@ -183,7 +185,7 @@ function PaymentMethodForm({
       'roomDescription:',
       roomDescription,
       'roomNum:',
-      3
+      rooms
     );
     try {
       const res = await axios.post<CreatePaymentResponse>(
@@ -199,7 +201,7 @@ function PaymentMethodForm({
           endDate: endDate,
           roomTypes: [roomDescription],
           roomDescription: roomDescription,
-          roomNum: 1,
+          roomNum: rooms,
         },
         { withCredentials: true }
       );
@@ -269,6 +271,7 @@ function PaymentMethodForm({
               hotelName: hotelName,
               hotelImage: hotelImage,
               address: hotelAddress,
+              rooms: rooms,
             },
           });
         } catch (bookingError) {

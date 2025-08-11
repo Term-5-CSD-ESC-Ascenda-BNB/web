@@ -20,6 +20,7 @@ export const Route = createFileRoute({
       hotelName: String(search.hotelName),
       hotelImage: String(search.hotelImage),
       address: String(search.address),
+      rooms: Number(1),
     };
   },
 });
@@ -47,6 +48,7 @@ function BookingSuccess() {
     hotelName,
     hotelImage,
     address,
+    rooms,
   } = useSearch({ from: '/bookingsuccess' });
   return (
     <Box>
