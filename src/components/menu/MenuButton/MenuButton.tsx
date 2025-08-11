@@ -38,7 +38,13 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
         <Stack component={'nav'} gap={0} className={styles.menuStack}>
           <MenuNavLink to="/" icon={IconHomeFilled} label="Home" className={styles.menuLink} />
           <MenuNavLink to="/search" icon={IconSearch} label="Search" className={styles.menuLink} />
-          <MenuNavLink to="/login" icon={IconLogin} label="Login" className={styles.menuLink} />
+          <MenuNavLink
+            to="/login"
+            icon={IconLogin}
+            label="Login"
+            className={styles.menuLink}
+            reloadDocument
+          />
         </Stack>
       </Drawer>
     </>

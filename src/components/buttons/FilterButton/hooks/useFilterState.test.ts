@@ -1,7 +1,7 @@
-import { renderHook, act } from '@testing-library/react';
 import type { FilterState } from '../FilterPanel';
 import { useFilterState } from './useFilterState';
 import { describe, it, expect, vi } from 'vitest';
+import { renderHook, act } from '@/tests/utils';
 
 describe('useFilterState', () => {
   const defaultFilters: FilterState = {

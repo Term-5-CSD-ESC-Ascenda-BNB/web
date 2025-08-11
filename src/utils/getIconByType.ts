@@ -53,7 +53,6 @@ export const getIconByType = (type: string): TablerIcon => {
     golf: IconGolf,
     skiing: IconSkiJumping,
     civic: IconBuildingCommunity,
-    // what are all these wtf
     anchor: IconAnchor,
     sign: IconDirectionsFilled,
     tree: IconTree,

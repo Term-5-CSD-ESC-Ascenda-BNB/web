@@ -6,7 +6,7 @@ import { IconPlus, IconMinus } from '@tabler/icons-react';
 import { HotelPinMarker } from './HotelPinMarker';
 
 import mapStyles from './Map.module.css';
-import PriceMarker from './PriceMarker';
+import PriceMarker from './PriceMarker/PriceMarker';
 import { HotelPopup } from './HotelPopup';
 import type { HotelResult } from '@/schemas/hotelResults';
 
@@ -22,14 +22,14 @@ interface Surrounding {
 }
 
 type MarkerRefHandler = (id: string) => (marker: L.Marker | null) => void;
-type PopupHandler = (id: string) => void;
 
 interface HotelMapProps {
   hotels?: HotelResult[];
   surroundings?: Surrounding[];
   getMarkerRef?: MarkerRefHandler;
-  onPopupOpen?: PopupHandler;
-  onPopupClose?: PopupHandler;
+  onPopupOpen?: (id: string) => void;
+  onPopupClose?: (id: string) => void;
+  onPopupClick?: (id: string) => void;
   center?: [number, number];
   zoom?: number;
   interactive?: boolean;
@@ -41,6 +41,7 @@ export function HotelMap({
   getMarkerRef,
   onPopupOpen,
   onPopupClose,
+  onPopupClick,
   center: providedCenter,
   zoom: providedZoom = 13,
   interactive = true,
@@ -77,10 +78,10 @@ export function HotelMap({
       ref={mapRef}
       center={center}
       zoom={providedZoom}
-      scrollWheelZoom={interactive ?? true}
-      dragging={interactive ?? true}
-      doubleClickZoom={interactive ?? true}
-      touchZoom={interactive ?? true}
+      scrollWheelZoom={interactive}
+      dragging={interactive}
+      doubleClickZoom={interactive}
+      touchZoom={interactive}
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
       zoomControl={false}
@@ -115,10 +116,7 @@ export function HotelMap({
             onPopupOpen={() => onPopupOpen?.(hotel.id)}
             onPopupClose={() => onPopupClose?.(hotel.id)}
           >
-            <HotelPopup
-              hotel={hotel}
-              onClick={() => console.log(`Clicked on hotel: ${hotel.id}`)}
-            />
+            <HotelPopup hotel={hotel} onClick={() => onPopupClick?.(hotel.id)} />
           </PriceMarker>
         );
       })}
