@@ -163,6 +163,28 @@ function PaymentMethodForm({
 
     console.log(guestInfo.values);
 
+    console.log(
+      'hotelId:',
+      hotelId,
+      'destination_id:',
+      destinationId,
+      'country_code:',
+      country_code,
+      'lang:',
+      lang,
+      'currency:',
+      currency,
+      'guests:',
+      guests,
+      'startDate:',
+      startDate,
+      'endDate:',
+      endDate,
+      'roomDescription:',
+      roomDescription,
+      'roomNum:',
+      3
+    );
     try {
       const res = await axios.post<CreatePaymentResponse>(
         'https://api-production-46df.up.railway.app/bookings/pay',
@@ -177,6 +199,7 @@ function PaymentMethodForm({
           endDate: endDate,
           roomTypes: [roomDescription],
           roomDescription: roomDescription,
+          roomNum: 1,
         },
         { withCredentials: true }
       );
