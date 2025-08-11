@@ -17,6 +17,7 @@ export const BookingParamsSchema = z.object({
   endDate: z.string(),
   numberOfNights: z.number(),
   price: z.number(),
+  rooms: z.number().int().min(1),
 });
 
 export type BookingParams = z.infer<typeof BookingParamsSchema>;

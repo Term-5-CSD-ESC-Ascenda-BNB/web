@@ -35,7 +35,7 @@ function getNumberOfNights(checkin: string, checkout: string): number {
 export function HotelRoomsSection() {
   const { data: hotel, isLoading: hotelLoading } = useHotel();
   const { data: roomData, isLoading, error } = useRooms();
-  const { date, guests } = useSearch({ from: '/hotels/$hotelId' });
+  const { date, guests, rooms } = useSearch({ from: '/hotels/$hotelId' });
   const [checkin, checkout] = date;
 
   if (isLoading || hotelLoading) {
@@ -54,9 +54,9 @@ export function HotelRoomsSection() {
     );
   }
 
-  const rooms: RoomRaw[] = roomData.rooms || [];
+  const room: RoomRaw[] = roomData.rooms || [];
 
-  if (rooms.length === 0) {
+  if (room.length === 0) {
     return (
       <Center py="xl">
         <Text>No rooms available for the selected dates.</Text>
@@ -64,7 +64,7 @@ export function HotelRoomsSection() {
     );
   }
 
-  const groupedRooms = groupByRoomType(rooms);
+  const groupedRooms = groupByRoomType(room);
 
   const safeCheckin = checkin ?? '';
   const safeCheckout = checkout ?? '';
@@ -135,6 +135,7 @@ export function HotelRoomsSection() {
               guests={guests}
               nights={nights}
               currency={'SGD'}
+              rooms={rooms}
             />
           );
         })}

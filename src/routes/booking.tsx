@@ -82,7 +82,7 @@ function Booking() {
             hotelAddress={search.hotelAddress}
             hotelImage={search.hotelImage}
             setLoading={setLoading}
-            rooms={2}
+            rooms={search.rooms}
           />
         </Grid.Col>
 
@@ -101,12 +101,12 @@ function Booking() {
 
           <PriceDetailsCard
             roomType={search.roomDescription}
-            rooms={2} // make this dynamic later
+            rooms={search.rooms}
             roomPrice={search.price}
             checkin={search.startDate}
             checkout={search.endDate}
             currency={search.currency}
-            nights={2}
+            nights={search.numberOfNights}
           />
 
           <CancellationPolicyCard currency={search.currency} fee={Math.floor(search.price * 0.4)} />

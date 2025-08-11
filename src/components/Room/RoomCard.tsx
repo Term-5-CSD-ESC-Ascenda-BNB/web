@@ -47,6 +47,7 @@ interface RoomCardProps {
   guests: number;
   nights: number;
   currency: string;
+  rooms: number;
 }
 
 export function RoomCard({
@@ -72,6 +73,7 @@ export function RoomCard({
   guests,
   nights,
   currency,
+  rooms,
 }: RoomCardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
@@ -98,6 +100,7 @@ export function RoomCard({
         endDate: checkout,
         numberOfNights: nights,
         price: selected.totalPrice,
+        rooms,
       },
     });
   };
