@@ -1,0 +1,29 @@
+.priceTag {
+  width: auto !important;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 4px 12px;
+  height: 30px;
+  border-radius: 999px;
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transform-origin: 50% 50%;
+  transition:
+    transform 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+}
+
+.priceTag:hover,
+.priceTagHovered,
+.priceTagActive {
+  transform: scale(1.1);
+  background-color: var(--mantine-color-primary-8);
+  color: #ffffff;
+}
+
+.onTop {
+  z-index: 99999 !important;
+}

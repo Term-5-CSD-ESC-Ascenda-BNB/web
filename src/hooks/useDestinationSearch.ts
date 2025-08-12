@@ -5,7 +5,7 @@ import axios from 'axios';
 import { getIconByType } from '@/utils';
 import type { TablerIcon } from '@tabler/icons-react';
 
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://api-production-46df.up.railway.app';
+const API_BASE_URL = 'https://api-production-46df.up.railway.app';
 
 const SEARCH_CONFIG = {
   debounceTime: 250, // Debounce time in milliseconds
@@ -29,7 +29,7 @@ export interface DestinationSearchResult {
   coordinates: { lat: number; lng: number };
 }
 
-const fetchDestinations = async (searchValue: string): Promise<ApiResponse[]> => {
+export const fetchDestinations = async (searchValue: string): Promise<ApiResponse[]> => {
   if (!searchValue.trim() || searchValue.trim().length < SEARCH_CONFIG.minSearchLength) {
     return [];
   }

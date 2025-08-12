@@ -59,11 +59,12 @@ export default defineConfig(({ mode }) => {
         'src/main.tsx',
         'e2e/**',
         'tests-examples/**',
+        'src/three/**',
       ],
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
-        include: ['src/**/*.test.{ts,tsx}', 'src/**/*.int.test.{ts,tsx}'],
+        include: ['src/**/*.{ts,tsx}'],
         exclude: [
           'src/routeTree.gen.ts',
           'src/**/index.ts',
@@ -72,6 +73,7 @@ export default defineConfig(({ mode }) => {
           'src/main.tsx',
           'e2e/**',
           'tests-examples/**',
+          'src/three/**',
         ],
       },
     },

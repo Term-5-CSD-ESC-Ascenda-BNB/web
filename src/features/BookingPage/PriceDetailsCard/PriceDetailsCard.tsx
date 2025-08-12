@@ -7,10 +7,24 @@ interface PriceDetailsCardProps {
   checkin: string;
   checkout: string;
   currency: string;
-  nights: number;
 }
 
-export function PriceDetailsCard({ rooms, roomPrice, currency, nights }: PriceDetailsCardProps) {
+export function PriceDetailsCard({
+  roomType,
+  rooms,
+  roomPrice,
+  checkin,
+  checkout,
+  currency,
+}: PriceDetailsCardProps) {
+  function getNumberOfNights(checkin: string, checkout: string): number {
+    const checkinDate = new Date(checkin);
+    const checkoutDate = new Date(checkout);
+    const diffTime = checkoutDate.getTime() - checkinDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24); // ms to days
+    return diffDays;
+  }
+  const nights: number = getNumberOfNights(checkin, checkout);
   return (
     <Paper withBorder radius="md" p="md" mt="md">
       <Stack gap={4}>
@@ -20,17 +34,17 @@ export function PriceDetailsCard({ rooms, roomPrice, currency, nights }: PriceDe
         <Divider />
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
-            {currency}
-            {(roomPrice / rooms / nights).toFixed(2)} x {rooms} room x {nights} nights
+            {rooms} room ({currency}
+            {roomPrice}) x {nights} nights
           </Text>
           <Text size="sm">
             {currency}
-            {roomPrice.toFixed(2)}
+            {roomPrice * nights}
           </Text>
         </Group>
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
-            Add-Ons
+            Add-Ons Add-Ons
           </Text>
           <Text size="sm">{currency}0</Text>
         </Group>
@@ -40,7 +54,7 @@ export function PriceDetailsCard({ rooms, roomPrice, currency, nights }: PriceDe
           <Text fw={600}>Total</Text>
           <Text fw={600}>
             {currency}
-            {roomPrice.toFixed(2)}
+            {roomPrice * nights}
           </Text>
         </Group>
       </Stack>

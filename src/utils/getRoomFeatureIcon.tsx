@@ -7,10 +7,11 @@ import {
   IconDeviceTv,
   IconBath,
   IconHelpCircle,
+  type IconProps,
 } from '@tabler/icons-react';
-import React from 'react';
+import type { ReactElement } from 'react';
 
-export function getRoomFeatureIcon(label: string | undefined): React.ReactElement {
+export function getRoomFeatureIcon(label: string | undefined): ReactElement<IconProps> {
   if (!label) return <IconHelpCircle size={14} />;
 
   const f = label.toLowerCase();

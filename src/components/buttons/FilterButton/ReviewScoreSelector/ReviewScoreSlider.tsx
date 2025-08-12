@@ -15,7 +15,7 @@ export function ReviewScoreSlider({
   label = 'Minimum Review Score',
   min = 0,
   max = 10,
-  step = 0.1,
+  step = 1,
 }: ReviewScoreSliderProps) {
   const marks = [
     { value: 0 },

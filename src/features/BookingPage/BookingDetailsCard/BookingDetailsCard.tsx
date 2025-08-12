@@ -41,7 +41,7 @@ export function BookingDetailsCard({
     <Paper withBorder radius="md" p="md">
       <Stack gap="sm">
         <Group align="flex-start" gap="md">
-          <Image src={image} alt="Hotel" radius="md" w={130} h={120} fit="cover" />
+          <Image src={image} alt="Hotel" radius="md" w={90} h={80} fit="cover" />
           <Box style={{ flex: 1 }}>
             <Text fw={600}>{name}</Text>
             <Group gap={4}>
