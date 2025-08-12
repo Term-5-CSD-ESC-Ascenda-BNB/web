@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 100;
 }
 
 .root-container {
@@ -127,4 +127,25 @@
   margin: 0 1rem;
   font-size: 1.5rem;
   font-weight: 600;
+}
+
+.delete-account-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.delete-account-button {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.delete-account-button:hover {
+  background: #d9363e;
 }

@@ -8,6 +8,7 @@ import { MilestoneBadge } from '@/components/Milestone/MilestoneBadge';
 import { IconHelp, IconDiamond } from '@tabler/icons-react';
 import { BookingGrid } from '@/components/BookingGrid/BookingGrid';
 import { useProfile } from '@/hooks/useProfile';
+import { useDeleteAccount } from '@/hooks/useDeleteProfile';
 
 export const Route = createFileRoute({
   component: Profile,
@@ -17,22 +18,26 @@ const getYearsOnWayfare = (createdAt: string): number => {
   const createdDate = new Date(createdAt);
   const now = new Date();
   const years = now.getFullYear() - createdDate.getFullYear();
-
-  // // Optional: adjust for whether the anniversary has passed this year
-  // const hasHadAnniversaryThisYear =
-  //   now.getMonth() > createdDate.getMonth() ||
-  //   (now.getMonth() === createdDate.getMonth() && now.getDate() >= createdDate.getDate());
-
   return years;
-  // hasHadAnniversaryThisYear ? years : years - 1;
 };
 
 function Profile() {
   const { hotels, isLoading: hotelsLoading } = useMockHotels();
   const { profile, isLoading: profileLoading, isUnauthenticated } = useProfile();
   const { handleMouseEnter, handleMouseLeave } = useMarkerHover();
+  const { mutate: deleteAccount, isPending } = useDeleteAccount();
 
-  console.log(hotels[0]);
+  const handleDeleteAccount = () => {
+    if (!window.confirm('Are you sure you want to delete your account?')) return;
+    deleteAccount(undefined, {
+      onSuccess: () => {
+        window.location.href = '/';
+      },
+      onError: () => {
+        alert('Failed to delete account.');
+      },
+    });
+  };
 
   if (profileLoading) {
     return (
@@ -62,10 +67,10 @@ function Profile() {
                 <div className={styles['picture-container']}>
                   <ProfilePicture />
                 </div>
-                <Group gap={4} className={styles['help-link']}>
+                {/* <Group gap={4} className={styles['help-link']}>
                   <IconHelp size="0.9rem" />
                   <p>How to earn points?</p>
-                </Group>
+                </Group> */}
               </Stack>
 
               <Stack gap={0} className={styles['details-container']}>
@@ -135,15 +140,6 @@ function Profile() {
         </Stack>
       </div>
       <div className={styles['booking-history-container']}>
-        {/* <Divider
-          label="My Booking History"
-          labelPosition="center"
-          size="sm"
-          color="#808ab1"
-          mt="sm"
-          mb="sm"
-          className={styles['divider-label-2']}
-        /> */}
         <div className={styles['custom-divider-wrapper']}>
           <div className={styles['custom-divider-line']} />
           <span className={styles['booking-history-label']}>My Booking History</span>
@@ -155,6 +151,11 @@ function Profile() {
           onHotelMouseEnter={handleMouseEnter}
           onHotelMouseLeave={handleMouseLeave}
         />
+      </div>
+      <div className={styles['delete-account-container']}>
+        <button className={styles['delete-account-button']} onClick={handleDeleteAccount}>
+          Delete Account
+        </button>
       </div>
     </>
   );
