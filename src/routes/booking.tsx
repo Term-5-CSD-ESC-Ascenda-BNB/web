@@ -9,6 +9,7 @@ import { useForm } from '@mantine/form';
 import { useSearch } from '@tanstack/react-router';
 import { BookingParamsSchema } from '@/schemas/bookingParams';
 import { useState } from 'react';
+import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 
 export const Route = createFileRoute({
   component: Booking,
@@ -40,78 +41,84 @@ function Booking() {
   });
 
   return (
-    <Container
-      size="lg"
-      py="md"
-      mt={20}
-      mb={50}
-      style={{ pointerEvents: loading ? 'none' : 'auto', opacity: loading ? 0.6 : 1 }}
-    >
-      <Modal
-        opened={loading}
-        onClose={() => {}}
-        withCloseButton={false}
-        centered
-        overlayProps={{
-          blur: 3,
-          backgroundOpacity: 0.6,
-        }}
+    <>
+      <IndexTopNavBar />
+      <Container
+        size="lg"
+        py="md"
+        mt={70}
+        mb={50}
+        style={{ pointerEvents: loading ? 'none' : 'auto', opacity: loading ? 0.6 : 1 }}
       >
-        <Stack align="center" gap="md">
-          <Title order={4}>Processing your booking...</Title>
-          <Loader color="blue" size="lg" />
-        </Stack>
-      </Modal>
-      <Grid gutter="xl">
-        <Grid.Col span={7}>
-          <GuestInfoForm guestInfo={guestInfo} guests={search.guests} />
-          <PaymentMethodForm
-            guestInfo={guestInfo}
-            hotelId={search.hotelId}
-            destinationId={search.destination_id}
-            startDate={search.startDate}
-            endDate={search.endDate}
-            guests={search.guests}
-            roomDescription={search.roomDescription}
-            currency={search.currency}
-            nights={search.numberOfNights}
-            price={search.price}
-            country_code={search.country_code}
-            lang={search.lang}
-            hotelName={search.hotelName}
-            hotelAddress={search.hotelAddress}
-            hotelImage={search.hotelImage}
-            setLoading={setLoading}
-            rooms={2}
-          />
-        </Grid.Col>
+        <Modal
+          opened={loading}
+          onClose={() => {}}
+          withCloseButton={false}
+          centered
+          overlayProps={{
+            blur: 3,
+            backgroundOpacity: 0.6,
+          }}
+        >
+          <Stack align="center" gap="md">
+            <Title order={4}>Processing your booking...</Title>
+            <Loader color="blue" size="lg" />
+          </Stack>
+        </Modal>
+        <Grid gutter="xl">
+          <Grid.Col span={7}>
+            <GuestInfoForm guestInfo={guestInfo} guests={search.guests} />
+            <PaymentMethodForm
+              guestInfo={guestInfo}
+              hotelId={search.hotelId}
+              destinationId={search.destination_id}
+              startDate={search.startDate}
+              endDate={search.endDate}
+              guests={search.guests}
+              roomDescription={search.roomDescription}
+              currency={search.currency}
+              nights={search.numberOfNights}
+              price={search.price}
+              country_code={search.country_code}
+              lang={search.lang}
+              hotelName={search.hotelName}
+              hotelAddress={search.hotelAddress}
+              hotelImage={search.hotelImage}
+              setLoading={setLoading}
+              rooms={search.rooms}
+            />
+          </Grid.Col>
 
-        <Grid.Col span={5}>
-          <BookingDetailsCard
-            name={search.hotelName}
-            image={search.hotelImage}
-            address={search.hotelAddress}
-            roomType={search.roomDescription}
-            starRating={search.starRating}
-            reviewScore={search.trustYouScore / 10}
-            checkin={search.startDate}
-            checkout={search.endDate}
-            guests={search.guests}
-          />
+          <Grid.Col span={5}>
+            <BookingDetailsCard
+              name={search.hotelName}
+              image={search.hotelImage}
+              address={search.hotelAddress}
+              roomType={search.roomDescription}
+              starRating={search.starRating}
+              reviewScore={search.trustYouScore / 10}
+              checkin={search.startDate}
+              checkout={search.endDate}
+              guests={search.guests}
+            />
 
-          <PriceDetailsCard
-            roomType={search.roomDescription}
-            rooms={2} // make this dynamic later
-            roomPrice={search.price}
-            checkin={search.startDate}
-            checkout={search.endDate}
-            currency={search.currency}
-            nights={2}
-          />
+            <PriceDetailsCard
+              roomType={search.roomDescription}
+              rooms={search.rooms}
+              roomPrice={search.price}
+              checkin={search.startDate}
+              checkout={search.endDate}
+              currency={search.currency}
+              nights={search.numberOfNights}
+            />
 
-          <CancellationPolicyCard currency={search.currency} fee={Math.floor(search.price * 0.4)} />
-        </Grid.Col>
-      </Grid>
-    </Container>
+            <CancellationPolicyCard
+              currency={search.currency}
+              fee={Math.floor(search.price * 0.4)}
+            />
+          </Grid.Col>
+        </Grid>
+      </Container>
+    </>
   );
 }
