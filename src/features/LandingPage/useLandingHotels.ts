@@ -11,7 +11,7 @@ export function useLandingHotels() {
     checkin: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     checkout: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     country_code: 'SG',
-    lang: 'en_US',
+    lang: 'en',
     currency: 'SGD',
     guests: '1',
   };

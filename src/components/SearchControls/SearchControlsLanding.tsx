@@ -5,7 +5,7 @@ import { DestinationSearch } from './DestinationSearch';
 import { SearchButton } from '@/components/buttons';
 import { DatePicker } from './DatePicker';
 import { useNavigate } from '@tanstack/react-router';
-import { defaultDate, SearchParamsSchema } from '@/schemas/searchParams';
+import { SearchParamsSchema } from '@/schemas/searchParams';
 
 export function SearchControlsLanding() {
   const navigate = useNavigate({});
@@ -14,7 +14,7 @@ export function SearchControlsLanding() {
     initialValues: {
       uid: '',
       term: '',
-      date: defaultDate(),
+      date: [null, null] as [string | null, string | null],
       guests: 1,
       rooms: 1,
     },

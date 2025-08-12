@@ -103,12 +103,12 @@ const PriceBreakdown = ({
             <Stack>
               <Text c={'dimmed'}>Room Price</Text>
               <Text>
-                {(price / rooms / nights).toFixed(2)} * {rooms} * {nights}
+                {price} * {rooms} * {nights}
               </Text>
             </Stack>
             <Stack>
               <Text c={'dimmed'}>Total</Text>
-              <Text>{price}</Text>
+              <Text>{price * nights}</Text>
             </Stack>
           </Group>
           <Divider />
@@ -117,7 +117,7 @@ const PriceBreakdown = ({
             <Text c="red">
               {' '}
               {currency}
-              {price}
+              {price * nights}
             </Text>
           </Group>
         </Stack>

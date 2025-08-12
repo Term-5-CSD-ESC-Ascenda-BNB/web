@@ -2,7 +2,7 @@ import { Marker } from 'react-leaflet';
 import { divIcon, Marker as LeafletMarker } from 'leaflet';
 import { useMemo } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { PriceTag } from '../PriceTag/PriceTag';
+import { PriceTag } from './PriceTag';
 import styles from './PriceMarker.module.css';
 
 interface PriceMarkerProps {

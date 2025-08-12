@@ -1,17 +1,18 @@
 import { Group, Text, useMantineTheme } from '@mantine/core';
-import { Link, type LinkComponentProps } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import type { TablerIcon } from '@tabler/icons-react';
 
-interface MenuLinkProps extends LinkComponentProps<'a'> {
+interface MenuLinkProps {
+  to: string;
   icon: TablerIcon;
   label: string;
   className?: string;
 }
 
-export function MenuNavLink({ to, icon: Icon, label, className, ...props }: MenuLinkProps) {
+export function MenuNavLink({ to, icon: Icon, label, className }: MenuLinkProps) {
   const theme = useMantineTheme();
   return (
-    <Link to={to} className={className} {...props}>
+    <Link to={to} className={className}>
       <Group>
         <Icon size={20} color={theme.colors.primary[9]} />
         <Text>{label}</Text>
