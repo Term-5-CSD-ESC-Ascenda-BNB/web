@@ -17,8 +17,6 @@
     "test:update": "vitest --update",
     "test:run": "vitest --run",
     "test:coverage": "vitest run --coverage",
-    "test:unit": "vitest --include 'src/**/*.test.{ts,tsx}'",
-    "test:integration": "vitest --include 'src/**/*.int.test.{ts,tsx}'",
     "test:e2e": "playwright test --config=playwright.config.ts",
     "test:e2e:ui": "playwright test --config=playwright.config.ts --ui"
   },
@@ -84,6 +82,7 @@
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
+    "msw": "^2.10.4",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
