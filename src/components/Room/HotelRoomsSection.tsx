@@ -5,7 +5,6 @@ import { useHotel } from '@/features/HotelPage/useHotel';
 import { useSearch } from '@tanstack/react-router';
 import { parseRoomFeatures } from '@/utils/parseRoomFeatures';
 import type { RoomRaw } from '@/schemas/roomResult';
-
 interface RoomOption {
   title: string;
   refundable: boolean;
@@ -13,7 +12,6 @@ interface RoomOption {
   price: number;
   totalPrice: number;
 }
-
 function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
   return rooms.reduce(
     (acc, room) => {
@@ -25,19 +23,16 @@ function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
     {} as Record<string, RoomRaw[]>
   );
 }
-
 function getNumberOfNights(checkin: string, checkout: string): number {
   const inDate = new Date(checkin);
   const outDate = new Date(checkout);
   return Math.round((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
 }
-
 export function HotelRoomsSection() {
   const { data: hotel, isLoading: hotelLoading } = useHotel();
   const { data: roomData, isLoading, error } = useRooms();
-  const { date, guests } = useSearch({ from: '/hotels/$hotelId' });
+  const { date, guests, rooms } = useSearch({ from: '/hotels/$hotelId' });
   const [checkin, checkout] = date;
-
   if (isLoading || hotelLoading) {
     return (
       <Center py="xl">
@@ -45,7 +40,6 @@ export function HotelRoomsSection() {
       </Center>
     );
   }
-
   if (error || !roomData || !hotel) {
     return (
       <Center py="xl">
@@ -53,29 +47,23 @@ export function HotelRoomsSection() {
       </Center>
     );
   }
-
-  const rooms: RoomRaw[] = roomData.rooms || [];
-
-  if (rooms.length === 0) {
+  const room: RoomRaw[] = roomData.rooms || [];
+  if (room.length === 0) {
     return (
       <Center py="xl">
         <Text>No rooms available for the selected dates.</Text>
       </Center>
     );
   }
-
-  const groupedRooms = groupByRoomType(rooms);
-
+  const groupedRooms = groupByRoomType(room);
   const safeCheckin = checkin ?? '';
   const safeCheckout = checkout ?? '';
   const nights = getNumberOfNights(safeCheckin, safeCheckout);
-
   return (
     <Box mt="xl">
       <Text fz="h2" mb="sm">
         Rooms
       </Text>
-
       <Box
         style={{
           display: 'grid',
@@ -88,13 +76,10 @@ export function HotelRoomsSection() {
           const images = firstRoom.images.length
             ? firstRoom.images.map((img) => img.url)
             : ['/fallback-room.jpg'];
-
           const features = parseRoomFeatures(firstRoom.long_description, firstRoom.amenities);
-
           const options: RoomOption[] = variations.map((room) => {
             const label = room.roomAdditionalInfo?.breakfastInfo?.toLowerCase();
             const hasBreakfast = label?.includes('breakfast') && !label?.includes('room_only');
-
             return {
               title: room.description,
               refundable: room.free_cancellation,
@@ -103,7 +88,6 @@ export function HotelRoomsSection() {
               totalPrice: room.price,
             };
           });
-
           return (
             <RoomCard
               key={roomName}
@@ -135,6 +119,7 @@ export function HotelRoomsSection() {
               guests={guests}
               nights={nights}
               currency={'SGD'}
+              rooms={rooms}
             />
           );
         })}
