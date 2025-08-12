@@ -1,22 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useSearch } from '@tanstack/react-router';
 import { RoomResultsSchema, type RoomResults } from '@/schemas/roomResult';
-import { FetchHotelsParamsSchema, type FetchHotelsParams } from '@/schemas/hotelResults';
 import { stringifyGuestsRooms } from '@/utils/stringifyGuestsRooms';
 import type { AxiosError } from 'axios';
 import type { ApiError } from '@/types/ApiError';
+import { z } from 'zod';
 
-const convertToStringParams = (params: FetchHotelsParams): Record<string, string> => {
-  const stringParams: Record<string, string> = {};
+// Create a separate schema for room parameters
+const FetchRoomsParamsSchema = z
+  .object({
+    destination_id: z.string().optional(),
+    checkin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    checkout: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    country_code: z.string().length(2),
+    lang: z.string().min(2),
+    currency: z.string().length(3),
+    guests: z.string().regex(/^\d+(\|\d+)*$/),
+    // Removed partner_id - not accepted by rooms API
+    // Only include sort if the API actually supports it with the correct values
+    sort: z.enum(['price', 'rooms_available']).optional(),
+  })
+  .refine((obj) => obj.checkout > obj.checkin, {
+    message: 'checkout date must be after checkin',
+    path: ['checkout'],
+  });
 
-  for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined) {
-      stringParams[key] = String(value);
-    }
-  }
-
-  return stringParams;
-};
+type FetchRoomsParams = z.infer<typeof FetchRoomsParamsSchema>;
 
 export function useRooms() {
   const { hotelId } = useParams({ from: '/hotels/$hotelId' });
@@ -32,19 +41,35 @@ export function useRooms() {
     currency: 'SGD',
     country_code: 'SG',
     guests,
-    partner_id: '1',
+    // Removed partner_id - not accepted by rooms API
+    // Only include sort if you want to use it, and use a valid value
+    // sort: 'price' as const,
   };
 
-  const parsedParams = FetchHotelsParamsSchema.parse(params);
+  const parsedParams = FetchRoomsParamsSchema.parse(params);
 
   return useQuery<RoomResults, AxiosError<ApiError>>({
     queryKey: ['hotelRooms', hotelId, parsedParams],
     queryFn: async () => {
+      const convertToStringParams = (params: FetchRoomsParams): Record<string, string> => {
+        const stringParams: Record<string, string> = {};
+        for (const [key, value] of Object.entries(params)) {
+          if (value !== undefined) {
+            stringParams[key] = String(value);
+          }
+        }
+        return stringParams;
+      };
+
       const query = new URLSearchParams(convertToStringParams(parsedParams)).toString();
       const res = await fetch(`/api/hotels/${hotelId}/price?${query}`);
+
       if (!res.ok) {
-        throw new Error(`Failed to fetch rooms: ${res.statusText}`);
+        const errorText = await res.text();
+        console.error('Room fetch error:', errorText);
+        throw new Error(`Failed to fetch rooms: ${res.status} ${res.statusText}`);
       }
+
       const data: unknown = await res.json();
       return RoomResultsSchema.parse(data);
     },
