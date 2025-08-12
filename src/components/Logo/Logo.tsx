@@ -22,7 +22,6 @@ export function Logo({ className, fz = '2rem', fw = 500, style = {}, ...props }:
       onClick={handleClick}
       className={className}
       {...props}
-      role="link"
     >
       Wayfare
     </Text>

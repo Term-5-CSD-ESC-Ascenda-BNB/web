@@ -9,7 +9,7 @@ export function CancellationPolicyCard({ currency, fee }: CancellationPolicyCard
   return (
     <Paper withBorder radius="md" p="md" mt="md">
       <Stack gap={4}>
-        <Text fw={600} size="sm">
+        <Text fw={600} size="lg">
           Cancellation Policy
         </Text>
         <Text size="sm">

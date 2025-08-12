@@ -3,7 +3,7 @@ import { IconChevronDown } from '@tabler/icons-react';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 import { HelpButton } from '@/components/buttons/';
 import { SearchControlsLanding } from '@/components/SearchControls/SearchControlsLanding';
-import { FeaturedSection } from '@/features/LandingPage/FeaturedSection/FeaturedSection';
+import { FeaturedSection } from '@/features/LandingPage/FeaturedSection';
 import { Flex, Stack, Text, useMantineTheme } from '@mantine/core';
 import { ExceptionalSection } from '@/features/LandingPage/Exceptional/ExceptionalSection';
 import { ThreeCanvas } from '@/three/ThreeCanvas';

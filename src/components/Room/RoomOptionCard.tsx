@@ -1,11 +1,5 @@
 import { Box, Button, Group, Stack, Text, NumberInput } from '@mantine/core';
-import {
-  IconToolsKitchen2,
-  IconCreditCard,
-  IconCalendarCancel,
-  IconCalendarCheck,
-  IconX,
-} from '@tabler/icons-react';
+import { IconToolsKitchen2, IconCreditCard, IconX } from '@tabler/icons-react';
 
 import type { RoomOption } from '@/types/Room';
 
@@ -37,11 +31,6 @@ export function RoomOptionCard({ option }: RoomOptionCardProps) {
           <Group gap={6}>
             <IconX size={16} />
             <Text size="sm">{option.refundable ? 'Refundable' : 'Non-Refundable'}</Text>
-          </Group>
-
-          <Group gap={6}>
-            <IconCalendarCancel size={16} />
-            <Text size="sm">{option.reschedulable ? 'Reschedulable' : 'Non-Reschedulable'}</Text>
           </Group>
 
           <Group gap={6}>
