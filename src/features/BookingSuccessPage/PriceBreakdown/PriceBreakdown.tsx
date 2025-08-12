@@ -1,7 +1,6 @@
 import { Paper, Stack, Text, Title, Divider, Group, Image, Box, Button, Grid } from '@mantine/core';
 import { IconPrinter } from '@tabler/icons-react';
 import React from 'react';
-
 interface PriceBreakdownProps {
   bookingId: string;
   startDate: string;
@@ -10,11 +9,10 @@ interface PriceBreakdownProps {
   roomDescription: string;
   price: number;
   currency: string;
+  rooms: number;
 }
-
 function formatDateInfo(dateStr: string) {
   const date = new Date(dateStr);
-
   const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const months = [
     'January',
@@ -30,7 +28,6 @@ function formatDateInfo(dateStr: string) {
     'November',
     'December',
   ];
-
   return {
     day: days[date.getUTCDay()],
     date: date.getUTCDate(),
@@ -38,7 +35,6 @@ function formatDateInfo(dateStr: string) {
     year: date.getUTCFullYear(),
   };
 }
-
 const PriceBreakdown = ({
   bookingId,
   startDate,
@@ -47,10 +43,10 @@ const PriceBreakdown = ({
   roomDescription,
   price,
   currency,
+  rooms,
 }: PriceBreakdownProps) => {
   const { day: sDay, date: sDate, month: sMonth, year: sYear } = formatDateInfo(startDate);
   const { day: eDay, date: eDate, month: eMonth, year: eYear } = formatDateInfo(endDate);
-
   return (
     <Paper withBorder p="md" radius="md">
       <Stack>
@@ -60,9 +56,7 @@ const PriceBreakdown = ({
             {bookingId}
           </Title>
         </Group>
-
         <Divider />
-
         <Group justify="flex-start" gap={40}>
           <Box>
             <Text fw={600}>Check-in</Text>
@@ -75,7 +69,6 @@ const PriceBreakdown = ({
               </Stack>
             </Paper>
           </Box>
-
           <Box>
             <Text fw={600}>Check-out</Text>
             <Paper withBorder p="sm" mt={4} radius="sm" w={120}>
@@ -88,9 +81,7 @@ const PriceBreakdown = ({
             </Paper>
           </Box>
         </Group>
-
         <Divider />
-
         <Stack>
           <Text fw={600}>Room Fare Breakup</Text>
           <Group justify="space-between">
@@ -101,12 +92,12 @@ const PriceBreakdown = ({
             <Stack>
               <Text c={'dimmed'}>Room Price</Text>
               <Text>
-                {price} * {nights}
+                {(price / rooms / nights).toFixed(2)} * {rooms} * {nights}
               </Text>
             </Stack>
             <Stack>
               <Text c={'dimmed'}>Total</Text>
-              <Text>{price * nights}</Text>
+              <Text>{price}</Text>
             </Stack>
           </Group>
           <Divider />
@@ -115,7 +106,7 @@ const PriceBreakdown = ({
             <Text c="red">
               {' '}
               {currency}
-              {price * nights}
+              {price}
             </Text>
           </Group>
         </Stack>
@@ -123,5 +114,4 @@ const PriceBreakdown = ({
     </Paper>
   );
 };
-
 export default PriceBreakdown;

@@ -13,7 +13,6 @@ import {
 } from '@mantine/core';
 import { useNavigate } from '@tanstack/react-router';
 import { getRoomFeatureIcon } from '@/utils/getRoomFeatureIcon';
-
 interface RoomOption {
   title: string;
   refundable: boolean;
@@ -21,7 +20,6 @@ interface RoomOption {
   price: number;
   totalPrice: number;
 }
-
 interface RoomCardProps {
   name: string;
   images: string[];
@@ -34,7 +32,6 @@ interface RoomCardProps {
   view: string;
   tv?: string;
   bath?: string;
-
   hotelId: string;
   destinationId: string;
   hotelName: string;
@@ -47,8 +44,8 @@ interface RoomCardProps {
   guests: number;
   nights: number;
   currency: string;
+  rooms: number;
 }
-
 export function RoomCard({
   name,
   images,
@@ -72,13 +69,12 @@ export function RoomCard({
   guests,
   nights,
   currency,
+  rooms,
 }: RoomCardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
-
   const handleSelect = () => {
     const selected = options[selectedIndex];
-
     void navigate({
       to: '/booking',
       search: {
@@ -98,10 +94,10 @@ export function RoomCard({
         endDate: checkout,
         numberOfNights: nights,
         price: selected.totalPrice,
+        rooms,
       },
     });
   };
-
   const featureList = [
     { label: size },
     { label: occupancy },
@@ -111,7 +107,6 @@ export function RoomCard({
     ...(tv ? [{ label: tv }] : []),
     ...(bath ? [{ label: bath }] : []),
   ];
-
   return (
     <Card
       shadow="sm"
@@ -129,11 +124,9 @@ export function RoomCard({
       <Card.Section>
         <Image src={images?.[0]} height={180} alt={name} />
       </Card.Section>
-
       <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Stack gap="xs" mt="xs">
           <Text fw={600}>{name}</Text>
-
           <Group gap="xs" wrap="wrap" mt="xs">
             {featureList.map(({ label }, idx) => (
               <Tooltip key={idx} label={label}>
@@ -145,9 +138,7 @@ export function RoomCard({
             ))}
           </Group>
         </Stack>
-
         <Divider my="sm" />
-
         <Radio.Group
           value={String(selectedIndex)}
           onChange={(value) => setSelectedIndex(parseInt(value))}
@@ -181,10 +172,8 @@ export function RoomCard({
             ))}
           </Stack>
         </Radio.Group>
-
         <Box mt="auto" />
       </Box>
-
       <Button fullWidth mt="md" color="#514D8A" onClick={handleSelect}>
         Select
       </Button>
