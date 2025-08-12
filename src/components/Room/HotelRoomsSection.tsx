@@ -68,7 +68,7 @@ export function HotelRoomsSection() {
 
   const safeCheckin = checkin ?? '';
   const safeCheckout = checkout ?? '';
-  const nights = getNumberOfNights(safeCheckin, safeCheckout) || 1;
+  const nights = getNumberOfNights(safeCheckin, safeCheckout);
 
   return (
     <Box mt="xl">
@@ -94,15 +94,13 @@ export function HotelRoomsSection() {
           const options: RoomOption[] = variations.map((room) => {
             const label = room.roomAdditionalInfo?.breakfastInfo?.toLowerCase();
             const hasBreakfast = label?.includes('breakfast') && !label?.includes('room_only');
-            const totalForStay = room.price;
-            const pricePerNight = totalForStay / nights;
 
             return {
               title: room.description,
               refundable: room.free_cancellation,
               breakfast: hasBreakfast ? 'Included' : 'Not included',
-              price: pricePerNight,
-              totalPrice: totalForStay,
+              price: room.price,
+              totalPrice: room.price,
             };
           });
 
