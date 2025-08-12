@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { type FilterState } from '../FilterPanel';
 
-const defaultFilters: FilterState = {
+export const defaultFilters: FilterState = {
   priceRange: [0, 1000],
   minRating: 0,
   minReviewScore: 0,

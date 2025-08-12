@@ -33,7 +33,7 @@ test.describe('Destination Search feature', () => {
      * Selects a date range
      */
     // 1. Open the date picker
-    const datePickerButton = page.getByRole('button', { name: /choose dates/i });
+    const datePickerButton = page.getByTestId('date-picker-input');
     await datePickerButton.click();
 
     // 2. Select check-in and check-out dates
