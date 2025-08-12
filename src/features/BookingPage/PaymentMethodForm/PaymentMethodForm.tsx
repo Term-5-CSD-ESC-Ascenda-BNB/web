@@ -252,6 +252,7 @@ function PaymentMethodForm({
               address: hotelAddress,
               rooms: rooms,
             },
+            replace: true,
           });
         } catch (bookingError) {
           console.error('❌ Booking failed:', bookingError);
@@ -373,10 +374,18 @@ function PaymentMethodForm({
               />
             </Group>
             <form
-              onSubmit={form.onSubmit((values) => {
-                setPendingValues(values);
-                open(); // show confirmation modal
-              })}
+              onSubmit={(event) => {
+                event.preventDefault();
+                const guestInfoErrors = guestInfo.validate();
+                const paymentErrors = form.validate();
+
+                if (guestInfoErrors.hasErrors || paymentErrors.hasErrors) {
+                  return;
+                }
+
+                setPendingValues(form.getValues());
+                open();
+              }}
             >
               <Stack gap="sm" mt="sm">
                 <TextInput

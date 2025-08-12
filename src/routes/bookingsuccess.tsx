@@ -5,6 +5,7 @@ import { IconCircleCheck } from '@tabler/icons-react';
 import { useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 
 export const Route = createFileRoute({
   component: BookingSuccess,
@@ -50,10 +51,12 @@ function BookingSuccess() {
     address,
     rooms,
   } = useSearch({ from: '/bookingsuccess' });
+
   return (
     <Box>
+      <IndexTopNavBar />
       <Paper p="md" radius="md" style={{ backgroundColor: '#fff9db' }}>
-        <Stack align="center" gap="xs" mb={40}>
+        <Stack align="center" gap="xs" mb={40} mt={40}>
           <IconCircleCheck size={120} color="green" />
           <Title order={2}>Thank You! Payment Successful</Title>
         </Stack>
