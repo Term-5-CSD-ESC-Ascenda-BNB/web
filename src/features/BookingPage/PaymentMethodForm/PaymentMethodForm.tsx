@@ -1,4 +1,16 @@
-import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image, Modal } from '@mantine/core';
+import {
+  Paper,
+  Title,
+  Tabs,
+  Group,
+  Button,
+  TextInput,
+  Stack,
+  Image,
+  Modal,
+  Divider,
+  Text,
+} from '@mantine/core';
 import { useForm, type UseFormReturnType } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -300,133 +312,97 @@ function PaymentMethodForm({
             </Button>
           </Group>
         </Modal>
-        <Title order={3} size="h4" mb={4}>
+        <Title order={3} size="h4">
           Payment Method
         </Title>
-        <Tabs defaultValue="prepay">
-          <Tabs.List>
-            <Tabs.Tab value="hotel">Pay at Hotel</Tabs.Tab>
-            <Tabs.Tab value="prepay">Prepay Online</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="prepay" pt="xs">
-            <Group gap="xs" mt="md">
-              <Button
-                leftSection={
-                  <Image
-                    src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                    width={28}
-                    height={18}
-                    alt="Visa"
-                  />
-                }
-                variant="default"
-                radius="xl"
-              >
-                *** 1234
-              </Button>
-              <Button
-                leftSection={
-                  <Image
-                    src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                    width={28}
-                    height={18}
-                    alt="Mastercard"
-                  />
-                }
-                variant="default"
-                radius="xl"
-              >
-                *** 1234
-              </Button>
-              <Button
-                leftSection={<IconCreditCard size={20} />}
-                variant="filled"
-                color="gray"
-                radius="xl"
-              >
-                New Card
-              </Button>
-            </Group>
-            <Group gap="xs" mt="sm" wrap="nowrap" ml={16}>
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="Visa"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="Mastercard"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="UnionPay"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="JCB"
-              />
-            </Group>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                const guestInfoErrors = guestInfo.validate();
-                const paymentErrors = form.validate();
+        <Group gap={'lg'}>
+          <Text size="sm" c="green">
+            ✔ Secure transmission
+          </Text>
+          <Text size="sm" c="green">
+            ✔ Protects personal information
+          </Text>
+        </Group>
+        <Divider />
 
-                if (guestInfoErrors.hasErrors || paymentErrors.hasErrors) {
-                  return;
-                }
+        <Group gap="xs" wrap="nowrap" ml={16}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="Visa"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="Mastercard"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="UnionPay"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="JCB"
+          />
+        </Group>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const guestInfoErrors = guestInfo.validate();
+            const paymentErrors = form.validate();
 
-                setPendingValues(form.getValues());
-                open();
+            if (guestInfoErrors.hasErrors || paymentErrors.hasErrors) {
+              return;
+            }
+
+            setPendingValues(form.getValues());
+            open();
+          }}
+        >
+          <Stack gap="sm" mt="sm">
+            <TextInput
+              placeholder="Cardholder's name"
+              withAsterisk
+              radius="xl"
+              {...form.getInputProps('cardholderName')}
+            />
+
+            <div
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: '12px',
+                padding: '12px',
+                marginTop: '8px',
               }}
             >
-              <Stack gap="sm" mt="sm">
-                <TextInput
-                  placeholder="Cardholder's name"
-                  withAsterisk
-                  radius="xl"
-                  {...form.getInputProps('cardholderName')}
-                />
-
-                <div
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '12px',
-                    padding: '12px',
-                    marginTop: '8px',
-                  }}
-                >
-                  <CardElement
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: '16px',
-                          color: '#000',
-                          '::placeholder': {
-                            color: '#888',
-                          },
-                        },
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#000',
+                      '::placeholder': {
+                        color: '#888',
                       },
-                    }}
-                  />
-                </div>
+                    },
+                  },
+                }}
+              />
+            </div>
 
-                <Group justify="flex-end">
-                  <Button type="submit" radius="xl">
-                    Submit Payment
-                  </Button>
-                </Group>
-              </Stack>
-            </form>
-          </Tabs.Panel>
-        </Tabs>
+            <Group justify="flex-end">
+              <Button type="submit" radius="xl">
+                Submit Payment
+              </Button>
+            </Group>
+          </Stack>
+        </form>
       </Stack>
     </Paper>
   );
