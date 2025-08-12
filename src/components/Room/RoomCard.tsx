@@ -18,9 +18,7 @@ interface RoomOption {
   title: string;
   refundable: boolean;
   breakfast: string;
-  /** Nightly rate */
   price: number;
-  /** Total for the whole stay (1 room) — optional */
   totalPrice: number;
 }
 
@@ -98,12 +96,11 @@ export function RoomCard({
         lang: 'en_US',
         currency,
         guests,
-        rooms,
         startDate: checkin,
         endDate: checkout,
         numberOfNights: nights,
-        // pass nightly price so booking math (price × nights × rooms) is correct
-        price: selected.price,
+        price: selected.totalPrice,
+        rooms,
       },
     });
   };
@@ -126,7 +123,11 @@ export function RoomCard({
       p="md"
       w={360}
       miw={300}
-      style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+      }}
     >
       <Card.Section>
         <Image src={images?.[0]} height={180} alt={name} />
@@ -175,9 +176,8 @@ export function RoomCard({
                   <Text fz="xs">
                     {opt.breakfast === 'Included' ? 'Breakfast included' : 'No breakfast'}
                   </Text>
-                  {/* Show nightly rate only */}
                   <Text fw={600} mt="xs">
-                    {currency} {opt.price.toFixed(2)} / night
+                    + ${opt.totalPrice.toFixed(2)}
                   </Text>
                 </Stack>
               </Card>
