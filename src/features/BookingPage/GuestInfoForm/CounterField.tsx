@@ -1,14 +1,12 @@
 import { Paper, TextInput, UnstyledButton, Text } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import React from 'react';
-
 interface CounterFieldProps {
   value: number;
   onChange: (newValue: number) => void;
   disabledDecrement?: boolean;
   disabledIncrement?: boolean;
 }
-
 export const CounterField = ({
   value,
   onChange,
@@ -29,6 +27,7 @@ export const CounterField = ({
       }}
     >
       <UnstyledButton
+        aria-label="decrement"
         display={'flex'}
         onClick={() => onChange(value - 1)}
         disabled={disabledDecrement}
@@ -39,6 +38,7 @@ export const CounterField = ({
         {value}
       </Text>
       <UnstyledButton
+        aria-label="increment"
         display={'flex'}
         onClick={() => onChange(value + 1)}
         disabled={disabledIncrement}

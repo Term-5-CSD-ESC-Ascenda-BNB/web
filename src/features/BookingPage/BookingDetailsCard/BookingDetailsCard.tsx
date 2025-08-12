@@ -3,7 +3,6 @@ import { IconStar, IconUser, IconRulerMeasure, IconCalendarTime } from '@tabler/
 import { useState } from 'react';
 import { useCounter } from '@mantine/hooks';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
-
 interface BookingDetailsCardProps {
   name: string;
   image: string;
@@ -15,7 +14,6 @@ interface BookingDetailsCardProps {
   checkout: string;
   guests: number;
 }
-
 export function BookingDetailsCard({
   name,
   image,
@@ -36,7 +34,6 @@ export function BookingDetailsCard({
       year: 'numeric', // "2025"
     });
   }
-
   return (
     <Paper withBorder radius="md" p="md">
       <Stack gap="sm">

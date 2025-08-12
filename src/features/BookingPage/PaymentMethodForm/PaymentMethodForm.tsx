@@ -1,4 +1,16 @@
-import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image, Modal } from '@mantine/core';
+import {
+  Paper,
+  Title,
+  Tabs,
+  Group,
+  Button,
+  TextInput,
+  Stack,
+  Image,
+  Modal,
+  Divider,
+  Text,
+} from '@mantine/core';
 import { useForm, type UseFormReturnType } from '@mantine/form';
 import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -8,36 +20,9 @@ import type { StringValidation } from 'zod';
 import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
-
-const createBookingDto = {
-  destinationId: 'RsBU',
-  hotelId: 'jOZC',
-  hotelName: 'ST Residences Novena',
-  hotelImage: 'https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg',
-  address: '145A Moulmein Road',
-  bookingInfo: {
-    startDate: '2026-11-20',
-    endDate: '2026-11-25',
-    numberOfNights: 6,
-    adults: 1,
-    children: 1,
-    messageToHotel: 'Late check-in please',
-    roomTypes: ['Superior Double or Twin Room 1 King Bed'],
-  },
-  price: 499.99,
-  currency: 'S$',
-  bookingReference: 'BNKG-123456',
-  guest: {
-    salutation: 'Mr.',
-    firstName: 'John',
-    lastName: 'Doe',
-  },
-};
-
 export interface PaymentMethodFormValues {
   cardholderName: string;
 }
-
 interface PaymentMethodFormProps {
   guestInfo: UseFormReturnType<{
     salutation: string;
@@ -65,8 +50,8 @@ interface PaymentMethodFormProps {
   hotelImage: string;
   hotelAddress: string;
   setLoading: (val: boolean) => void;
+  rooms: number;
 }
-
 interface BookingResponse {
   adults: number;
   bookingReference: string;
@@ -89,7 +74,6 @@ interface BookingResponse {
   updatedAt: string;
   userId: number;
 }
-
 function PaymentMethodForm({
   guestInfo,
   hotelId,
@@ -107,6 +91,7 @@ function PaymentMethodForm({
   hotelImage,
   hotelAddress,
   setLoading,
+  rooms,
 }: PaymentMethodFormProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const [pendingValues, setPendingValues] = useState<PaymentMethodFormValues | null>(null);
@@ -116,7 +101,6 @@ function PaymentMethodForm({
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
   const router = useRouter();
-
   const form = useForm({
     initialValues: {
       cardholderName: '',
@@ -131,38 +115,30 @@ function PaymentMethodForm({
       },
     },
   });
-
   interface CreatePaymentResponse {
     clientSecret: string;
     payeeId: string;
     paymentId: string;
   }
-
   const handleSubmit = async (values: PaymentMethodFormValues) => {
     setLoading(true);
-
     if (guestInfo.validate().hasErrors) {
       return;
     }
-
     if (!stripe) {
       console.error('Stripe.js has not loaded.');
       return;
     }
-
     if (!elements || typeof elements.getElement !== 'function') {
       console.error('Stripe Elements not loaded or invalid');
       return;
     }
-
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
       console.error('CardElement not found.');
       return;
     }
-
     console.log(guestInfo.values);
-
     console.log(
       'hotelId:',
       hotelId,
@@ -183,8 +159,11 @@ function PaymentMethodForm({
       'roomDescription:',
       roomDescription,
       'roomNum:',
-      3
+      rooms,
+      'price:',
+      price
     );
+    const guestsPerRoom: number = Math.ceil(guests / rooms);
     try {
       const res = await axios.post<CreatePaymentResponse>(
         'https://api-production-46df.up.railway.app/bookings/pay',
@@ -194,18 +173,16 @@ function PaymentMethodForm({
           country_code: country_code, // example values — replace with real ones
           lang: lang,
           currency: currency,
-          guests: guests,
+          guests: guestsPerRoom,
           startDate: startDate,
           endDate: endDate,
           roomTypes: [roomDescription],
           roomDescription: roomDescription,
-          roomNum: 1,
+          roomNum: rooms,
         },
         { withCredentials: true }
       );
-
       console.log('✅ Payment response:', res.data);
-
       const clientSecret = res.data.clientSecret;
       const payeeId = String(res.data.payeeId);
       const paymentId = String(res.data.paymentId);
@@ -227,7 +204,6 @@ function PaymentMethodForm({
         const bookingPayload = {
           hotelId: hotelId,
           destinationId: destinationId,
-
           bookingInfo: {
             startDate: startDate,
             endDate: endDate,
@@ -237,7 +213,7 @@ function PaymentMethodForm({
             roomTypes: [roomDescription],
             messageToHotel: guestInfo.values.specialRequests,
           },
-          price: createBookingDto.price,
+          price: price,
           guest: {
             salutation: guestInfo.values.salutation,
             firstName: guestInfo.values.firstName,
@@ -255,7 +231,6 @@ function PaymentMethodForm({
             { withCredentials: true }
           );
           console.log('✅ Booking successful:', bookingRes.data);
-
           void router.navigate({
             to: '/bookingsuccess',
             search: {
@@ -269,7 +244,9 @@ function PaymentMethodForm({
               hotelName: hotelName,
               hotelImage: hotelImage,
               address: hotelAddress,
+              rooms: rooms,
             },
+            replace: true,
           });
         } catch (bookingError) {
           console.error('❌ Booking failed:', bookingError);
@@ -283,7 +260,6 @@ function PaymentMethodForm({
       setLoading(false);
     }
   };
-
   return (
     <Paper withBorder radius="md" p="xl" mt="md">
       <Stack gap="md">
@@ -317,128 +293,94 @@ function PaymentMethodForm({
             </Button>
           </Group>
         </Modal>
-        <Title order={3} size="h4" mb={4}>
+        <Title order={3} size="h4">
           Payment Method
         </Title>
-        <Tabs defaultValue="prepay">
-          <Tabs.List>
-            <Tabs.Tab value="hotel">Pay at Hotel</Tabs.Tab>
-            <Tabs.Tab value="prepay">Prepay Online</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="prepay" pt="xs">
-            <Group gap="xs" mt="md">
-              <Button
-                leftSection={
-                  <Image
-                    src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                    width={28}
-                    height={18}
-                    alt="Visa"
-                  />
-                }
-                variant="default"
-                radius="xl"
-              >
-                *** 1234
-              </Button>
-              <Button
-                leftSection={
-                  <Image
-                    src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                    width={28}
-                    height={18}
-                    alt="Mastercard"
-                  />
-                }
-                variant="default"
-                radius="xl"
-              >
-                *** 1234
-              </Button>
-              <Button
-                leftSection={<IconCreditCard size={20} />}
-                variant="filled"
-                color="gray"
-                radius="xl"
-              >
-                New Card
-              </Button>
-            </Group>
-            <Group gap="xs" mt="sm" wrap="nowrap" ml={16}>
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="Visa"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="Mastercard"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="UnionPay"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="JCB"
-              />
-            </Group>
-            <form
-              onSubmit={form.onSubmit((values) => {
-                setPendingValues(values);
-                open(); // show confirmation modal
-              })}
+        <Group gap={'lg'}>
+          <Text size="sm" c="green">
+            ✔ Secure transmission
+          </Text>
+          <Text size="sm" c="green">
+            ✔ Protects personal information
+          </Text>
+        </Group>
+        <Divider />
+        <Group gap="xs" wrap="nowrap" ml={16}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="Visa"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="Mastercard"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="UnionPay"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="JCB"
+          />
+        </Group>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const guestInfoErrors = guestInfo.validate();
+            const paymentErrors = form.validate();
+            if (guestInfoErrors.hasErrors || paymentErrors.hasErrors) {
+              return;
+            }
+            setPendingValues(form.getValues());
+            open();
+          }}
+        >
+          <Stack gap="sm" mt="sm">
+            <TextInput
+              placeholder="Cardholder's name"
+              withAsterisk
+              radius="xl"
+              {...form.getInputProps('cardholderName')}
+            />
+            <div
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: '12px',
+                padding: '12px',
+                marginTop: '8px',
+              }}
             >
-              <Stack gap="sm" mt="sm">
-                <TextInput
-                  placeholder="Cardholder's name"
-                  withAsterisk
-                  radius="xl"
-                  {...form.getInputProps('cardholderName')}
-                />
-
-                <div
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '12px',
-                    padding: '12px',
-                    marginTop: '8px',
-                  }}
-                >
-                  <CardElement
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: '16px',
-                          color: '#000',
-                          '::placeholder': {
-                            color: '#888',
-                          },
-                        },
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#000',
+                      '::placeholder': {
+                        color: '#888',
                       },
-                    }}
-                  />
-                </div>
-
-                <Group justify="flex-end">
-                  <Button type="submit" radius="xl">
-                    Submit Payment
-                  </Button>
-                </Group>
-              </Stack>
-            </form>
-          </Tabs.Panel>
-        </Tabs>
+                    },
+                  },
+                }}
+              />
+            </div>
+            <Group justify="flex-end">
+              <Button type="submit" radius="xl">
+                Submit Payment
+              </Button>
+            </Group>
+          </Stack>
+        </form>
       </Stack>
     </Paper>
   );
 }
-
 export default PaymentMethodForm;
