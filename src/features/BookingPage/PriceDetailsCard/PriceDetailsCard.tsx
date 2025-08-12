@@ -21,11 +21,11 @@ export function PriceDetailsCard({ rooms, roomPrice, currency, nights }: PriceDe
         <Group justify="space-between">
           <Text size="sm" c="dimmed">
             {currency}
-            {roomPrice} x {rooms} room x {nights} nights
+            {roomPrice} x {rooms} room
           </Text>
           <Text size="sm">
             {currency}
-            {(rooms * roomPrice * nights).toFixed(2)}
+            {(rooms * roomPrice).toFixed(2)}
           </Text>
         </Group>
         <Group justify="space-between">
@@ -40,7 +40,7 @@ export function PriceDetailsCard({ rooms, roomPrice, currency, nights }: PriceDe
           <Text fw={600}>Total</Text>
           <Text fw={600}>
             {currency}
-            {(rooms * roomPrice * nights).toFixed(2)}
+            {(rooms * roomPrice).toFixed(2)}
           </Text>
         </Group>
       </Stack>

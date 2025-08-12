@@ -20,7 +20,7 @@ export const Route = createFileRoute({
       hotelName: String(search.hotelName),
       hotelImage: String(search.hotelImage),
       address: String(search.address),
-      rooms: Number(1),
+      rooms: Number(search.rooms),
     };
   },
 });
@@ -69,7 +69,7 @@ function BookingSuccess() {
               roomDescription={roomDescription}
               price={price}
               currency={currency}
-              rooms={2}
+              rooms={rooms}
             ></PriceBreakdown>
           </Grid.Col>
           <Grid.Col span={5}>
