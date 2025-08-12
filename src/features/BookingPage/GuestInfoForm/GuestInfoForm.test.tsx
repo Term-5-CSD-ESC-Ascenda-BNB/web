@@ -5,11 +5,6 @@ import { useForm } from '@mantine/form';
 import GuestInfoForm from './GuestInfoForm';
 import { describe, it, expect, test } from 'vitest';
 
-// Custom render helper wrapping in MantineProvider
-function renderWithMantine(ui: React.ReactElement) {
-  return render(<MantineProvider>{ui}</MantineProvider>);
-}
-
 function GuestInfoFormTestWrapper({ guests }: { guests: number }) {
   const guestInfo = useForm({
     initialValues: {
@@ -30,7 +25,7 @@ function GuestInfoFormTestWrapper({ guests }: { guests: number }) {
 
 describe('GuestInfoForm', () => {
   test('renders all input fields', () => {
-    renderWithMantine(<GuestInfoFormTestWrapper guests={3} />);
+    render(<GuestInfoFormTestWrapper guests={3} />);
 
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
@@ -41,7 +36,7 @@ describe('GuestInfoForm', () => {
   });
 
   test('updates adults and children counters correctly', () => {
-    renderWithMantine(<GuestInfoFormTestWrapper guests={3} />);
+    render(<GuestInfoFormTestWrapper guests={3} />);
 
     // Adults Counter plus button
     const adultsIncrementBtn = screen.getAllByRole('button', { name: /increment/i })[0];

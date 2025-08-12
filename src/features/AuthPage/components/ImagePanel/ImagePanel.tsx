@@ -14,9 +14,16 @@ import {
 import { Link, useLocation } from '@tanstack/react-router';
 import styles from './ImagePanel.module.css';
 
-interface ImagePanelProps extends BoxComponentProps, ElementProps<'div'> {}
+interface ImagePanelProps extends BoxComponentProps, ElementProps<'div'> {
+  handleButtonClick?: () => void;
+}
 
-export function ImagePanel({ h = '100vh', pos = 'relative', ...props }: ImagePanelProps) {
+export function ImagePanel({
+  handleButtonClick,
+  h = '100vh',
+  pos = 'relative',
+  ...props
+}: ImagePanelProps) {
   const theme = useMantineTheme();
 
   const { pathname } = useLocation();
@@ -66,6 +73,7 @@ export function ImagePanel({ h = '100vh', pos = 'relative', ...props }: ImagePan
                 size={'xl'}
                 radius={'xl'}
                 variant="outline"
+                onClick={handleButtonClick}
               >
                 {buttonText}
               </Button>

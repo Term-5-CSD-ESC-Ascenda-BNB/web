@@ -5,6 +5,7 @@ import { IconCircleCheck } from '@tabler/icons-react';
 import { useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 
 export const Route = createFileRoute({
   component: BookingSuccess,
@@ -20,7 +21,7 @@ export const Route = createFileRoute({
       hotelName: String(search.hotelName),
       hotelImage: String(search.hotelImage),
       address: String(search.address),
-      rooms: Number(1),
+      rooms: Number(search.rooms),
     };
   },
 });
@@ -50,10 +51,12 @@ function BookingSuccess() {
     address,
     rooms,
   } = useSearch({ from: '/bookingsuccess' });
+
   return (
     <Box>
+      <IndexTopNavBar />
       <Paper p="md" radius="md" style={{ backgroundColor: '#fff9db' }}>
-        <Stack align="center" gap="xs" mb={40}>
+        <Stack align="center" gap="xs" mb={40} mt={40}>
           <IconCircleCheck size={120} color="green" />
           <Title order={2}>Thank You! Payment Successful</Title>
         </Stack>
@@ -69,7 +72,7 @@ function BookingSuccess() {
               roomDescription={roomDescription}
               price={price}
               currency={currency}
-              rooms={2}
+              rooms={rooms}
             ></PriceBreakdown>
           </Grid.Col>
           <Grid.Col span={5}>
