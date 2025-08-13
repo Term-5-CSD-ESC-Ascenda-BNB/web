@@ -1,5 +1,9 @@
 import { HotelRoomsSection } from '@/components/Room/HotelRoomsSection';
 
 export function HotelRooms() {
-  return <HotelRoomsSection />;
+  return (
+    <div data-testid="rooms-section">
+      <HotelRoomsSection />
+    </div>
+  );
 }
