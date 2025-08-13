@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'jsdom',
       globals: true,
-      setupFiles: ['/src/tests/setup.ts', '/src/tests/vitest.setup.mjs'],
+      setupFiles: ['/src/tests/setup.ts', '/src/tests/vitest.setup.mjs', '/src/tests/msw/setup.ts'],
       include: ['src/**/*.test.{ts,tsx}', 'src/**/*.int.test.{ts,tsx}'],
       exclude: [
         'src/routeTree.gen.ts',
