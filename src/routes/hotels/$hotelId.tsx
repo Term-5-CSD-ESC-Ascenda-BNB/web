@@ -11,22 +11,17 @@ import { SearchParamsSchema } from '@/schemas/searchParams';
 import { useHotel } from '@/features/HotelPage/useHotel';
 import { getFirstFiveImages } from '@/utils/getFirstFiveImages';
 import { ErrorAlert } from '@/components/ErrorAlert/ErrorAlert';
-
+import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
 export const Route = createFileRoute({
   component: RouteComponent,
   validateSearch: SearchParamsSchema,
 });
-
 function RouteComponent() {
   const { data: hotel, isLoading, error, isError } = useHotel();
-
   const [reviewsModalOpen, setReviewsModalOpen] = useState(false);
-
   const latitude = hotel?.latitude ?? 0;
   const longitude = hotel?.longitude ?? 0;
-
   const { surroundings } = useSurroundings({ lat: latitude, lng: longitude });
-
   const formattedSurroundings = surroundings.map((s) => ({
     type: s.type ?? 'POI',
     name: s.name || 'Unnamed',
@@ -34,7 +29,6 @@ function RouteComponent() {
     latitude: s.point.lat,
     longitude: s.point.lon,
   }));
-
   if (isLoading) {
     return (
       <Center h={'100vh'}>
@@ -42,7 +36,6 @@ function RouteComponent() {
       </Center>
     );
   }
-
   if (isError || !hotel) {
     return (
       <Center h={'100vh'}>
@@ -50,12 +43,11 @@ function RouteComponent() {
       </Center>
     );
   }
-
   return (
     <>
-      <Stack pl="10vh" pr="10vh" pt="2rem" gap="xl" mb="xl">
+      <IndexTopNavBar />
+      <Stack pl="10vh" pr="10vh" pt="5.5rem" gap="xl" mb="xl">
         <ImageGallery images={getFirstFiveImages(hotel.image_details)} />
-
         <HotelHeader
           name={hotel.name || 'Hotel Name'}
           address={hotel.address || 'Hotel Address'}
@@ -66,24 +58,20 @@ function RouteComponent() {
           modalOpen={reviewsModalOpen}
           setModalOpen={setReviewsModalOpen}
         />
-
         <Flex justify="space-between" wrap="wrap" mt="xl" gap="xl">
           {hotel.amenities && Object.keys(hotel.amenities).length > 0 ? (
             <HotelAmenities amenities={hotel.amenities} />
           ) : (
             <Center mx={'xl'}>No amenities available</Center>
           )}
-
           <HotelSurroundings
             hotel={hotel}
             surroundings={formattedSurroundings}
             dimmed={reviewsModalOpen}
           />
         </Flex>
-
         <HotelRooms />
       </Stack>
-
       <HotelReviews
         trustyou={hotel.trustyou}
         ratings={hotel.amenities_ratings}

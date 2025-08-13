@@ -1,7 +1,6 @@
 import { Paper, Group, Text, Divider, Stack, Image, Box, ThemeIcon } from '@mantine/core';
 import { IconStar, IconUser, IconRulerMeasure } from '@tabler/icons-react';
 import { ReviewScoreLarge } from '@/components/ReviewScoreLarge/ReviewScoreLarge';
-
 interface BookingDetailsCardProps {
   name: string;
   image: string;
@@ -13,7 +12,6 @@ interface BookingDetailsCardProps {
   checkout: string;
   guests: number;
 }
-
 export function BookingDetailsCard({
   name,
   image,
@@ -34,12 +32,11 @@ export function BookingDetailsCard({
       year: 'numeric', // "2025"
     });
   }
-
   return (
     <Paper withBorder radius="md" p="md">
       <Stack gap="sm">
         <Group align="flex-start" gap="md">
-          <Image src={image} alt="Hotel" radius="md" w={90} h={80} fit="cover" />
+          <Image src={image} alt="Hotel" radius="md" w={130} h={120} fit="cover" />
           <Box style={{ flex: 1 }}>
             <Text fw={600}>{name}</Text>
             <Group gap={4}>

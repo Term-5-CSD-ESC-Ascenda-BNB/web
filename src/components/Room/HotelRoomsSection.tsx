@@ -1,35 +1,17 @@
-import { Box, Text } from '@mantine/core';
+import { Box, Text, Center, Loader } from '@mantine/core';
 import { RoomCard } from '@/components/Room/RoomCard';
-import roomData from '@/.mock_data/price.json';
+import { useRooms } from '@/features/HotelPage/useRooms';
+import { useHotel } from '@/features/HotelPage/useHotel';
+import { useSearch } from '@tanstack/react-router';
 import { parseRoomFeatures } from '@/utils/parseRoomFeatures';
-
-interface RoomRaw {
-  key: string;
-  description: string;
-  roomDescription: string;
-  roomNormalizedDescription: string;
-  type: string;
-  free_cancellation: boolean;
-  long_description: string;
-  amenities: string[];
-  images: { url: string }[];
-  price: number;
-  roomAdditionalInfo?: {
-    breakfastInfo?: string;
-  };
-}
-
+import type { RoomRaw } from '@/schemas/roomResult';
 interface RoomOption {
   title: string;
   refundable: boolean;
-  refundableUntil?: string;
-  reschedulable: boolean;
   breakfast: string;
-  prepay: boolean;
   price: number;
   totalPrice: number;
 }
-
 function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
   return rooms.reduce(
     (acc, room) => {
@@ -41,17 +23,47 @@ function groupByRoomType(rooms: RoomRaw[]): Record<string, RoomRaw[]> {
     {} as Record<string, RoomRaw[]>
   );
 }
-
+function getNumberOfNights(checkin: string, checkout: string): number {
+  const inDate = new Date(checkin);
+  const outDate = new Date(checkout);
+  return Math.round((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
+}
 export function HotelRoomsSection() {
-  const rooms: RoomRaw[] = roomData.rooms || [];
-  const groupedRooms = groupByRoomType(rooms);
-
+  const { data: hotel, isLoading: hotelLoading } = useHotel();
+  const { data: roomData, isLoading, error } = useRooms();
+  const { date, guests, rooms } = useSearch({ from: '/hotels/$hotelId' });
+  const [checkin, checkout] = date;
+  if (isLoading || hotelLoading) {
+    return (
+      <Center py="xl">
+        <Loader />
+      </Center>
+    );
+  }
+  if (error || !roomData || !hotel) {
+    return (
+      <Center py="xl">
+        <Text c="red">Failed to load rooms. Please try again later.</Text>
+      </Center>
+    );
+  }
+  const room: RoomRaw[] = roomData.rooms || [];
+  if (room.length === 0) {
+    return (
+      <Center py="xl">
+        <Text>No rooms available for the selected dates.</Text>
+      </Center>
+    );
+  }
+  const groupedRooms = groupByRoomType(room);
+  const safeCheckin = checkin ?? '';
+  const safeCheckout = checkout ?? '';
+  const nights = getNumberOfNights(safeCheckin, safeCheckout);
   return (
     <Box mt="xl">
       <Text fz="h2" mb="sm">
         Rooms
       </Text>
-
       <Box
         style={{
           display: 'grid',
@@ -61,25 +73,21 @@ export function HotelRoomsSection() {
       >
         {Object.entries(groupedRooms).map(([roomName, variations]) => {
           const firstRoom = variations[0];
-          const images = firstRoom.images.map((img) => img.url);
+          const images = firstRoom.images.length
+            ? firstRoom.images.map((img) => img.url)
+            : ['/fallback-room.jpg'];
           const features = parseRoomFeatures(firstRoom.long_description, firstRoom.amenities);
-
           const options: RoomOption[] = variations.map((room) => {
             const label = room.roomAdditionalInfo?.breakfastInfo?.toLowerCase();
             const hasBreakfast = label?.includes('breakfast') && !label?.includes('room_only');
-
             return {
               title: room.description,
               refundable: room.free_cancellation,
-              refundableUntil: room.free_cancellation ? 'Sep 26' : undefined,
-              reschedulable: true,
               breakfast: hasBreakfast ? 'Included' : 'Not included',
-              prepay: true,
               price: room.price,
               totalPrice: room.price,
             };
           });
-
           return (
             <RoomCard
               key={roomName}
@@ -98,6 +106,20 @@ export function HotelRoomsSection() {
               view={features.view}
               tv={features.tv}
               bath={features.bath}
+              // Booking
+              hotelId={hotel.id}
+              destinationId={'RsBU'}
+              hotelName={hotel.name}
+              hotelAddress={hotel.address}
+              hotelImage={images[0]}
+              starRating={hotel.rating}
+              trustYouScore={hotel.trustyou?.score?.overall || 0}
+              checkin={safeCheckin}
+              checkout={safeCheckout}
+              guests={guests}
+              nights={nights}
+              currency={'SGD'}
+              rooms={rooms}
             />
           );
         })}

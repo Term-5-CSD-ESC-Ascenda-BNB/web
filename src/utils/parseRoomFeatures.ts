@@ -32,8 +32,6 @@ export function parseRoomFeatures(
     occupancy = 'Sleeps 3–4';
   } else if (lowerBed.includes('1 king') || lowerBed.includes('1 double')) {
     occupancy = 'Sleeps 2';
-  } else if (lowerBed.includes('or')) {
-    occupancy = 'Sleeps 3';
   }
 
   // 5. TV size (e.g., "55-inch LCD TV")

@@ -28,5 +28,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "src/main.tsx", "tests"]
+  "include": ["src", "src/main.tsx", "tests", "e2e", "tests-examples"]
 }
