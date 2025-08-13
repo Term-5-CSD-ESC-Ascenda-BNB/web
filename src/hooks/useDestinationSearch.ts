@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getIconByType } from '@/utils';
 import type { TablerIcon } from '@tabler/icons-react';
-import type { UserProfile } from './useProfile';
 
 const API_BASE_URL = 'https://api-production-46df.up.railway.app';
 
@@ -31,13 +30,6 @@ export interface DestinationSearchResult {
 }
 
 export const fetchDestinations = async (searchValue: string): Promise<ApiResponse[]> => {
-  const responsebruh = await axios.get<UserProfile>(
-    `https://api-production-46df.up.railway.app/me`,
-    {
-      withCredentials: true,
-    }
-  );
-  console.log('API response:', responsebruh.data);
   if (!searchValue.trim() || searchValue.trim().length < SEARCH_CONFIG.minSearchLength) {
     return [];
   }
