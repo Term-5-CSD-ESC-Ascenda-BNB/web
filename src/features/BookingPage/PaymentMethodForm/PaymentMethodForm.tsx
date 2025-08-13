@@ -20,7 +20,7 @@ import { useDisclosure } from '@mantine/hooks';
 export interface PaymentMethodFormValues {
   cardholderName: string;
 }
-interface PaymentMethodFormProps {
+export interface PaymentMethodFormProps {
   guestInfo: UseFormReturnType<{
     salutation: string;
     firstName: string;
