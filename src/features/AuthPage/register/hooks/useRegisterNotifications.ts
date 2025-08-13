@@ -25,9 +25,13 @@ export function useRegisterNotifications() {
 
   const handleError = (error: AxiosError) => {
     console.log(error);
+
+    const responseData = (error.response?.data as { message?: string })?.message;
+    const errorMessage = responseData ? `${error.message}: ${responseData}` : error.message;
+
     notifications.show({
       title: 'Registration Error',
-      message: error.message || 'An error occurred during registration.',
+      message: errorMessage || 'An error occurred during registration.',
       color: 'red',
       withBorder: true,
       withCloseButton: true,
