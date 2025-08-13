@@ -1,42 +1,38 @@
 import { test, expect } from '@playwright/test';
 
 test('Home page → hotel details (UC5)', async ({ page }) => {
-  // 1. Go to the home/landing page
   await page.goto('/');
 
-  // Destination search (same as UC4)
   const searchInput = page.getByPlaceholder('Search for a destination...');
-  await searchInput.fill('Singapore'); // use a real destination with results
+  await searchInput.fill('Singapore');
   const resultOption = page.getByRole('option', { name: /Singapore/i }).first();
-  await expect(resultOption).toBeVisible({ timeout: 10000 });
+  await expect(resultOption).toBeVisible({ timeout: 10_000 });
   await resultOption.click();
 
-  // Select dates
+  // Dates
   const datePickerButton = page.getByTestId('date-picker-input');
   await datePickerButton.click();
   const today = new Date();
   const checkIn = new Date(today);
-  const checkOut = new Date(checkIn);
   checkIn.setDate(today.getDate() + 3);
+  const checkOut = new Date(checkIn);
   checkOut.setDate(checkIn.getDate() + 6);
   const formatAria = (d: Date) =>
     `${d.getDate()} ${d.toLocaleString('default', { month: 'long' })} ${d.getFullYear()}`;
   await page.getByRole('button', { name: formatAria(checkIn), exact: true }).click();
   await page.getByRole('button', { name: formatAria(checkOut), exact: true }).click();
 
-  // Submit search
   await page.getByTestId('search-button').click();
   await expect(page).toHaveURL(/\/search/);
 
-  // 2. Click first hotel in search results
-  // Ensure your hotel cards have this:
-  // <a data-testid="hotel-card-link" ...>
+  // Click first hotel and wait for client-side navigation
   const firstHotelLink = page.getByTestId('hotel-card-link').first();
-  await expect(firstHotelLink).toBeVisible({ timeout: 10000 });
-  await firstHotelLink.click();
+  await expect(firstHotelLink).toBeVisible({ timeout: 10_000 });
 
-  // Wait for hotel page to load
-  await page.waitForLoadState('networkidle');
+  await Promise.all([
+    page.waitForURL(/\/hotel(s)?\/?.+/i), // adjust to your route
+    firstHotelLink.click(),
+  ]);
 
   // 3. UC5 assertions
   await expect(page.getByTestId('hotel-title')).toBeVisible({ timeout: 15000 });
@@ -64,8 +60,6 @@ test('Home page → hotel details (UC5)', async ({ page }) => {
   // assert both are gone
   await expect(dialogs).toHaveCount(0);
 
-
-
   // Amenities
   if (await page.getByTestId('amenities-section').count()) {
     await expect(page.getByTestId('amenities-section')).toBeVisible();
@@ -82,6 +76,6 @@ test('Home page → hotel details (UC5)', async ({ page }) => {
   if (await page.getByTestId('rooms-section').count()) {
     await expect(page.getByTestId('rooms-section')).toBeVisible();
   } else {
-    await expect(page.getByText(/room|option|breakfast/i)).toBeTruthy();
+    expect(page.getByText(/room|option|breakfast/i)).toBeTruthy();
   }
 });

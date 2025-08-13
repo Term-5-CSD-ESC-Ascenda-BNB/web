@@ -10,7 +10,7 @@ describe('HotelInfo Component', () => {
 
     expect(screen.getByText('Grand Palace')).toBeInTheDocument();
     expect(screen.getByText('123 Palace Road')).toBeInTheDocument();
-    const img = screen.getByRole('img');
+    const img: HTMLImageElement = screen.getByRole('img');
     expect(img.src).toContain('/hotel.png');
   });
 });
