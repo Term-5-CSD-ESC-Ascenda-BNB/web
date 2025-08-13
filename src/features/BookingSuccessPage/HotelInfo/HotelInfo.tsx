@@ -1,5 +1,4 @@
-import { Paper, Stack, Text, Title, Divider, Group, Image, Box, Button, Grid } from '@mantine/core';
-import React from 'react';
+import { Paper, Stack, Text, Divider, Group, Image, Box } from '@mantine/core';
 
 interface HotelInfoProps {
   hotelName: string;

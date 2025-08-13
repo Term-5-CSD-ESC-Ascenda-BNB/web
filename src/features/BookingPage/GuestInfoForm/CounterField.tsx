@@ -1,6 +1,5 @@
-import { Paper, TextInput, UnstyledButton, Text } from '@mantine/core';
+import { Paper, UnstyledButton, Text } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-import React from 'react';
 interface CounterFieldProps {
   value: number;
   onChange: (newValue: number) => void;

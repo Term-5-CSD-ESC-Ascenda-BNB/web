@@ -1,6 +1,4 @@
-import { Paper, Stack, Text, Title, Divider, Group, Image, Box, Button, Grid } from '@mantine/core';
-import { IconPrinter } from '@tabler/icons-react';
-import React from 'react';
+import { Paper, Stack, Text, Title, Divider, Group, Box } from '@mantine/core';
 interface PriceBreakdownProps {
   bookingId: string;
   startDate: string;

@@ -1,7 +1,6 @@
 import {
   Paper,
   Title,
-  Tabs,
   Group,
   Button,
   TextInput,
@@ -12,11 +11,9 @@ import {
   Text,
 } from '@mantine/core';
 import { useForm, type UseFormReturnType } from '@mantine/form';
-import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
-import type { StringValidation } from 'zod';
 import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';

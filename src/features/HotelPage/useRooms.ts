@@ -17,8 +17,6 @@ const FetchRoomsParamsSchema = z
     currency: z.string().length(3),
     guests: z.string().regex(/^\d+(\|\d+)*$/),
     // Removed partner_id - not accepted by rooms API
-    // Only include sort if the API actually supports it with the correct values
-    sort: z.enum(['price', 'rooms_available']).optional(),
   })
   .refine((obj) => obj.checkout > obj.checkin, {
     message: 'checkout date must be after checkin',
@@ -41,9 +39,6 @@ export function useRooms() {
     currency: 'SGD',
     country_code: 'SG',
     guests,
-    // Removed partner_id - not accepted by rooms API
-    // Only include sort if you want to use it, and use a valid value
-    // sort: 'price' as const,
   };
 
   const parsedParams = FetchRoomsParamsSchema.parse(params);

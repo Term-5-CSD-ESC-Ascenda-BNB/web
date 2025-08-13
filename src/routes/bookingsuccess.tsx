@@ -1,6 +1,6 @@
 import HotelInfo from '@/features/BookingSuccessPage/HotelInfo/HotelInfo';
 import PriceBreakdown from '@/features/BookingSuccessPage/PriceBreakdown/PriceBreakdown';
-import { Container, Grid, Paper, Box, Stack, Title, useMantineTheme } from '@mantine/core';
+import { Container, Grid, Paper, Box, Stack, Title } from '@mantine/core';
 import { IconCircleCheck } from '@tabler/icons-react';
 import { useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
@@ -25,7 +25,6 @@ export const Route = createFileRoute({
   },
 });
 function BookingSuccess() {
-  const theme = useMantineTheme();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     void confetti({

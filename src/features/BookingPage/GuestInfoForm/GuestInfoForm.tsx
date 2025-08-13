@@ -9,7 +9,6 @@ import {
   Paper,
   Title,
   Flex,
-  Button,
 } from '@mantine/core';
 import { type UseFormReturnType } from '@mantine/form';
 import { CounterField } from './CounterField';
@@ -72,25 +71,6 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
   return (
     <Paper withBorder radius="md" p="xl">
       <Stack gap="md">
-        {/* <Button
-          variant="light"
-          size="xs"
-          onClick={() => {
-            guestInfo.setValues({
-              salutation: 'mr',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'john.doe@example.com',
-              countryCode: 'sg',
-              phone: '91234567',
-              specialRequests: 'Late check-in, please.',
-              adults: guestInfo.values.adults,
-              children: guestInfo.values.children,
-            });
-          }}
-        >
-          Fill with dummy data
-        </Button> */}
         <Box>
           <Title order={2} size="h3" mb={4}>
             Guest Info
