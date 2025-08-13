@@ -30,7 +30,9 @@ export function HotelHeader({
     <>
       <Group justify="space-between" align="stretch">
         <Stack gap="xs">
-          <Text fz="h2">{name}</Text>
+          <Text fz="h2" data-testid="hotel-title">
+            {name}
+          </Text>
           <RatingStars rating={rating} size={24} />
           <LocationDisplay address={address} fontSize="md" />
           <Group gap="xs">
@@ -41,6 +43,7 @@ export function HotelHeader({
         {trustyouScore && (
           <Tooltip label="Click to view guest review breakdown" position="top" withArrow>
             <Stack
+              data-testid="reviews-trigger"
               align="center"
               gap={4}
               style={{ cursor: 'pointer' }}

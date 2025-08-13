@@ -37,6 +37,7 @@ export const fetchDestinations = async (searchValue: string): Promise<ApiRespons
   const response = await axios.get<ApiResponse[]>(`${API_BASE_URL}/destinations`, {
     params: { search: searchValue },
   });
+  console.log('API response:', response.data);
   return response.data;
 };
 

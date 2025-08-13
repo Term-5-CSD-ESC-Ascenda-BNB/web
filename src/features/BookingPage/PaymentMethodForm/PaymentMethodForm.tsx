@@ -20,7 +20,7 @@ import { useDisclosure } from '@mantine/hooks';
 export interface PaymentMethodFormValues {
   cardholderName: string;
 }
-interface PaymentMethodFormProps {
+export interface PaymentMethodFormProps {
   guestInfo: UseFormReturnType<{
     salutation: string;
     firstName: string;
@@ -252,6 +252,8 @@ function PaymentMethodForm({
         }
       }
     } catch (error) {
+      setFailureMessage('Please make sure you are logged in.');
+      openFailureModal();
       console.error('❌ Error submitting payment:', error);
     } finally {
       setLoading(false);
