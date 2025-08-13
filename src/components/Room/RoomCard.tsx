@@ -11,19 +11,15 @@ import {
   Divider,
   Tooltip,
 } from '@mantine/core';
+import { useNavigate } from '@tanstack/react-router';
 import { getRoomFeatureIcon } from '@/utils/getRoomFeatureIcon';
-
 interface RoomOption {
   title: string;
   refundable: boolean;
-  refundableUntil?: string;
-  reschedulable: boolean;
   breakfast: string;
-  prepay: boolean;
   price: number;
   totalPrice: number;
 }
-
 interface RoomCardProps {
   name: string;
   images: string[];
@@ -36,8 +32,20 @@ interface RoomCardProps {
   view: string;
   tv?: string;
   bath?: string;
+  hotelId: string;
+  destinationId: string;
+  hotelName: string;
+  hotelAddress: string;
+  hotelImage: string;
+  starRating: number;
+  trustYouScore: number;
+  checkin: string;
+  checkout: string;
+  guests: number;
+  nights: number;
+  currency: string;
+  rooms: number;
 }
-
 export function RoomCard({
   name,
   images,
@@ -49,9 +57,47 @@ export function RoomCard({
   view,
   tv,
   bath,
+  hotelId,
+  destinationId,
+  hotelName,
+  hotelAddress,
+  hotelImage,
+  starRating,
+  trustYouScore,
+  checkin,
+  checkout,
+  guests,
+  nights,
+  currency,
+  rooms,
 }: RoomCardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const navigate = useNavigate();
+  const handleSelect = () => {
+    const selected = options[selectedIndex];
+    void navigate({
+      to: '/booking',
+      search: {
+        destination_id: destinationId,
+        hotelId,
+        hotelName,
+        hotelAddress,
+        hotelImage,
+        roomDescription: selected.title,
+        starRating,
+        trustYouScore,
+        country_code: 'SG',
+        lang: 'en_US',
+        currency,
+        guests,
+        startDate: checkin,
+        endDate: checkout,
+        numberOfNights: nights,
+        price: selected.totalPrice,
+        rooms,
+      },
+    });
+  };
   const featureList = [
     { label: size },
     { label: occupancy },
@@ -61,7 +107,6 @@ export function RoomCard({
     ...(tv ? [{ label: tv }] : []),
     ...(bath ? [{ label: bath }] : []),
   ];
-
   return (
     <Card
       shadow="sm"
@@ -76,17 +121,12 @@ export function RoomCard({
         height: '100%',
       }}
     >
-      {/* Top Image */}
       <Card.Section>
         <Image src={images?.[0]} height={180} alt={name} />
       </Card.Section>
-
-      {/* Room Info and Features */}
       <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Stack gap="xs" mt="xs">
           <Text fw={600}>{name}</Text>
-
-          {/* Features Icons */}
           <Group gap="xs" wrap="wrap" mt="xs">
             {featureList.map(({ label }, idx) => (
               <Tooltip key={idx} label={label}>
@@ -98,10 +138,7 @@ export function RoomCard({
             ))}
           </Group>
         </Stack>
-
         <Divider my="sm" />
-
-        {/* Room Option Selector */}
         <Radio.Group
           value={String(selectedIndex)}
           onChange={(value) => setSelectedIndex(parseInt(value))}
@@ -122,9 +159,7 @@ export function RoomCard({
                 <Radio value={String(idx)} label={opt.title} />
                 <Stack gap={2} mt="xs">
                   <Text fz="xs" c="dimmed">
-                    {opt.refundable
-                      ? `Fully refundable before ${opt.refundableUntil}`
-                      : 'Non-refundable'}
+                    {opt.refundable ? 'Fully refundable' : 'Non-refundable'}
                   </Text>
                   <Text fz="xs">
                     {opt.breakfast === 'Included' ? 'Breakfast included' : 'No breakfast'}
@@ -137,12 +172,9 @@ export function RoomCard({
             ))}
           </Stack>
         </Radio.Group>
-
         <Box mt="auto" />
       </Box>
-
-      {/* Select Button */}
-      <Button fullWidth mt="md" color="#514D8A">
+      <Button fullWidth mt="md" color="#514D8A" onClick={handleSelect}>
         Select
       </Button>
     </Card>
