@@ -252,6 +252,8 @@ function PaymentMethodForm({
         }
       }
     } catch (error) {
+      setFailureMessage('Please make sure you are logged in.');
+      openFailureModal();
       console.error('❌ Error submitting payment:', error);
     } finally {
       setLoading(false);
