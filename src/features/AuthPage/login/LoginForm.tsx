@@ -25,14 +25,16 @@ export function LoginForm() {
             placeholder="Email"
             {...form.getInputProps('email', { withError: false })}
             error={form.errors.email ? true : false}
+            data-testid="login-email"
           />
           <PasswordInput
             placeholder="Password"
             {...form.getInputProps('password', { withError: false })}
             error={form.errors.password ? true : false}
+            data-testid="password"
           />
 
-          <SubmitButton disabled={mutation.isPending} mt={'lg'}>
+          <SubmitButton disabled={mutation.isPending} mt={'lg'} data-testid="login-button">
             Log in
           </SubmitButton>
         </Stack>

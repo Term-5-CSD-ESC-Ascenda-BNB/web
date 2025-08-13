@@ -89,19 +89,22 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
             ]}
             style={{ maxWidth: 100, flexShrink: 0 }}
             {...guestInfo.getInputProps('salutation')}
+            data-testid="salutation"
           />
           <TextInput
             placeholder="First Name"
             {...guestInfo.getInputProps('firstName')}
             style={{ flex: 1 }}
+            data-testid="first-name"
           />
           <TextInput
             placeholder="Last Name"
             {...guestInfo.getInputProps('lastName')}
             style={{ flex: 1 }}
+            data-testid="last-name"
           />
         </Flex>
-        <TextInput placeholder="Email" {...guestInfo.getInputProps('email')} />
+        <TextInput placeholder="Email" {...guestInfo.getInputProps('email')} data-testid="email" />
         <Group gap={0} align="flex-start" style={{ flexWrap: 'nowrap' }}>
           <Select
             data={countryCodes}
@@ -110,6 +113,7 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
             styles={{
               input: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
             }}
+            data-testid="country-code"
           />
           <TextInput
             placeholder="Phone Number"
@@ -122,6 +126,7 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
                 borderLeft: 0,
               },
             }}
+            data-testid="phone-number"
           />
         </Group>
         <Group gap={32}>
@@ -134,6 +139,7 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
               onChange={updateAdults}
               disabledDecrement={adults <= 1}
               disabledIncrement={adults >= guests}
+              data-testid="adults"
             />
           </Group>
           <Group>
@@ -145,6 +151,7 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
               onChange={updateChildren}
               disabledDecrement={children <= 0}
               disabledIncrement={children >= guests - 1}
+              data-testid="children"
             />
           </Group>
         </Group>
@@ -157,6 +164,7 @@ function GuestInfoForm({ guestInfo, guests }: GuestInfoFormProps) {
             autosize
             minRows={3}
             {...guestInfo.getInputProps('specialRequests')}
+            data-testid="special-requests"
           />
         </Box>
       </Stack>

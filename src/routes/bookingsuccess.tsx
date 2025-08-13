@@ -52,7 +52,9 @@ function BookingSuccess() {
       <Paper p="md" radius="md" style={{ backgroundColor: '#fff9db' }}>
         <Stack align="center" gap="xs" mb={40} mt={40}>
           <IconCircleCheck size={120} color="green" />
-          <Title order={2}>Thank You! Payment Successful</Title>
+          <Title order={2} data-testid="success-message">
+            Thank You! Payment Successful
+          </Title>
         </Stack>
       </Paper>
       <Container size="lg" py="md" mt={16} mb={90}>
