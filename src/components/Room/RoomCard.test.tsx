@@ -6,6 +6,11 @@ vi.mock('@/utils/getRoomFeatureIcon', () => ({
   getRoomFeatureIcon: (label: string) => <span data-testid="feature-icon">{label}</span>,
 }));
 
+const mockNavigate = vi.fn();
+vi.mock('@tanstack/react-router', () => ({
+  useNavigate: () => mockNavigate,
+}));
+
 const mockProps = {
   name: 'Heritage Twin Room',
   images: [
@@ -48,22 +53,32 @@ const mockProps = {
       totalPrice: 6807.83,
     },
   ],
+  hotelId: 'hotel-123',
+  destinationId: 'dest-456',
+  hotelName: 'Hotel Test',
+  hotelAddress: '123 Test Street',
+  hotelImage: 'hotel.jpg',
+  starRating: 4,
+  trustYouScore: 90,
+  checkin: '2025-09-01',
+  checkout: '2025-09-03',
+  guests: 2,
+  nights: 2,
+  currency: 'USD',
+  rooms: 1,
 };
 
 describe('RoomCard', () => {
   it('renders images, features, and all room options', () => {
     render(<RoomCard {...mockProps} />);
 
-    // Image
     const img = screen.getByAltText('Heritage Twin Room');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', mockProps.images[0]);
 
-    // Feature icons (from props + tv + bath = total of 7)
     const features = screen.getAllByTestId('feature-icon');
     expect(features.length).toBeGreaterThan(0);
 
-    // Room options
     const radios = screen.getAllByRole('radio');
     expect(radios).toHaveLength(2);
     expect(screen.getAllByLabelText('Heritage Room Twin')).toHaveLength(2);
@@ -74,14 +89,11 @@ describe('RoomCard', () => {
 
     const optionCards = screen.getAllByTestId('option-card');
 
-    // First option selected by default
     expect(optionCards[0]).toHaveStyle({ backgroundColor: '#F1F0FB' });
     expect(optionCards[1]).not.toHaveStyle({ backgroundColor: '#F1F0FB' });
 
-    // Click second option
     fireEvent.click(screen.getAllByLabelText('Heritage Room Twin')[1]);
 
-    // Second option selected
     expect(optionCards[0]).not.toHaveStyle({ backgroundColor: '#F1F0FB' });
     expect(optionCards[1]).toHaveStyle({ backgroundColor: '#F1F0FB' });
   });
@@ -89,12 +101,9 @@ describe('RoomCard', () => {
   it('shows correct price for selected option', () => {
     render(<RoomCard {...mockProps} />);
 
-    // First option selected by default
     expect(screen.getByText('+ $5446.26')).toBeInTheDocument();
 
-    // Change to second option
-    const secondRadio = screen.getAllByLabelText('Heritage Room Twin')[1];
-    fireEvent.click(secondRadio);
+    fireEvent.click(screen.getAllByLabelText('Heritage Room Twin')[1]);
 
     expect(screen.getByText('+ $6807.83')).toBeInTheDocument();
   });
