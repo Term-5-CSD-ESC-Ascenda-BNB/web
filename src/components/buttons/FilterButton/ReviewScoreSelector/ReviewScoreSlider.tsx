@@ -1,5 +1,4 @@
 import { Slider, Text } from '@mantine/core';
-
 interface ReviewScoreSliderProps {
   value: number;
   onChange: (value: number) => void;
@@ -8,7 +7,6 @@ interface ReviewScoreSliderProps {
   max?: number;
   step?: number;
 }
-
 export function ReviewScoreSlider({
   value,
   onChange,
@@ -25,7 +23,6 @@ export function ReviewScoreSlider({
     { value: 8 },
     { value: 10 },
   ];
-
   return (
     <div>
       <Text size={'sm'} mb={8}>

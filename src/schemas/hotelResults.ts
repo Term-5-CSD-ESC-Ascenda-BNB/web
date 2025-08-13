@@ -1,15 +1,12 @@
 import { z } from 'zod';
-
 /**
  * For hotel search results
  */
-
 export const ImageDetailsSchema = z.object({
   suffix: z.string(),
   count: z.number(),
   prefix: z.string(),
 });
-
 /**
  * This schema represents a hotel result in the search response.
  */
@@ -25,7 +22,6 @@ export const HotelResultSchema = z.object({
   score: z.number().nullable(),
   image_details: ImageDetailsSchema,
 });
-
 /**
  * This schema represents the entire response from the hotel search API.
  */
@@ -35,7 +31,6 @@ export const HotelsResponseSchema = z.object({
   hotels: z.array(HotelResultSchema),
   hotelsTotalLength: z.number(),
 });
-
 /**
  * This schema represents the search parameters that will be submitted to the backend.
  */
@@ -53,8 +48,8 @@ export const FetchHotelsParamsSchema = z
     order: z.enum(['asc', 'desc']).catch('desc'),
     minPrice: z.number().min(0, 'minPrice must be a non-negative number').optional(),
     maxPrice: z.number().min(0, 'maxPrice must be a non-negative number').optional(),
-    minRating: z.number().min(0, 'minRating must be a non-negative number').optional(),
-    minReviewScore: z.number().min(0, 'minReviewScore must be a non-negative number').optional(),
+    minRatings: z.number().min(0, 'minRatings must be a non-negative number').optional(),
+    minScore: z.number().min(0, 'minScore must be a non-negative number').optional(),
   })
   .refine((obj) => obj.checkout > obj.checkin, {
     message: 'checkout date must be after checkin',
@@ -72,17 +67,14 @@ export const FetchHotelsParamsSchema = z
       path: ['minPrice', 'maxPrice'],
     }
   );
-
 /**
  * This type represents a single hotel result in the search response.
  */
 export type HotelResult = z.infer<typeof HotelResultSchema>;
-
 /**
  * This type represents the entire response from the hotel search API.
  */
 export type HotelsResponse = z.infer<typeof HotelsResponseSchema>;
-
 /**
  * This type represents the parameters used to fetch hotels.
  */

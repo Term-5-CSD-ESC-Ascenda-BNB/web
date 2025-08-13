@@ -19,11 +19,10 @@ export function useHotels() {
     guests: stringifyGuestsRooms(search.guests, search.rooms),
     sort: search.sortBy,
     order: search.sortOrder,
-    // temporarily commented out while waiting for backend to support these filters
-    // minPrice: search.minPrice,
-    // maxPrice: search.maxPrice,
-    // minRating: search.minRating,
-    // minReviewScore: search.minScore,
+    minPrice: search.minPrice,
+    maxPrice: search.maxPrice,
+    minRatings: search.minRating,
+    minScore: search.minScore,
     page: search.page || 1,
   };
 
