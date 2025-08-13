@@ -31,7 +31,7 @@ export function HotelSurroundings({ hotel, surroundings, dimmed }: HotelSurround
   }, []);
 
   return (
-    <Box style={{ flex: 1, minWidth: 300 }}>
+    <Box data-testid="surroundings-section" style={{ flex: 1, minWidth: 300 }}>
       <Text fw={600} fz="lg" mb="xs">
         Surroundings
       </Text>
@@ -42,6 +42,7 @@ export function HotelSurroundings({ hotel, surroundings, dimmed }: HotelSurround
         <Stack gap="sm" ref={listRef} style={{ flex: 1, minWidth: 0 }}>
           <SurroundingsList surroundings={surroundings.slice(0, 5)} />
           <Button
+            data-testid="surroundings-view-all"
             radius="xl"
             size="sm"
             style={{ backgroundColor: '#514D8A', alignSelf: 'start' }}
@@ -54,6 +55,7 @@ export function HotelSurroundings({ hotel, surroundings, dimmed }: HotelSurround
         {!modalOpen && (
           <Tooltip label="Click to expand full map" position="bottom" withArrow>
             <Box
+              data-testid="surroundings-inline-map" // ← optional test hook
               style={{
                 cursor: dimmed ? 'default' : 'pointer',
                 pointerEvents: dimmed ? 'none' : 'auto',

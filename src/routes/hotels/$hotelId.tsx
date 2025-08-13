@@ -52,9 +52,9 @@ function RouteComponent() {
           name={hotel.name || 'Hotel Name'}
           address={hotel.address || 'Hotel Address'}
           rating={hotel.rating || 0}
-          trustyouScore={hotel.trustyou.score.overall}
+          trustyouScore={hotel.trustyou?.score?.overall ?? null}
           trustyou={hotel.trustyou}
-          ratings={hotel.amenities_ratings || {}}
+          ratings={hotel.amenities_ratings ?? []}
           modalOpen={reviewsModalOpen}
           setModalOpen={setReviewsModalOpen}
         />
