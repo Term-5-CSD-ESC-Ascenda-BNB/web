@@ -1,54 +1,103 @@
-import { Paper, Title, Tabs, Group, Button, TextInput, Stack, Image } from '@mantine/core';
+import {
+  Paper,
+  Title,
+  Group,
+  Button,
+  TextInput,
+  Stack,
+  Image,
+  Modal,
+  Divider,
+  Text,
+} from '@mantine/core';
 import { useForm, type UseFormReturnType } from '@mantine/form';
-import { IconCreditCard } from '@tabler/icons-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import axios from 'axios';
-
-const createBookingDto = {
-  destinationId: 'RsBU',
-  hotelId: 'jOZC',
-  bookingInfo: {
-    startDate: '2025-10-10',
-    endDate: '2025-10-17',
-    numberOfNights: 6,
-    adults: 1,
-    children: 1,
-    messageToHotel: 'Late check-in please',
-    roomTypes: ['standard-room'],
-  },
-  price: 499.99,
-  bookingReference: 'BNKG-123456',
-  guest: {
-    salutation: 'Mr.',
-    firstName: 'John',
-    lastName: 'Doe',
-  },
-  payment: {
-    paymentId: 'pay-123456',
-    payeeId: 'payee-98765',
-  },
-};
-
+import { useRouter } from '@tanstack/react-router';
+import { useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
 export interface PaymentMethodFormValues {
   cardholderName: string;
 }
-
 interface PaymentMethodFormProps {
   guestInfo: UseFormReturnType<{
+    salutation: string;
     firstName: string;
     lastName: string;
     email: string;
     countryCode: string;
     phone: string;
     specialRequests: string;
+    adults: number;
+    children: number;
   }>;
+  hotelId: string;
+  destinationId: string;
+  startDate: string;
+  endDate: string;
+  guests: number;
+  roomDescription: string;
+  currency: string;
+  nights: number;
+  price: number;
+  country_code: string;
+  lang: string;
+  hotelName: string;
+  hotelImage: string;
+  hotelAddress: string;
+  setLoading: (val: boolean) => void;
+  rooms: number;
 }
-
-function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
+interface BookingResponse {
+  adults: number;
+  bookingReference: string;
+  children: number;
+  createdAt: string;
+  destinationId: string;
+  endDate: string;
+  firstName: string;
+  hotelId: string;
+  id: number;
+  lastName: string;
+  messageToHotel: string;
+  numberOfNights: number;
+  payeeId: string;
+  paymentId: string;
+  price: string;
+  roomTypes: string[];
+  salutation: string;
+  startDate: string;
+  updatedAt: string;
+  userId: number;
+}
+function PaymentMethodForm({
+  guestInfo,
+  hotelId,
+  destinationId,
+  startDate,
+  endDate,
+  guests,
+  roomDescription,
+  currency,
+  nights,
+  price,
+  country_code,
+  lang,
+  hotelName,
+  hotelImage,
+  hotelAddress,
+  setLoading,
+  rooms,
+}: PaymentMethodFormProps) {
+  const [opened, { open, close }] = useDisclosure(false);
+  const [pendingValues, setPendingValues] = useState<PaymentMethodFormValues | null>(null);
+  const [failureModalOpen, { open: openFailureModal, close: closeFailureModal }] =
+    useDisclosure(false);
+  const [failureMessage, setFailureMessage] = useState<string>('An unknown error occurred.');
   const stripe: Stripe | null = useStripe();
   const elements: StripeElements | null = useElements();
-
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       cardholderName: '',
@@ -63,174 +112,272 @@ function PaymentMethodForm({ guestInfo }: PaymentMethodFormProps) {
       },
     },
   });
-
+  interface CreatePaymentResponse {
+    clientSecret: string;
+    payeeId: string;
+    paymentId: string;
+  }
   const handleSubmit = async (values: PaymentMethodFormValues) => {
+    setLoading(true);
     if (guestInfo.validate().hasErrors) {
       return;
     }
-
     if (!stripe) {
       console.error('Stripe.js has not loaded.');
       return;
     }
-
     if (!elements || typeof elements.getElement !== 'function') {
       console.error('Stripe Elements not loaded or invalid');
       return;
     }
-
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
       console.error('CardElement not found.');
       return;
     }
-
     console.log(guestInfo.values);
-
+    console.log(
+      'hotelId:',
+      hotelId,
+      'destination_id:',
+      destinationId,
+      'country_code:',
+      country_code,
+      'lang:',
+      lang,
+      'currency:',
+      currency,
+      'guests:',
+      guests,
+      'startDate:',
+      startDate,
+      'endDate:',
+      endDate,
+      'roomDescription:',
+      roomDescription,
+      'roomNum:',
+      rooms,
+      'price:',
+      price
+    );
+    const guestsPerRoom: number = Math.ceil(guests / rooms);
     try {
-      const res = await axios.post(
+      const res = await axios.post<CreatePaymentResponse>(
         'https://api-production-46df.up.railway.app/bookings/pay',
         {
-          hotelId: createBookingDto.hotelId,
-          destination_id: createBookingDto.destinationId,
-          country_code: 'SG', // example values — replace with real ones
-          lang: 'en_US',
-          currency: 'SGD',
-          guests: createBookingDto.bookingInfo.adults + createBookingDto.bookingInfo.children,
-          startDate: createBookingDto.bookingInfo.startDate,
-          endDate: createBookingDto.bookingInfo.endDate,
-          roomTypes: createBookingDto.bookingInfo.roomTypes,
-          roomDescription: 'Superior Double or Twin Room 1 King Bed',
+          hotelId: hotelId,
+          destination_id: destinationId,
+          country_code: country_code, // example values — replace with real ones
+          lang: lang,
+          currency: currency,
+          guests: guestsPerRoom,
+          startDate: startDate,
+          endDate: endDate,
+          roomTypes: [roomDescription],
+          roomDescription: roomDescription,
+          roomNum: rooms,
         },
         { withCredentials: true }
       );
-
       console.log('✅ Payment response:', res.data);
+      const clientSecret = res.data.clientSecret;
+      const payeeId = String(res.data.payeeId);
+      const paymentId = String(res.data.paymentId);
+      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: values.cardholderName,
+            email: guestInfo.values.email,
+          },
+        },
+      });
+      if (stripeError) {
+        console.error('❌ Payment failed:', stripeError.message);
+        setFailureMessage(stripeError.message || 'Payment failed');
+        openFailureModal();
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('✅ Payment successful:', paymentIntent);
+        const bookingPayload = {
+          hotelId: hotelId,
+          destinationId: destinationId,
+          bookingInfo: {
+            startDate: startDate,
+            endDate: endDate,
+            numberOfNights: nights,
+            adults: guestInfo.values.adults,
+            children: guestInfo.values.children,
+            roomTypes: [roomDescription],
+            messageToHotel: guestInfo.values.specialRequests,
+          },
+          price: price,
+          guest: {
+            salutation: guestInfo.values.salutation,
+            firstName: guestInfo.values.firstName,
+            lastName: guestInfo.values.lastName,
+          },
+          payment: {
+            paymentId: paymentId,
+            payeeId: payeeId,
+          },
+        };
+        try {
+          const bookingRes = await axios.post<BookingResponse>(
+            'https://api-production-46df.up.railway.app/bookings',
+            bookingPayload,
+            { withCredentials: true }
+          );
+          console.log('✅ Booking successful:', bookingRes.data);
+          void router.navigate({
+            to: '/bookingsuccess',
+            search: {
+              bookingId: bookingRes.data.bookingReference,
+              startDate: startDate,
+              endDate: endDate,
+              nights: nights,
+              roomDescription: roomDescription,
+              price: Number(price), // ensure it's a number
+              currency: currency,
+              hotelName: hotelName,
+              hotelImage: hotelImage,
+              address: hotelAddress,
+              rooms: rooms,
+            },
+            replace: true,
+          });
+        } catch (bookingError) {
+          console.error('❌ Booking failed:', bookingError);
+          setFailureMessage('Booking failed. Please try again.');
+          openFailureModal();
+        }
+      }
     } catch (error) {
       console.error('❌ Error submitting payment:', error);
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <Paper withBorder radius="md" p="xl" mt="md">
       <Stack gap="md">
-        <Title order={3} size="h4" mb={4}>
+        <Modal
+          opened={failureModalOpen}
+          onClose={closeFailureModal}
+          title="Something went wrong"
+          centered
+        >
+          <p>{failureMessage}</p>
+          <Group justify="flex-end" mt="md">
+            <Button onClick={closeFailureModal}>Close</Button>
+          </Group>
+        </Modal>
+        <Modal opened={opened} onClose={close} title="Confirm your booking" centered>
+          <p>Are you sure you want to proceed with the booking and payment?</p>
+          <Group justify="flex-end" mt="md">
+            <Button variant="default" onClick={close}>
+              Cancel
+            </Button>
+            <Button
+              color="blue"
+              onClick={() => {
+                if (pendingValues) {
+                  void handleSubmit(pendingValues);
+                }
+                close();
+              }}
+            >
+              Confirm
+            </Button>
+          </Group>
+        </Modal>
+        <Title order={3} size="h4">
           Payment Method
         </Title>
-        <Tabs defaultValue="prepay">
-          <Tabs.List>
-            <Tabs.Tab value="hotel">Pay at Hotel</Tabs.Tab>
-            <Tabs.Tab value="prepay">Prepay Online</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="prepay" pt="xs">
-            <Group gap="xs" mt="md">
-              <Button
-                leftSection={
-                  <Image
-                    src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                    width={28}
-                    height={18}
-                    alt="Visa"
-                  />
-                }
-                variant="default"
-                radius="xl"
-              >
-                *** 1234
-              </Button>
-              <Button
-                leftSection={
-                  <Image
-                    src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                    width={28}
-                    height={18}
-                    alt="Mastercard"
-                  />
-                }
-                variant="default"
-                radius="xl"
-              >
-                *** 1234
-              </Button>
-              <Button
-                leftSection={<IconCreditCard size={20} />}
-                variant="filled"
-                color="gray"
-                radius="xl"
-              >
-                New Card
-              </Button>
-            </Group>
-            <Group gap="xs" mt="sm" wrap="nowrap" ml={16}>
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="Visa"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="Mastercard"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="UnionPay"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg"
-                style={{ width: 15, height: 10 }}
-                fit="contain"
-                alt="JCB"
-              />
-            </Group>
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-              <Stack gap="sm" mt="sm">
-                <TextInput
-                  placeholder="Cardholder's name"
-                  withAsterisk
-                  radius="xl"
-                  {...form.getInputProps('cardholderName')}
-                />
-
-                <div
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '12px',
-                    padding: '12px',
-                    marginTop: '8px',
-                  }}
-                >
-                  <CardElement
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: '16px',
-                          color: '#000',
-                          '::placeholder': {
-                            color: '#888',
-                          },
-                        },
+        <Group gap={'lg'}>
+          <Text size="sm" c="green">
+            ✔ Secure transmission
+          </Text>
+          <Text size="sm" c="green">
+            ✔ Protects personal information
+          </Text>
+        </Group>
+        <Divider />
+        <Group gap="xs" wrap="nowrap" ml={16}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="Visa"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="Mastercard"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="UnionPay"
+          />
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg"
+            style={{ width: 25, height: 20 }}
+            fit="contain"
+            alt="JCB"
+          />
+        </Group>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const guestInfoErrors = guestInfo.validate();
+            const paymentErrors = form.validate();
+            if (guestInfoErrors.hasErrors || paymentErrors.hasErrors) {
+              return;
+            }
+            setPendingValues(form.getValues());
+            open();
+          }}
+        >
+          <Stack gap="sm" mt="sm">
+            <TextInput
+              placeholder="Cardholder's name"
+              withAsterisk
+              radius="xl"
+              {...form.getInputProps('cardholderName')}
+            />
+            <div
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: '12px',
+                padding: '12px',
+                marginTop: '8px',
+              }}
+            >
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#000',
+                      '::placeholder': {
+                        color: '#888',
                       },
-                    }}
-                  />
-                </div>
-
-                <Group justify="flex-end">
-                  <Button type="submit" radius="xl">
-                    Submit Payment
-                  </Button>
-                </Group>
-              </Stack>
-            </form>
-          </Tabs.Panel>
-        </Tabs>
+                    },
+                  },
+                }}
+              />
+            </div>
+            <Group justify="flex-end">
+              <Button type="submit" radius="xl">
+                Submit Payment
+              </Button>
+            </Group>
+          </Stack>
+        </form>
       </Stack>
     </Paper>
   );
 }
-
 export default PaymentMethodForm;
