@@ -1,14 +1,35 @@
 import React from 'react';
-import { IconDots, IconHomeFilled, IconLogin, IconSearch } from '@tabler/icons-react';
+import {
+  IconDots,
+  IconHomeFilled,
+  IconSearch,
+  IconUserFilled,
+  IconLogin,
+  IconLogout,
+} from '@tabler/icons-react';
 import { Drawer, Stack } from '@mantine/core';
 import { IconButton } from '@/components/IconButton/IconButton';
 import { useDisclosure } from '@mantine/hooks';
 import { Logo } from '@/components/Logo/Logo';
 import { MenuNavLink } from '@/components/menu/MenuLink/MenuLink';
 import styles from './MenuButton.module.css';
+import { useProfile } from '@/hooks/useProfile';
+import { logoutUser } from '@/features/AuthPage/login/api';
+import { showNotification } from '@mantine/notifications';
 
 export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  const { profile } = useProfile();
   const [opened, { open, close }] = useDisclosure(false);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      showNotification({ message: 'Logged out successfully', color: 'green' });
+      window.location.reload();
+    } catch {
+      showNotification({ message: 'Logout failed', color: 'red' });
+    }
+  };
 
   return (
     <>
@@ -39,12 +60,32 @@ export function MenuButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>)
           <MenuNavLink to="/" icon={IconHomeFilled} label="Home" className={styles.menuLink} />
           <MenuNavLink to="/search" icon={IconSearch} label="Search" className={styles.menuLink} />
           <MenuNavLink
-            to="/login"
-            icon={IconLogin}
-            label="Login"
+            to="/profile"
+            icon={IconUserFilled}
+            label="Profile"
             className={styles.menuLink}
-            reloadDocument
           />
+          {!profile && (
+            <MenuNavLink
+              to="/login"
+              icon={IconLogin}
+              label="Login"
+              className={styles.menuLink}
+              reloadDocument
+            />
+          )}
+
+          {profile && (
+            <MenuNavLink
+              icon={IconLogout}
+              label="Logout"
+              className={styles.menuLink}
+              onClick={(e) => {
+                e.preventDefault();
+                void handleLogout();
+              }}
+            />
+          )}
         </Stack>
       </Drawer>
     </>
