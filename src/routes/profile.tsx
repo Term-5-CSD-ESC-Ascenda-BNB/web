@@ -124,10 +124,13 @@ function Profile() {
           </div>
 
           <Group className={styles['badges-container']} gap="xl">
-            {Array.isArray(profile.bookings) &&
+            {Array.isArray(profile.bookings) && profile.bookings.some((b) => b && b.country) ? (
               profile.bookings
                 .filter((b) => b && b.country)
-                .map((b) => (b ? <MilestoneBadge country={b.country} /> : null))}
+                .map((b, i) => <MilestoneBadge key={i} country={b.country} />)
+            ) : (
+              <div className={styles['no-trip-booked']}>No bookings made</div>
+            )}
           </Group>
         </Stack>
       </div>
