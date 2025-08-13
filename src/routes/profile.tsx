@@ -1,3 +1,8 @@
+ 
+ 
+ 
+ 
+ 
 // import { useMarkerHover } from '@/hooks';
 import styles from './profile.module.css';
 import { IndexTopNavBar } from '@/features/LandingPage/IndexTopNavBar/IndexTopNavBar';
@@ -124,12 +129,12 @@ function Profile() {
           </div>
 
           <Group className={styles['badges-container']} gap="xl">
-            {Array.isArray(profile.bookings) && profile.bookings.some((b) => b && b.country) ? (
+            {Array.isArray(profile.bookings) && profile.bookings.some((b) => b?.country) ? (
               profile.bookings
-                .filter((b) => b && b.country)
-                .map((b, i) => <MilestoneBadge key={i} country={b.country} />)
+                .filter((b) => b?.country)
+                .map((b, i) => <MilestoneBadge key={i} country={b!.country} />)
             ) : (
-              <div className={styles['no-trip-booked']}>No bookings made</div>
+              <span className={styles['no-trips-booked']}>No trips booked</span>
             )}
           </Group>
         </Stack>
