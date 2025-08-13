@@ -30,7 +30,7 @@ export function HotelGrid({
 
   const renderHotelCards = () => {
     return hotels.map((hotel) => (
-      <div key={hotel.id}>
+      <div key={hotel.id} data-testid="hotel-card-link">
         <CarouselCard
           id={hotel.id}
           name={hotel.name}

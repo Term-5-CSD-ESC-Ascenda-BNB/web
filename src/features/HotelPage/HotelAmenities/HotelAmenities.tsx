@@ -5,5 +5,9 @@ interface HotelAmenitiesProps {
 }
 
 export function HotelAmenities({ amenities }: HotelAmenitiesProps) {
-  return <HotelAmenitiesSection amenities={amenities} />;
+  return (
+    <div data-testid="amenities-section">
+      <HotelAmenitiesSection amenities={amenities} />
+    </div>
+  );
 }
