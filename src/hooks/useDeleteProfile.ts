@@ -1,12 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://api-production-46df.up.railway.app';
-
 export function useDeleteAccount() {
   return useMutation({
     mutationFn: async () => {
-      await axios.delete(`${API_BASE_URL}/me/delete`, { withCredentials: true });
+      try {
+        await axios.post(`https://api-production-46df.up.railway.app/me/delete`, null, {
+          withCredentials: true,
+        });
+      } catch (error) {
+        console.error('Delete account error:', error);
+        throw error;
+      }
     },
   });
 }

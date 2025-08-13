@@ -1,34 +1,33 @@
 import { SimpleGrid } from '@mantine/core';
-import { BookingDetailsCard } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCard';
+import { BookingGridDetailsCard } from './BookingGridDetailsCard';
 import { BookingDetailsCardSkeleton } from '@/features/BookingPage/BookingDetailsCard/BookingDetailsCardSkeleton';
-import type { MockHotel } from '@/types/MockHotel';
+import type { BookingDetails } from '@/hooks/useBookings';
 
 interface BookingGridProps {
-  hotels: MockHotel[];
+  bookings: BookingDetails[];
   isLoading: boolean;
   onHotelMouseEnter?: (hotelId: string) => void;
   onHotelMouseLeave?: (hotelId: string) => void;
+  onHotelClick: (hotelId: string) => void;
 }
 
 export function BookingGrid({
-  hotels,
+  bookings,
   isLoading,
   onHotelMouseEnter,
   onHotelMouseLeave,
+  onHotelClick,
+  ...props
 }: BookingGridProps) {
   const renderSkeletons = () =>
     Array(4)
       .fill(0)
       .map((_, index) => <BookingDetailsCardSkeleton key={`skeleton-${index}`} />);
 
-  const renderHotelCards = () =>
-    hotels.map((hotel) => (
-      <div
-        key={hotel.id}
-        onMouseEnter={() => onHotelMouseEnter?.(hotel.id)}
-        onMouseLeave={() => onHotelMouseLeave?.(hotel.id)}
-      >
-        <BookingDetailsCard
+  const renderBookingCards = () => {
+    return bookings.map((booking) => (
+      <div key={booking.hotelId}>
+        <BookingGridDetailsCard
           name={'ST Residences Novena'}
           image={'https://d2ey9sqrvkqdfs.cloudfront.net/050G/0.jpg'}
           address={'145A Moulmein Road'}
@@ -38,13 +37,17 @@ export function BookingGrid({
           checkin={'2025-10-01'}
           checkout={'2025-10-10'}
           guests={2}
+          onMouseEnter={() => onHotelMouseEnter?.('050G')}
+          onMouseLeave={() => onHotelMouseLeave?.('050G')}
+          onClick={() => onHotelClick('050G')}
         />
       </div>
     ));
+  };
 
   return (
-    <SimpleGrid type="container" cols={{ base: 2, '620px': 2 }} mb="xl">
-      {isLoading ? renderSkeletons() : renderHotelCards()}
+    <SimpleGrid type="container" cols={{ base: 2, '620px': 2 }} mb={'xl'} {...props}>
+      {isLoading ? renderSkeletons() : renderBookingCards()}
     </SimpleGrid>
   );
 }

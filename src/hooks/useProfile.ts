@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://api-production-46df.up.railway.app';
+// const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://api-production-46df.up.railway.app';
 
 export interface BookingSummary {
   country: string;
@@ -19,7 +19,7 @@ export interface UserProfile {
   provider: string | null;
   providerId: string | null;
   stripeCustomerId: string | null;
-  bookings: BookingSummary[];
+  bookings: BookingSummary[] | [null];
 }
 
 export interface UseProfileResult {
@@ -30,7 +30,7 @@ export interface UseProfileResult {
   error: AxiosError | null;
 }
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 const fetchUserProfile = async (): Promise<UserProfile> => {
   if (USE_MOCK) {
@@ -53,7 +53,7 @@ const fetchUserProfile = async (): Promise<UserProfile> => {
       ],
     };
   } else {
-    const response = await axios.get<UserProfile>(`${API_BASE_URL}/me`, {
+    const response = await axios.get<UserProfile>(`https://api-production-46df.up.railway.app/me`, {
       withCredentials: true,
     });
     return response.data;
@@ -64,8 +64,8 @@ export function useProfile(): UseProfileResult {
   const { data, error, isLoading, isError } = useQuery<UserProfile, AxiosError>({
     queryKey: ['profile'],
     queryFn: fetchUserProfile,
-    staleTime: 60 * 1000,
-    gcTime: 5 * 60 * 1000,
+    staleTime: 5 * 1000,
+    gcTime: 5 * 1000,
     retry: (failureCount, error) => {
       // Type guard to ensure error is AxiosError
       if (axios.isAxiosError(error)) {
