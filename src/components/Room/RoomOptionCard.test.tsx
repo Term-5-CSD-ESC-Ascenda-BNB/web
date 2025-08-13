@@ -38,7 +38,6 @@ vi.mock('@mantine/core', async () => {
 vi.mock('@tabler/icons-react', () => ({
   IconToolsKitchen2: () => <span data-testid="icon-breakfast" />,
   IconCreditCard: () => <span data-testid="icon-creditcard" />,
-  IconCalendarCancel: () => <span data-testid="icon-calendar-cancel" />,
   IconCalendarCheck: () => <span data-testid="icon-calendar-check" />,
   IconX: () => <span data-testid="icon-x" />,
 }));
@@ -63,9 +62,6 @@ describe('RoomOptionCard', () => {
 
     expect(screen.getByTestId('icon-x')).toBeInTheDocument();
     expect(screen.getByText('Non-Refundable')).toBeInTheDocument();
-
-    expect(screen.getByTestId('icon-calendar-cancel')).toBeInTheDocument();
-    expect(screen.getByText('Reschedulable')).toBeInTheDocument();
 
     expect(screen.getByTestId('icon-creditcard')).toBeInTheDocument();
     expect(screen.getByText('Prepay Online')).toBeInTheDocument();
