@@ -151,7 +151,6 @@ export function RoomCard({
                 withBorder
                 radius="md"
                 padding="sm"
-                data-testid="option-card"
                 style={{
                   borderColor: idx === selectedIndex ? '#7B76B5' : undefined,
                   backgroundColor: idx === selectedIndex ? '#F1F0FB' : undefined,

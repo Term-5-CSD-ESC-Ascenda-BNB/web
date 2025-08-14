@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     // root: 'src/',
-    base: '/',
+    base: './',
     publicDir: './public',
     server: {
       host: true,
@@ -76,9 +76,6 @@ export default defineConfig(({ mode }) => {
           'src/three/**',
         ],
       },
-    },
-    preview: {
-      port: 5173,
     },
   };
 });

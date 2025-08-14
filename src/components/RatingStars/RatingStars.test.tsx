@@ -2,6 +2,7 @@ import { render, screen } from '@/tests/utils';
 import { RatingStars } from './RatingStars';
 import { expect, describe, it, vi } from 'vitest';
 
+// Mock the Tabler icons
 vi.mock('@tabler/icons-react', () => ({
   IconStarFilled: () => <span data-testid="star-filled" />,
   IconStarHalfFilled: () => <span data-testid="star-half" />,

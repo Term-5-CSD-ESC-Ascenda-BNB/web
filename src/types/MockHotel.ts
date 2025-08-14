@@ -8,16 +8,3 @@ export type MockHotel = BaseMockHotel & {
   images: string[];
   score: number;
 };
-
-export interface TestHotel {
-  id: string;
-  name: string;
-  images: string;
-  address: string;
-  roomType: string;
-  starRating: number;
-  reviewScore: number;
-  checkin: string;
-  checkout: string;
-  guests: number;
-}
