@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ImageGallery } from '@/components/ImageGallery/ImageGallery';
 import { useSurroundings } from '@/hooks/useSurroundings';
-import { Stack, Flex, Center, Loader } from '@mantine/core';
+import { Stack, Flex, Center, Loader, Box } from '@mantine/core';
 import { HotelHeader } from '@/features/HotelPage/HotelHeader/HotelHeader';
 import { HotelAmenities } from '@/features/HotelPage/HotelAmenities/HotelAmenities';
 import { HotelSurroundings } from '@/features/HotelPage/HotelSurroundings/HotelSurroundings';
@@ -58,18 +58,19 @@ function RouteComponent() {
           modalOpen={reviewsModalOpen}
           setModalOpen={setReviewsModalOpen}
         />
-        <Flex justify="space-between" wrap="wrap" mt="xl" gap="xl">
-          {hotel.amenities && Object.keys(hotel.amenities).length > 0 ? (
+        <Flex justify="space-between" wrap="wrap" mt="xl" gap="xl" align="stretch">
+          <Box style={{ flex: 1, minWidth: 300 }}>
             <HotelAmenities amenities={hotel.amenities} />
-          ) : (
-            <Center mx={'xl'}>No amenities available</Center>
-          )}
-          <HotelSurroundings
-            hotel={hotel}
-            surroundings={formattedSurroundings}
-            dimmed={reviewsModalOpen}
-          />
+          </Box>
+          <Box style={{ flex: 1, minWidth: 300 }}>
+            <HotelSurroundings
+              hotel={hotel}
+              surroundings={formattedSurroundings}
+              dimmed={reviewsModalOpen}
+            />
+          </Box>
         </Flex>
+
         <HotelRooms />
       </Stack>
       <HotelReviews
