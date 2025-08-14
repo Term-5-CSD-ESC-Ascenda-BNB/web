@@ -49,6 +49,12 @@ vi.mock('./MenuButton.module.css', () => ({
   },
 }));
 
+vi.mock('@/hooks/useProfile', () => ({
+  useProfile: () => ({
+    profile: null, // change to {} to simulate logged-in
+  }),
+}));
+
 describe('MenuButton', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
