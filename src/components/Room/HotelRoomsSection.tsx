@@ -67,7 +67,8 @@ export function HotelRoomsSection() {
       <Box
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, max-content))',
+          justifyContent: 'space-between',
           gap: '1.5rem',
         }}
       >
