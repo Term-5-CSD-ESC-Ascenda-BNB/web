@@ -357,19 +357,21 @@ function PaymentMethodForm({
                 marginTop: '8px',
               }}
             >
-              <CardElement
-                options={{
-                  style: {
-                    base: {
-                      fontSize: '16px',
-                      color: '#000',
-                      '::placeholder': {
-                        color: '#888',
+              <div data-testid="card-element-wrapper">
+                <CardElement
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: '16px',
+                        color: '#000',
+                        '::placeholder': {
+                          color: '#888',
+                        },
                       },
                     },
-                  },
-                }}
-              />
+                  }}
+                />
+              </div>
             </div>
             <Group justify="flex-end">
               <Button type="submit" radius="xl">
