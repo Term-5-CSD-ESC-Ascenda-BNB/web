@@ -64,14 +64,14 @@ export function useProfile(): UseProfileResult {
   const { data, error, isLoading, isError } = useQuery<UserProfile, AxiosError>({
     queryKey: ['profile'],
     queryFn: fetchUserProfile,
-    staleTime: 5 * 1000,
-    gcTime: 5 * 1000,
+    staleTime: 1,
+    gcTime: 1,
     retry: (failureCount, error) => {
       // Type guard to ensure error is AxiosError
       if (axios.isAxiosError(error)) {
-        return error.response?.status !== 401 && failureCount < 3;
+        return error.response?.status !== 401 && failureCount < 2;
       }
-      return failureCount < 3;
+      return failureCount < 2;
     },
   });
 

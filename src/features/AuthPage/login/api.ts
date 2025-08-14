@@ -15,3 +15,7 @@ const api = axios.create({
 export async function loginUser(data: LoginSchema): Promise<AxiosResponse<ResponseSchema>> {
   return api.post('/auth/login', data);
 }
+
+export async function logoutUser(): Promise<AxiosResponse<ResponseSchema>> {
+  return api.post('/auth/logout');
+}
