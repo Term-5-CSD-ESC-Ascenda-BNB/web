@@ -5,6 +5,7 @@ import { useHotel } from '@/features/HotelPage/useHotel';
 import { useSearch } from '@tanstack/react-router';
 import { parseRoomFeatures } from '@/utils/parseRoomFeatures';
 import type { RoomRaw } from '@/schemas/roomResult';
+import { ErrorAlert } from '../ErrorAlert/ErrorAlert';
 interface RoomOption {
   title: string;
   refundable: boolean;
@@ -43,7 +44,7 @@ export function HotelRoomsSection() {
   if (error || !roomData || !hotel) {
     return (
       <Center py="xl">
-        <Text c="red">Failed to load rooms. Please try again later.</Text>
+        <ErrorAlert message={error?.message || 'Failed to load rooms.'} title="Error" />
       </Center>
     );
   }

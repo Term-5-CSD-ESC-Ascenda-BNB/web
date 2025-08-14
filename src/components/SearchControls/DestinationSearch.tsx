@@ -1,6 +1,6 @@
 import { Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
 import { useDestinationSearch, type DestinationSearchResult } from '@/hooks/useDestinationSearch';
-import { IconMapPinFilled } from '@tabler/icons-react';
+import { IconMapPinFilled, IconX } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 import { useCoords } from '@/context/coords-store';
 
@@ -16,6 +16,7 @@ export function DestinationSearch({
   error: formError,
 }: DestinationSearchProps) {
   const [searchValue, setSearchValue] = useState(destination);
+  const [isHoveringClear, setIsHoveringClear] = useState(false);
   const lastValidTerm = useRef(destination);
   const { searchResults, isLoading, error } = useDestinationSearch(searchValue);
 
@@ -53,6 +54,12 @@ export function DestinationSearch({
     combobox.closeDropdown();
   };
 
+  const handleClear = () => {
+    // Clear text input
+    setSearchValue('');
+    combobox.closeDropdown();
+  };
+
   return (
     <Combobox store={combobox}>
       <Combobox.Target>
@@ -67,6 +74,21 @@ export function DestinationSearch({
           size="md"
           radius={9999}
           leftSection={<IconMapPinFilled size={16} />}
+          rightSection={
+            <IconX
+              size={16}
+              onClick={handleClear}
+              onMouseEnter={() => setIsHoveringClear(true)}
+              onMouseLeave={() => setIsHoveringClear(false)}
+              style={{
+                position: 'absolute',
+                right: 14,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: isHoveringClear ? '#43455e' : '#888',
+              }}
+            />
+          }
           error={formError}
         />
       </Combobox.Target>

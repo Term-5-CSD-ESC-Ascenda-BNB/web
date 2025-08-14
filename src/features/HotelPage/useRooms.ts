@@ -57,7 +57,9 @@ export function useRooms() {
       };
 
       const query = new URLSearchParams(convertToStringParams(parsedParams)).toString();
-      const res = await fetch(`/api/hotels/${hotelId}/price?${query}`);
+      const res = await fetch(
+        `https://api-production-46df.up.railway.app/hotels/${hotelId}/price?${query}`
+      );
 
       if (!res.ok) {
         const errorText = await res.text();
