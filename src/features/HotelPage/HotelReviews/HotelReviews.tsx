@@ -23,22 +23,31 @@ const ratingLabels = [
 ];
 
 export function HotelReviews({ trustyou, ratings, opened, onClose }: HotelReviewsProps) {
+  // Divide category scores by 10
   const mappedRatings = ratingLabels
     .map((label) => {
       const entry = ratings.find((r) => r.name === label);
-      return entry ? { label: entry.name, score: entry.score / 10 } : null;
+      return entry
+        ? {
+            label: entry.name,
+            score: typeof entry.score === 'number' ? entry.score / 10 : entry.score,
+          }
+        : null;
     })
     .filter(Boolean) as { label: string; score: number }[];
 
+  // Divide traveler scores by 10
   const travelerScores = [
     { label: 'Solo', score: trustyou?.score?.solo },
     { label: 'Couple', score: trustyou?.score?.couple },
     { label: 'Family', score: trustyou?.score?.family },
     { label: 'Business', score: trustyou?.score?.business },
-  ].filter((t) => t.score !== null && t.score !== undefined) as {
-    label: string;
-    score: number;
-  }[];
+  ]
+    .filter((t) => typeof t.score === 'number')
+    .map((t) => ({
+      ...t,
+      score: (t.score as number) / 10,
+    }));
 
   return (
     <Modal
@@ -50,7 +59,8 @@ export function HotelReviews({ trustyou, ratings, opened, onClose }: HotelReview
       radius="md"
     >
       <Stack align="center" mb="md" gap={4}>
-        <ReviewScoreLarge score={trustyou?.score?.overall ?? 0} />
+        {/* Divide overall score by 10 */}
+        <ReviewScoreLarge score={(trustyou?.score?.overall ?? 0) / 10} />
         <Text fz="md" c="dimmed">
           Overall Rating
         </Text>
